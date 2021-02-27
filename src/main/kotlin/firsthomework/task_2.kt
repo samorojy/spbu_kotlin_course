@@ -4,12 +4,7 @@ fun getNumberOfOccurrence(firstString: String, secondString: String): Int {
     if (kotlin.math.min(firstString.length, secondString.length) == 0 || firstString.length < secondString.length) {
         return 0
     }
-    return firstString.windowed(secondString.length) {
-        if (it.equals(secondString))
-            1
-        else
-            0
-    }.sum()
+    return firstString.windowed(secondString.length) { if (it.equals(secondString)) 1 else 0 }.sum()
 }
 
 fun main() {
