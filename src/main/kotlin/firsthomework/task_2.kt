@@ -19,5 +19,4 @@ fun main() {
     println("Enter second string: ")
     val secondString: String = input.nextLine()
     println("Number of occurrence is ${getNumberOfOccurrence(firstString, secondString)}")
-
 }
