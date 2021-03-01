@@ -16,17 +16,20 @@ fun getFactorialRecursive(number: Int): Int {
 }
 
 fun getUserInput(): Int {
+    val scan = java.util.Scanner(System.`in`)
     print("Please enter a natural number: ")
-    var input: Int = readLine()!!.toInt()
-    while (input < 0) {
-        print("Please enter a number greater than 0: ")
-        input = readLine()!!.toInt()
+    if (!scan.hasNextInt()) {
+        error("ERROR! String cannot be converted to INT")
+    }
+    val input: Int = scan.nextInt()
+    if (input < 0) {
+        error("ERROR! Number must be greater than or equal to 0")
     }
     return input
 }
 
 fun main() {
-    val number = getUserInput()
+    val number: Int = getUserInput()
     print("Iterative: factorial of $number is ${getFactorialIterative(number)}\n")
     print("Recursive: factorial of $number is ${getFactorialRecursive(number)}")
 }
