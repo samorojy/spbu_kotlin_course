@@ -1,7 +1,5 @@
 package action
 
-import action.PerformedCommandStorage
-
 interface Action {
     val storage: PerformedCommandStorage
     fun doAction()

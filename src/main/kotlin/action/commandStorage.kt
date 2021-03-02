@@ -1,7 +1,5 @@
 package action
 
-import action.Action
-
 class PerformedCommandStorage() {
     var numberList = mutableListOf<Int>()
     var actionList = mutableListOf<Action>()
