@@ -26,7 +26,7 @@ class InsertAtEnd(private val number: Int, override val storage: PerformedComman
     }
 
     override fun undoAction() {
-        storage.numberList.removeAt(0)
+        storage.numberList.removeAt(storage.numberList.size - 1)
     }
 }
 

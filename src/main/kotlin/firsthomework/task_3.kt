@@ -24,4 +24,8 @@ fun main() {
     println("After move")
     storage.undoLastAction()
     storage.numberList.forEach { println(it) }
+    InsertAtEnd(0, storage).doAction()
+    storage.numberList.forEach { println(it) }
+    storage.undoLastAction()
+    storage.numberList.forEach { println(it) }
 }
