@@ -1,12 +1,12 @@
 package action
 
 interface Action {
-    val storage: commandStorage
+    val storage: CommandStorage
     fun doAction()
     fun undoAction()
 }
 
-class InsertAtStart(private val number: Int, override val storage: commandStorage) : Action {
+class InsertAtStart(private val number: Int, override val storage: CommandStorage) : Action {
     override fun doAction() {
         storage.numberList.add(0, number)
         storage.actionList.add(0, this)
@@ -17,7 +17,7 @@ class InsertAtStart(private val number: Int, override val storage: commandStorag
     }
 }
 
-class InsertAtEnd(private val number: Int, override val storage: commandStorage) : Action {
+class InsertAtEnd(private val number: Int, override val storage: CommandStorage) : Action {
     override fun doAction() {
         storage.numberList.add(number)
         storage.actionList.add(0, this)
@@ -28,7 +28,7 @@ class InsertAtEnd(private val number: Int, override val storage: commandStorage)
     }
 }
 
-class Move(private val startIndex: Int, private val endIndex: Int, override val storage: commandStorage) :
+class Move(private val startIndex: Int, private val endIndex: Int, override val storage: CommandStorage) :
     Action {
     override fun doAction() {
         if (startIndex > storage.numberList.size || endIndex > storage.numberList.size) {

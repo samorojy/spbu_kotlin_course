@@ -1,12 +1,12 @@
 package firsthomework
 
-import action.commandStorage
+import action.CommandStorage
 import action.InsertAtStart
 import action.InsertAtEnd
 import action.Move
 
 fun main() {
-    val storage = commandStorage()
+    val storage = CommandStorage()
     storage.actionList
     InsertAtStart(5, storage).doAction()
     InsertAtStart(3, storage).doAction()
