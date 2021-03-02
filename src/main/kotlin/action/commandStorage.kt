@@ -1,7 +1,7 @@
 package action
 
 class PerformedCommandStorage {
-    var numberList= mutableListOf<Int>()
+    var numberList = mutableListOf<Int>()
     var actionList = mutableListOf<Action>()
 
     fun undoLastAction() {
