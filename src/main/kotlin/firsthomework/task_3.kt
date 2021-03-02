@@ -19,20 +19,18 @@ fun main() {
     InsertAtStart(NUMBER2, storage).doAction()
     InsertAtStart(NUMBER3, storage).doAction()
     InsertAtStart(NUMBER4, storage).doAction()
-    storage.numberList.forEach { println(it) }
+    storage.numberList.forEach { print(it) }
+    println(" After InsertAtStart")
     storage.undoLastAction()
-    println("After Undo")
-    storage.numberList.forEach { println(it) }
+    storage.numberList.forEach { print(it) }
+    println(" After Undo")
     InsertAtEnd(NUMBER5, storage).doAction()
-    println("After Insert At end")
-    storage.numberList.forEach { println(it) }
+    storage.numberList.forEach { print(it) }
+    println(" After Insert At end")
     Move(NUMBER0, NUMBER3, storage).doAction()
-    storage.numberList.forEach { println(it) }
-    println("After move")
+    storage.numberList.forEach { print(it) }
+    println(" After move")
     storage.undoLastAction()
-    storage.numberList.forEach { println(it) }
-    InsertAtEnd(NUMBER0, storage).doAction()
-    storage.numberList.forEach { println(it) }
-    storage.undoLastAction()
-    storage.numberList.forEach { println(it) }
+    storage.numberList.forEach { print(it) }
+    println(" After undo move")
 }
