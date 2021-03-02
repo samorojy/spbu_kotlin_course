@@ -6,7 +6,7 @@ class PerformedCommandStorage() {
     var numberList = mutableListOf<Int>()
     var actionList = mutableListOf<Action>()
 
-    fun undoActionList() {
+    fun undoLastAction() {
         if (actionList.isEmpty()) {
             error("ERROR! Action list is empty. Nothing to undo")
         }

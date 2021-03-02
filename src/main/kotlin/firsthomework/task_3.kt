@@ -13,7 +13,7 @@ fun main() {
     InsertAtStart(6, storage).doAction()
     InsertAtStart(7, storage).doAction()
     storage.numberList.forEach { println(it) }
-    storage.undoActionList()
+    storage.undoLastAction()
     println("After Undo")
     storage.numberList.forEach { println(it) }
     InsertAtEnd(10, storage).doAction()
@@ -22,6 +22,6 @@ fun main() {
     Move(0, 3, storage).doAction()
     storage.numberList.forEach { println(it) }
     println("After move")
-    Move(3, 0, storage).doAction()
+    storage.undoLastAction()
     storage.numberList.forEach { println(it) }
 }
