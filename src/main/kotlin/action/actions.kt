@@ -35,7 +35,9 @@ private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage)
 class Move(private val startIndex: Int, private val endIndex: Int, override val storage: CommandStorage) : Action {
 
     override fun doAction() {
-        if (startIndex < 0 || endIndex < 0 || startIndex > storage.numberList.size || endIndex > storage.numberList.size) {
+        if (startIndex < 0 || endIndex < 0 || startIndex > storage.numberList.size ||
+            endIndex > storage.numberList.size
+        ) {
             error("ERROR! Out of List bounds")
         }
         moveElement(startIndex, endIndex, storage)
