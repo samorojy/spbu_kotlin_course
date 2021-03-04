@@ -14,20 +14,19 @@ const val NUMBER5 = 5
 
 fun main() {
     val storage = CommandStorage()
-    storage.actionList
-    InsertAtStart(NUMBER1, storage).doAction()
-    InsertAtStart(NUMBER2, storage).doAction()
-    InsertAtStart(NUMBER3, storage).doAction()
-    InsertAtStart(NUMBER4, storage).doAction()
+    storage.doAction(InsertAtStart(NUMBER1, storage))
+    storage.doAction(InsertAtStart(NUMBER2, storage))
+    storage.doAction(InsertAtStart(NUMBER3, storage))
+    storage.doAction(InsertAtStart(NUMBER4, storage))
     storage.numberList.forEach { print(it) }
     println(" After InsertAtStart")
     storage.undoLastAction()
     storage.numberList.forEach { print(it) }
     println(" After Undo")
-    InsertAtEnd(NUMBER5, storage).doAction()
+    storage.doAction(InsertAtEnd(NUMBER5, storage))
     storage.numberList.forEach { print(it) }
     println(" After Insert At end")
-    Move(NUMBER0, NUMBER3, storage).doAction()
+    storage.doAction(Move(NUMBER0, NUMBER3, storage))
     storage.numberList.forEach { print(it) }
     println(" After move")
     storage.undoLastAction()

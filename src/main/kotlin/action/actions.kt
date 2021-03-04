@@ -9,40 +9,39 @@ interface Action {
 class InsertAtStart(private val number: Int, override val storage: CommandStorage) : Action {
     override fun doAction() {
         storage.numberList.add(0, number)
-        storage.actionList.add(0, this)
     }
 
     override fun undoAction() {
-        storage.numberList.removeAt(0)
+        storage.numberList.removeFirst()
     }
 }
 
 class InsertAtEnd(private val number: Int, override val storage: CommandStorage) : Action {
     override fun doAction() {
         storage.numberList.add(number)
-        storage.actionList.add(0, this)
     }
 
     override fun undoAction() {
-        storage.numberList.removeAt(storage.numberList.size - 1)
+        storage.numberList.removeLast()
     }
 }
 
-class Move(private val startIndex: Int, private val endIndex: Int, override val storage: CommandStorage) :
-    Action {
+private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage) {
+    val value: Int = storage.numberList[startIndex]
+    storage.numberList.removeAt(startIndex)
+    storage.numberList.add(endIndex, value)
+}
+
+class Move(private val startIndex: Int, private val endIndex: Int, override val storage: CommandStorage) : Action {
+
     override fun doAction() {
-        if (startIndex > storage.numberList.size || endIndex > storage.numberList.size) {
+        if (startIndex < 0 || endIndex < 0 || startIndex > storage.numberList.size || endIndex > storage.numberList.size) {
             error("ERROR! Out of List bounds")
         }
-        val value: Int = storage.numberList[startIndex]
-        storage.numberList.removeAt(startIndex)
-        storage.numberList.add(endIndex, value)
-        storage.actionList.add(0, this)
+        moveElement(startIndex, endIndex, storage)
     }
 
     override fun undoAction() {
-        val value: Int = storage.numberList[endIndex]
-        storage.numberList.removeAt(endIndex)
-        storage.numberList.add(startIndex, value)
+        moveElement(endIndex, startIndex, storage)
     }
 }
