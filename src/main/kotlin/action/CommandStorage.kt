@@ -5,7 +5,6 @@ class CommandStorage {
     private var actionList = mutableListOf<Action>()
 
     fun doAction(action: Action) {
-        action.doAction()
         actionList.add(0, action)
     }
 
