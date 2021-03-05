@@ -15,6 +15,6 @@ class CommandStorage {
             return
         }
         actionList[0].undoAction()
-        actionList.removeAt(0)
+        actionList.removeFirst()
     }
 }
