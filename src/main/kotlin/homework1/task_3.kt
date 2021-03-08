@@ -1,4 +1,4 @@
-package homework_1
+package homework1
 
 import action.CommandStorage
 import action.InsertAtStart
