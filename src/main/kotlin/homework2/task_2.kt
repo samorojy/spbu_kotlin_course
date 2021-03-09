@@ -1,22 +1,31 @@
 package homework2
 
-const val NUMBER0 = 0
-const val NUMBER1 = 1
-const val NUMBER2 = 2
-const val NUMBER3 = 3
-
-fun IntArray.removeRepeats(): IntArray {
+fun Array<Int>.removeRepeats(): Array<Int> {
     val set: MutableSet<Int> = mutableSetOf()
-    for (i in this.indices.reversed()) {
-        if (!set.contains(this[i])) {
-            set.add(this[i])
-        }
+    set.addAll(this.reversedArray())
+    return set.toTypedArray().reversedArray()
+}
+
+fun getFilledArray(): Array<Int> {
+    println("Enter array size: ")
+    val scan = java.util.Scanner(System.`in`)
+    if (!scan.hasNextInt()) {
+        error("ERROR! String cannot be converted to INT")
     }
-    return set.toIntArray().reversedArray()
+    val arraySize: Int = scan.nextInt()
+    val array = IntArray(arraySize)
+    println("Enter $arraySize values (elements of array): ")
+    for (i in array.indices) {
+        if (!scan.hasNextInt()) {
+            error("ERROR! String cannot be converted to INT")
+        }
+        array[i] = scan.nextInt()
+    }
+    return array.toTypedArray()
 }
 
 fun main() {
-    val array: IntArray = intArrayOf(NUMBER0, NUMBER1, NUMBER2, NUMBER3, NUMBER3, NUMBER2, NUMBER0, NUMBER1)
+    val array: Array<Int> = getFilledArray()
     array.forEach { print(it) }
     print("\nAfter remove\n")
     array.removeRepeats().forEach { print(it) }
