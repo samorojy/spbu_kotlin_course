@@ -40,8 +40,8 @@ tasks.withType<KotlinCompile>() {
 }
 
 tasks.dokkaHtml {
-    outputDirectory.set(file("src"))
-    moduleName.set("CommandStorage")
+    outputDirectory.set(file("build/docs"))
+    moduleName.set("Kotlin Homeworks")
     dokkaSourceSets {
         configureEach {
             includeNonPublic.set(true)
