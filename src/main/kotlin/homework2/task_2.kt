@@ -1,12 +1,12 @@
 package homework2
 
-fun Array<Int>.removeRepeats(): Array<Int> {
+fun IntArray.removeRepeats(): IntArray {
     val set: MutableSet<Int> = mutableSetOf()
-    set.addAll(this.reversedArray())
-    return set.toTypedArray().reversedArray()
+    set.addAll(this.toTypedArray().reversedArray())
+    return set.toIntArray().reversedArray()
 }
 
-fun getFilledArray(): Array<Int> {
+fun getFilledArray(): IntArray {
     println("Enter array size: ")
     val scan = java.util.Scanner(System.`in`)
     if (!scan.hasNextInt()) {
@@ -21,11 +21,11 @@ fun getFilledArray(): Array<Int> {
         }
         array[i] = scan.nextInt()
     }
-    return array.toTypedArray()
+    return array
 }
 
 fun main() {
-    val array: Array<Int> = getFilledArray()
+    val array: IntArray = getFilledArray()
     array.forEach { print(it) }
     print("\nAfter remove\n")
     array.removeRepeats().forEach { print(it) }
