@@ -1,8 +1,19 @@
 package action
 
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+import kotlinx.serialization.modules.*
+
+val module = SerializersModule {
+    polymorphic(Action::class) {
+        subclass(InsertAtStart::class)
+    }
+}
+val format = Json { serializersModule = module }
 /**
  * interface for action classes
  */
+
 interface Action {
     val storage: CommandStorage
     fun doAction()
@@ -14,7 +25,9 @@ interface Action {
  * @param number Value to add
  * @property storage CommandStorage with whom we work
  */
-class InsertAtStart(private val number: Int, override val storage: CommandStorage) : Action {
+
+@Serializable
+class InsertAtStart(private val number: Int, @Contextual override val storage: CommandStorage) : Action {
     /**
      * Adds the value to the beginning of the list
      */
@@ -30,13 +43,15 @@ class InsertAtStart(private val number: Int, override val storage: CommandStorag
         storage.numberList.removeFirst()
     }
 }
-
+/*
 /**
  * Class for adding a number to the end of the list
  * @param number Value to add
  * @property storage CommandStorage with whom we work
  */
-class InsertAtEnd(private val number: Int, override val storage: CommandStorage) : Action {
+@Serializable
+@SerialName("InsertAtEnd")
+class InsertAtEnd(private val number: Int, @Contextual override val storage: CommandStorage) : Action {
     /**
      * Adds the value to the end of the list
      */
@@ -59,6 +74,7 @@ class InsertAtEnd(private val number: Int, override val storage: CommandStorage)
  * @param endIndex The index where to arrange the element
  * @property storage CommandStorage with whom we work
  */
+
 private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage) {
     val value: Int = storage.numberList[startIndex]
     storage.numberList.removeAt(startIndex)
@@ -71,7 +87,10 @@ private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage)
  * @param endIndex The index where to arrange the element
  * @property storage CommandStorage with whom we work
  */
-class Move(private val startIndex: Int, private val endIndex: Int, override val storage: CommandStorage) : Action {
+@Serializable
+@SerialName("Move")
+class Move(private val startIndex: Int, private val endIndex: Int, @Contextual override val storage: CommandStorage) :
+    Action {
 
     /**
      * Rearranges element from StartIndex to EndIndex
@@ -91,3 +110,4 @@ class Move(private val startIndex: Int, private val endIndex: Int, override val 
         moveElement(endIndex, startIndex, storage)
     }
 }
+*/

@@ -2,8 +2,8 @@ package homework1
 
 import action.CommandStorage
 import action.InsertAtStart
-import action.InsertAtEnd
-import action.Move
+//import action.InsertAtEnd
+//import action.Move
 
 const val NUMBER0 = 0
 const val NUMBER1 = 1
@@ -19,7 +19,7 @@ fun main() {
     InsertAtStart(NUMBER3, storage).doAction()
     InsertAtStart(NUMBER4, storage).doAction()
     storage.numberList.forEach { print(it) }
-    println(" After InsertAtStart")
+    /* println(" After InsertAtStart")
     storage.undoLastAction()
     storage.numberList.forEach { print(it) }
     println(" After Undo")
@@ -31,5 +31,6 @@ fun main() {
     println(" After move")
     storage.undoLastAction()
     storage.numberList.forEach { print(it) }
-    println(" After undo move")
+    println(" After undo move") */
+    storage.printChoto()
 }
