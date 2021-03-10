@@ -1,5 +1,7 @@
 package action
 
+import kotlinx.serialization.Serializable
+
 /**
  * Stores a list of numbers and a list of actions on them
  * @property numberList stores numbers
