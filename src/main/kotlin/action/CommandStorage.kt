@@ -46,6 +46,9 @@ class CommandStorage {
     fun getSerializationFromFile(name: String) {
         val inputStream: InputStream = File(name).inputStream()
         val inputString = inputStream.bufferedReader().use { it.readText() }
-        actionList = Json.decodeFromString(inputString)
+        val actionListFromFile: MutableList<Action> = Json.decodeFromString(inputString)
+        for (action in actionListFromFile) {
+            action.doAction(this)
+        }
     }
 }
