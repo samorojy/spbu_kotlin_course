@@ -1,6 +1,6 @@
 package action
 
-import kotlinx.serialization.*
+import kotlinx.serialization.Serializable
 
 /**
  * interface for action classes

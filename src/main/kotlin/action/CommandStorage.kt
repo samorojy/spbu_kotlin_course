@@ -1,7 +1,8 @@
 package action
 
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileWriter
 import java.io.InputStream
@@ -12,7 +13,7 @@ import java.io.InputStream
  * @property actionList stores actions on numbers
  */
 
-class CommandStorage() {
+class CommandStorage {
     var numberList = mutableListOf<Int>()
     private var actionList = mutableListOf<Action>()
 
