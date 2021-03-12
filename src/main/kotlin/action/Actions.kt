@@ -1,5 +1,6 @@
 package action
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -17,6 +18,7 @@ sealed class Action {
  */
 
 @Serializable
+@SerialName("Insert at start")
 class InsertAtStart(private val number: Int) : Action() {
     /**
      * Adds the value to the beginning of the list
@@ -41,6 +43,7 @@ class InsertAtStart(private val number: Int) : Action() {
  * @param number Value to add
  */
 @Serializable
+@SerialName("Insert at end")
 class InsertAtEnd(private val number: Int) : Action() {
     /**
      * Adds the value to the end of the list
@@ -79,6 +82,7 @@ private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage)
  * @param endIndex The index where to arrange the element
  */
 @Serializable
+@SerialName("Move")
 class Move(private val startIndex: Int, private val endIndex: Int) : Action() {
 
     /**

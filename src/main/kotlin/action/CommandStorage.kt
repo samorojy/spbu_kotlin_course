@@ -21,7 +21,7 @@ class CommandStorage {
      * add action to actionList
      */
     fun doAction(action: Action) {
-        actionList.add(0, action)
+        actionList.add(action)
     }
 
     /**
@@ -33,17 +33,17 @@ class CommandStorage {
             println("ERROR! Action list is empty. Nothing to undo")
             return
         }
-        actionList[0].undoAction(this)
-        actionList.removeFirst()
+        actionList.last().undoAction(this)
+        actionList.removeLast()
     }
 
-    fun pushSerializationToFile(name: String) {
+    fun serializeToFile(name: String) {
         val file = FileWriter(name)
         file.write(Json.encodeToString(actionList))
         file.flush()
     }
 
-    fun getSerializationFromFile(name: String) {
+    fun deserializeFromFile(name: String) {
         val inputStream: InputStream = File(name).inputStream()
         val inputString = inputStream.bufferedReader().use { it.readText() }
         val actionListFromFile: MutableList<Action> = Json.decodeFromString(inputString)
