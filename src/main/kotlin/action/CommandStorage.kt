@@ -12,7 +12,6 @@ import java.io.InputStream
  * @property numberList stores numbers
  * @property actionList stores actions on numbers
  */
-
 class CommandStorage {
     var numberList = mutableListOf<Int>()
     private var actionList = mutableListOf<Action>()
@@ -37,12 +36,20 @@ class CommandStorage {
         actionList.removeLast()
     }
 
+    /**
+     * Serialize actionList and put it to file
+     * @param name path to put file with serialization of actionList
+     */
     fun serializeToFile(name: String) {
         val file = FileWriter(name)
         file.write(Json.encodeToString(actionList))
         file.flush()
     }
 
+    /**
+     * Deserialize Json and performs actionList's actions from file
+     * @param name path to get the file for deserialization
+     */
     fun deserializeFromFile(name: String) {
         val inputStream: InputStream = File(name).inputStream()
         val inputString = inputStream.bufferedReader().use { it.readText() }

@@ -16,7 +16,6 @@ sealed class Action {
  * Class for adding a number to the beginning of the list
  * @param number Value to add
  */
-
 @Serializable
 @SerialName("Insert at start")
 class InsertAtStart(private val number: Int) : Action() {
@@ -69,7 +68,6 @@ class InsertAtEnd(private val number: Int) : Action() {
  * @param endIndex The index where to arrange the element
  * @property storage CommandStorage with whom we work
  */
-
 private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage) {
     val value: Int = storage.numberList[startIndex]
     storage.numberList.removeAt(startIndex)

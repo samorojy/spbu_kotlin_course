@@ -11,7 +11,7 @@ const val NUMBER2 = 2
 const val NUMBER3 = 3
 const val NUMBER4 = 4
 const val NUMBER5 = 5
-const val NAME = "ActionList.json"
+const val FILE_NAME = "ActionList.json"
 
 fun main() {
     val storage = CommandStorage()
@@ -33,6 +33,6 @@ fun main() {
     storage.undoLastAction()
     storage.numberList.forEach { print(it) }
     println(" After undo move")
-    storage.serializeToFile(NAME)
-    storage.deserializeFromFile(NAME)
+    storage.serializeToFile(FILE_NAME)
+    storage.deserializeFromFile(FILE_NAME)
 }
