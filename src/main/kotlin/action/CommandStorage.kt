@@ -41,9 +41,7 @@ class CommandStorage {
      * @param name path to put file with serialization of actionList
      */
     fun serializeToFile(name: String) {
-        val file = FileWriter(name)
-        file.write(Json.encodeToString(actionList))
-        file.flush()
+        File(name).writeText(Json.encodeToString(actionList))
     }
 
     /**
@@ -51,8 +49,7 @@ class CommandStorage {
      * @param name path to get the file for deserialization
      */
     fun deserializeFromFile(name: String) {
-        val inputStream: InputStream = File(name).inputStream()
-        val inputString = inputStream.bufferedReader().use { it.readText() }
+        val inputString = File(name).readText()
         val actionListFromFile: MutableList<Action> = Json.decodeFromString(inputString)
         for (action in actionListFromFile) {
             action.doAction(this)

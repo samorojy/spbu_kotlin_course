@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package homework1
 
 import action.CommandStorage
@@ -5,34 +7,29 @@ import action.InsertAtStart
 import action.InsertAtEnd
 import action.Move
 
-const val NUMBER0 = 0
-const val NUMBER1 = 1
-const val NUMBER2 = 2
-const val NUMBER3 = 3
-const val NUMBER4 = 4
-const val NUMBER5 = 5
-const val FILE_NAME = "ActionList.json"
 
 fun main() {
+    val fileName = "src/main/resources/ActionList.json"
+    val numbers: IntArray = intArrayOf(0, 1, 2, 3, 4, 5)
     val storage = CommandStorage()
-    InsertAtStart(NUMBER1).doAction(storage)
-    InsertAtStart(NUMBER2).doAction(storage)
-    InsertAtStart(NUMBER3).doAction(storage)
-    InsertAtStart(NUMBER4).doAction(storage)
+    InsertAtStart(numbers[1]).doAction(storage)
+    InsertAtStart(numbers[2]).doAction(storage)
+    InsertAtStart(numbers[3]).doAction(storage)
+    InsertAtStart(numbers[4]).doAction(storage)
     storage.numberList.forEach { print(it) }
     println(" After InsertAtStart")
     storage.undoLastAction()
     storage.numberList.forEach { print(it) }
     println(" After Undo")
-    InsertAtEnd(NUMBER5).doAction(storage)
+    InsertAtEnd(numbers[5]).doAction(storage)
     storage.numberList.forEach { print(it) }
     println(" After Insert At end")
-    Move(NUMBER0, NUMBER3).doAction(storage)
+    Move(numbers[0], numbers[3]).doAction(storage)
     storage.numberList.forEach { print(it) }
     println(" After move")
     storage.undoLastAction()
     storage.numberList.forEach { print(it) }
     println(" After undo move")
-    storage.serializeToFile(FILE_NAME)
-    storage.deserializeFromFile(FILE_NAME)
+    storage.serializeToFile(fileName)
+    storage.deserializeFromFile(fileName)
 }
