@@ -7,7 +7,6 @@ import action.InsertAtStart
 import action.InsertAtEnd
 import action.Move
 
-
 fun main() {
     val fileName = "src/main/resources/ActionList.json"
     val numbers: IntArray = intArrayOf(0, 1, 2, 3, 4, 5)

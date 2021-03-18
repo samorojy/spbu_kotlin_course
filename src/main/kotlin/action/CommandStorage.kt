@@ -4,8 +4,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.io.FileWriter
-import java.io.InputStream
 
 /**
  * Stores a list of numbers and a list of actions on them
