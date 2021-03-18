@@ -1,11 +1,15 @@
 package action
 
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.io.File
+
 /**
  * Stores a list of numbers and a list of actions on them
  * @property numberList stores numbers
  * @property actionList stores actions on numbers
  */
-
 class CommandStorage {
     var numberList = mutableListOf<Int>()
     private var actionList = mutableListOf<Action>()
@@ -14,7 +18,7 @@ class CommandStorage {
      * add action to actionList
      */
     fun doAction(action: Action) {
-        actionList.add(0, action)
+        actionList.add(action)
     }
 
     /**
@@ -26,7 +30,27 @@ class CommandStorage {
             println("ERROR! Action list is empty. Nothing to undo")
             return
         }
-        actionList[0].undoAction()
-        actionList.removeFirst()
+        actionList.last().undoAction(this)
+        actionList.removeLast()
+    }
+
+    /**
+     * Serialize actionList and put it to file
+     * @param name path to put file with serialization of actionList
+     */
+    fun serializeToFile(name: String) {
+        File(name).writeText(Json.encodeToString(actionList))
+    }
+
+    /**
+     * Deserialize Json and performs actionList's actions from file
+     * @param name path to get the file for deserialization
+     */
+    fun deserializeFromFile(name: String) {
+        val inputString = File(name).readText()
+        val actionListFromFile: MutableList<Action> = Json.decodeFromString(inputString)
+        for (action in actionListFromFile) {
+            action.doAction(this)
+        }
     }
 }
