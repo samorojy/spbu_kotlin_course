@@ -19,7 +19,6 @@ repositories {
 
 dependencies {
     implementation("org.junit.jupiter:junit-jupiter:5.4.2")
-    implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
