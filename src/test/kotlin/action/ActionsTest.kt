@@ -1,14 +1,13 @@
 package action
 
 import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
 
 internal class InsertAtStartTest {
+    private val testStorage = CommandStorage()
 
     @Test
     fun doAction() {
-        val testStorage = CommandStorage()
         InsertAtStart(3).doAction(testStorage)
         InsertAtStart(2).doAction(testStorage)
         InsertAtStart(1).doAction(testStorage)
@@ -17,7 +16,6 @@ internal class InsertAtStartTest {
 
     @Test
     fun undoAction() {
-        val testStorage = CommandStorage()
         InsertAtStart(3).doAction(testStorage)
         InsertAtStart(2).doAction(testStorage)
         InsertAtStart(1).doAction(testStorage)
@@ -27,10 +25,10 @@ internal class InsertAtStartTest {
 }
 
 internal class InsertAtStartEndTest {
+    private val testStorage = CommandStorage()
 
     @Test
     fun doAction() {
-        val testStorage = CommandStorage()
         InsertAtEnd(3).doAction(testStorage)
         InsertAtEnd(2).doAction(testStorage)
         InsertAtEnd(1).doAction(testStorage)
@@ -39,7 +37,6 @@ internal class InsertAtStartEndTest {
 
     @Test
     fun undoAction() {
-        val testStorage = CommandStorage()
         InsertAtEnd(3).doAction(testStorage)
         InsertAtEnd(2).doAction(testStorage)
         InsertAtEnd(1).doAction(testStorage)
@@ -49,10 +46,10 @@ internal class InsertAtStartEndTest {
 }
 
 internal class MoveTest {
+    private val testStorage = CommandStorage()
 
     @Test
     fun doAction() {
-        val testStorage = CommandStorage()
         InsertAtEnd(3).doAction(testStorage)
         InsertAtEnd(2).doAction(testStorage)
         InsertAtEnd(1).doAction(testStorage)
@@ -62,7 +59,6 @@ internal class MoveTest {
 
     @Test
     fun undoAction() {
-        val testStorage = CommandStorage()
         InsertAtEnd(3).doAction(testStorage)
         InsertAtEnd(2).doAction(testStorage)
         InsertAtEnd(1).doAction(testStorage)
