@@ -1,5 +1,5 @@
-package name: "homework3"
-class name: "TestGenerator"
+package name: homework3
+class name: PerformedCommandStorage
 functions:
-  - name: "add"
-  - name: "delete"
+  - name: "forwardApply"
+  - name: "backwardApply"
