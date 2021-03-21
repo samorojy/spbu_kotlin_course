@@ -14,7 +14,7 @@ internal class TestGeneratorTest {
                 TestGeneratorTest::class.java.getResource("GeneratorTest1.kt").readText(),
                 Config(
                     "homework3",
-                    "Command",
+                    "PerformedCommandStorage",
                     listOf(
                         FunctionsName("forwardApply"),
                         FunctionsName("backwardApply")
@@ -25,7 +25,7 @@ internal class TestGeneratorTest {
                 TestGeneratorTest::class.java.getResource("GeneratorTest2.kt").readText(),
                 Config(
                     "homework3",
-                    "Storage",
+                    "CommandStorage",
                     listOf(
                         FunctionsName("forwardApply")
                     )
