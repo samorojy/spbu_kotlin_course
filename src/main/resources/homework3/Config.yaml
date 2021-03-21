@@ -1,0 +1,5 @@
+package name: "homework3"
+class name: "TestGenerator"
+functions:
+  - name: "add"
+  - name: "delete"

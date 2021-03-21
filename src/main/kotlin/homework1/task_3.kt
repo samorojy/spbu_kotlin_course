@@ -8,7 +8,7 @@ import action.InsertAtEnd
 import action.Move
 
 fun main() {
-    val fileName = "src/main/resources/ActionList.json"
+    val fileName = "src/main/resources/homework1/ActionList.json"
     val numbers: IntArray = intArrayOf(0, 1, 2, 3, 4, 5)
     val (startIndex, endIndex) = Pair(0, 3)
     val storage = CommandStorage()

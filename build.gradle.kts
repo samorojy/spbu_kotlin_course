@@ -20,6 +20,8 @@ repositories {
 dependencies {
     testImplementation(kotlin("test-junit"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
+    implementation("com.charleskorn.kaml:kaml:0.28.3")
+    implementation("com.squareup:kotlinpoet:1.7.2")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
 }
 
