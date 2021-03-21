@@ -28,6 +28,7 @@ class TestGenerator(private val config: Config) {
 }
 
 /**
+ * Function which generate tests and put it on Kt file.
  * @param inputFilePath Path to input Yaml format file.
  * @param outputFilePath Path to output Kt format file.
  */
