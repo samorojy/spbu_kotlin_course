@@ -1,6 +1,11 @@
 package homework3
 
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.TypeSpec
+
 import java.io.File
 
 /**
