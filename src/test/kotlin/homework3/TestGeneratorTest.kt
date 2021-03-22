@@ -11,7 +11,7 @@ internal class TestGeneratorTest {
         @JvmStatic
         fun inputData(): List<Arguments> = listOf(
             Arguments.of(
-                TestGeneratorTest::class.java.getResource("GeneratorTest1.kt").readText(),
+                TestGeneratorTest::class.java.getResource("GeneratorTest1.kt").readText().replace("\r\n", "\n"),
                 Config(
                     "homework3",
                     "PerformedCommandStorage",
