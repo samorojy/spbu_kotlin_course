@@ -26,9 +26,10 @@ class TestGenerator(private val config: Config) {
         .addFunctions(config.functions.map { createFunction(it) })
         .build()
 
-    val kotlinFile = FileSpec.builder(config.packageName, name)
-        .addType(createClass)
-        .build()
+    val kotlinFile: FileSpec
+        get() = FileSpec.builder(config.packageName, name)
+            .addType(createClass)
+            .build()
 }
 
 /**
