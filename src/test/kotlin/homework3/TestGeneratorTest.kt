@@ -22,7 +22,7 @@ internal class TestGeneratorTest {
                 )
             ),
             Arguments.of(
-                TestGeneratorTest::class.java.getResource("GeneratorTest2.kt").readText(),
+                TestGeneratorTest::class.java.getResource("GeneratorTest2.kt").readText().replace("\r\n", "\n"),
                 Config(
                     "homework3",
                     "CommandStorage",
