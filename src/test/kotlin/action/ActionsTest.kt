@@ -24,7 +24,7 @@ internal class InsertAtStartTest {
     }
 }
 
-internal class InsertAtStartEndTest {
+internal class InsertAtEndTest {
     private val testStorage = CommandStorage()
 
     @Test
