@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-internal class YamlDeserializationKtTest {
+internal class YamlDeserializationTest {
 
     companion object {
         @JvmStatic
@@ -18,7 +18,7 @@ internal class YamlDeserializationKtTest {
                         FunctionsName("forwardApply"),
                         FunctionsName("backwardApply")
                     )
-                ), YamlDeserializationKtTest::class.java.getResource("ConfigTest1.yaml").readText()
+                ), YamlDeserializationTest::class.java.getResource("ConfigTest1.yaml").readText()
             ),
             Arguments.of(
                 Config(
@@ -27,7 +27,7 @@ internal class YamlDeserializationKtTest {
                     listOf(
                         FunctionsName("forwardApply")
                     )
-                ), YamlDeserializationKtTest::class.java.getResource("ConfigTest2.yaml").readText()
+                ), YamlDeserializationTest::class.java.getResource("ConfigTest2.yaml").readText()
             )
         )
     }
