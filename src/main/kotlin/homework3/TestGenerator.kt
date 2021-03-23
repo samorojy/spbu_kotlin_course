@@ -4,7 +4,7 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
-import junit.framework.Test
+import com.squareup.kotlinpoet.ClassName
 
 import java.io.File
 
@@ -15,7 +15,7 @@ import java.io.File
  */
 class TestGenerator(private val config: Config) {
     private fun createFunction(function: FunctionsName) = FunSpec.builder(function.name)
-        .addAnnotation(Test::class)
+        .addAnnotation(ClassName("org.junit.jupiter.api", "Test"))
         .build()
 
     private val createClass = TypeSpec.classBuilder(config.className + "Test")
