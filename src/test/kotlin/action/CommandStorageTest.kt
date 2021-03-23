@@ -9,6 +9,25 @@ import java.nio.file.Path
 internal class CommandStorageTest {
 
     @Test
+    fun doAction() {
+        val testStorage = CommandStorage()
+        InsertAtStart(1).doAction(testStorage)
+        InsertAtEnd(2).doAction(testStorage)
+        Move(0, 1).doAction(testStorage)
+        assertEquals(listOf(2, 1), testStorage.numberList)
+    }
+
+    @Test
+    fun undoAction() {
+        val testStorage = CommandStorage()
+        InsertAtStart(1).doAction(testStorage)
+        InsertAtEnd(2).doAction(testStorage)
+        Move(0, 1).doAction(testStorage)
+        testStorage.undoLastAction()
+        assertEquals(listOf(1, 2), testStorage.numberList)
+    }
+
+    @Test
     fun serializeToFile(@TempDir directory: Path) {
         val testStorage = CommandStorage()
         val file: Path = directory.resolve("testFile.json")

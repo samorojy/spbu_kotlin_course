@@ -2,6 +2,7 @@ package action
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
+import java.lang.IllegalStateException
 
 internal class InsertAtStartTest {
     private val testStorage = CommandStorage()
@@ -65,5 +66,15 @@ internal class MoveTest {
         Move(0, 2).doAction(testStorage)
         testStorage.undoLastAction()
         assertEquals(listOf(3, 2, 1), testStorage.numberList)
+    }
+
+    @Test
+    fun useIncorrectData() {
+        InsertAtEnd(3).doAction(testStorage)
+        InsertAtEnd(2).doAction(testStorage)
+        InsertAtEnd(1).doAction(testStorage)
+        assertThrows(IllegalStateException("ERROR! Out of List bounds")::class.java) {
+            Move(-1, 5).doAction(testStorage)
+        }
     }
 }
