@@ -18,7 +18,6 @@ data class Config(
     val className: String,
     val functions: List<FunctionsName>
 ) {
-
     companion object {
         /**
          * Function to decode yaml text to config.
