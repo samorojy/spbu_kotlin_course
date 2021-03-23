@@ -21,6 +21,7 @@ repositories {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    implementation("junit:junit:3.8.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
     implementation("com.charleskorn.kaml:kaml:0.28.3")
     implementation("com.squareup:kotlinpoet:1.6.0")
