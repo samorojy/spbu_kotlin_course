@@ -6,5 +6,5 @@ fun main() {
     val inputFileName = scanner.nextLine()
     println("Please enter path to output file")
     val outputFileName = scanner.nextLine()
-    generateTest(inputFileName, outputFileName)
+    TestGenerator.generate(inputFileName, outputFileName)
 }

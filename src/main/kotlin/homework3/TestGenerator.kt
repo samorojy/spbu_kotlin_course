@@ -26,16 +26,19 @@ class TestGenerator(private val config: Config) {
     val kotlinFile: FileSpec = FileSpec.builder(config.packageName, config.className + "Test")
         .addType(createClass)
         .build()
+
+    companion object {
+        /**
+         * Function which generate tests and put it on Kt file.
+         * @param inputFilePath Path to input Yaml format file.
+         * @param outputFilePath Path to output Kt format file.
+         */
+        fun generate(inputFilePath: String, outputFilePath: String) {
+            val yamlText: String = File(inputFilePath).readText()
+            val config = Config.getFromYaml(yamlText)
+            val file = TestGenerator(config).kotlinFile
+            file.writeTo(File(outputFilePath))
+        }
+    }
 }
 
-/**
- * Function which generate tests and put it on Kt file.
- * @param inputFilePath Path to input Yaml format file.
- * @param outputFilePath Path to output Kt format file.
- */
-fun generateTest(inputFilePath: String, outputFilePath: String) {
-    val yamlText: String = File(inputFilePath).readText()
-    val config = getConfigFromYaml(yamlText)
-    val file = TestGenerator(config).kotlinFile
-    file.writeTo(File(outputFilePath))
-}

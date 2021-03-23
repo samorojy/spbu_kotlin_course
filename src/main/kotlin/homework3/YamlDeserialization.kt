@@ -17,7 +17,17 @@ data class Config(
     @SerialName("class name")
     val className: String,
     val functions: List<FunctionsName>
-)
+) {
+
+    companion object {
+        /**
+         * Function to decode yaml text to config.
+         * @param yamlText Yaml text data.
+         * @return Config object.
+         */
+        fun getFromYaml(yamlText: String) = Yaml.default.decodeFromString(this.serializer(), yamlText)
+    }
+}
 
 /**
  * Class storing function name.
@@ -25,10 +35,3 @@ data class Config(
  */
 @Serializable
 data class FunctionsName(val name: String)
-
-/**
- * Function to decode yaml text to config.
- * @param yamlText Yaml text data.
- * @return Config object.
- */
-fun getConfigFromYaml(yamlText: String) = Yaml.default.decodeFromString(Config.serializer(), yamlText)
