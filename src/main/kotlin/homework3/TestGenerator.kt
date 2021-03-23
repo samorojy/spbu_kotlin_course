@@ -41,4 +41,3 @@ class TestGenerator(private val config: Config) {
         }
     }
 }
-
