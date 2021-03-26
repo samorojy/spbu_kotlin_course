@@ -15,8 +15,8 @@ internal class PriorityQueueTest {
 
     @Test
     fun peek() {
-        queue.enqueue("Kotlin", 10)
-        queue.enqueue("F#", 1)
+        queue.enqueue("Kotlin", 1)
+        queue.enqueue("F#", 100)
         assertEquals("Kotlin", queue.peek())
     }
 
@@ -30,7 +30,7 @@ internal class PriorityQueueTest {
         queue.enqueue("Kotlin", 10)
         queue.enqueue("F#", 1)
         queue.remove()
-        assertEquals("F#", queue.peek())
+        assertEquals("Kotlin", queue.peek())
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class PriorityQueueTest {
     fun rool() {
         queue.enqueue("Kotlin", 10)
         queue.enqueue("F#", 1)
-        assertEquals("Kotlin", queue.rool())
+        assertEquals("F#", queue.rool())
     }
 
     @Test
