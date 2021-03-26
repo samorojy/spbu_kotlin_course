@@ -1,6 +1,5 @@
 package test1
 
-import java.util.*
 import java.util.PriorityQueue
 import kotlin.NoSuchElementException
 
