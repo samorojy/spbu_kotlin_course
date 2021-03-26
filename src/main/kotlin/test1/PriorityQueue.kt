@@ -9,7 +9,7 @@ class QueueMember<E, K : Comparable<K>>(val element: E, private val priority: K)
 
 class PriorityQueue<E, K : Comparable<K>> {
 
-    private var queue: PriorityQueue<QueueMember<E, K>> = PriorityQueue()
+    private val queue: PriorityQueue<QueueMember<E, K>> = PriorityQueue()
 
     fun enqueue(element: E, priority: K) {
         queue.add(QueueMember(element, priority))
