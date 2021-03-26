@@ -3,7 +3,6 @@ package test1
 import java.util.PriorityQueue
 import kotlin.NoSuchElementException
 
-
 class QueueMember<E, K : Comparable<K>>(val element: E, private val priority: K) : Comparable<QueueMember<E, K>> {
     override fun compareTo(other: QueueMember<E, K>) = priority.compareTo(other.priority)
 }
