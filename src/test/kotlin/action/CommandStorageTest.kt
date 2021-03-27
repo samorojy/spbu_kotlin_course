@@ -22,7 +22,7 @@ internal class CommandStorageTest {
     @Test
     fun serializeToFile(@TempDir directory: Path) {
         val testStorage = CommandStorage()
-        val file: Path = directory.resolve("testFile.json")
+        val file = directory.resolve("testFile.json")
         InsertAtStart(1).doAction(testStorage)
         InsertAtStart(2).doAction(testStorage)
         InsertAtStart(3).doAction(testStorage)
