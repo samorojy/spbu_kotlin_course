@@ -30,6 +30,6 @@ internal class GeneralTest {
         val config = javaClass.getResource("generalTest/$directoryName/config.yaml").path
         val file = tempDirectory.resolve(tempFileName)
         TestGenerator.generate(config, tempDirectory.toString())
-        assertEquals(expectedCode, file.toFile().readText())
+        assertEquals(expectedCode, file.toFile().readText().replace("\r\n", "\n"))
     }
 }
