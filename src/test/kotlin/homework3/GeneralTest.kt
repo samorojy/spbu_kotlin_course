@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
 import java.nio.file.Path
-import kotlin.io.path.readText
 
 internal class GeneralTest {
 
@@ -30,6 +29,6 @@ internal class GeneralTest {
         val config = javaClass.getResource("generalTest/$directoryName/config.yaml").path
         val file = tempDirectory.resolve(tempFileName)
         TestGenerator.generate(config, tempDirectory.toString())
-        assertEquals(expectedCode, file.toFile().readText().replace("\r\n", "\n"))
+        assertEquals(expectedCode.replace("\r\n", "\n"), file.toFile().readText().replace("\r\n", "\n"))
     }
 }
