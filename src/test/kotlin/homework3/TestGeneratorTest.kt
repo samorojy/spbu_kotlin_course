@@ -12,7 +12,7 @@ internal class TestGeneratorTest {
         @JvmStatic
         fun inputData(): List<Arguments> = listOf(
             Arguments.of(
-                TestGeneratorTest::class.java.getResource("GeneratorTest1.kt").file,
+                "GeneratorTest1.kt",
                 Config(
                     "homework3",
                     "PerformedCommandStorage",
@@ -23,7 +23,7 @@ internal class TestGeneratorTest {
                 )
             ),
             Arguments.of(
-                TestGeneratorTest::class.java.getResource("GeneratorTest2.kt").file,
+                "GeneratorTest2.kt",
                 Config(
                     "homework3",
                     "CommandStorage",
@@ -37,7 +37,10 @@ internal class TestGeneratorTest {
 
     @MethodSource("inputData")
     @ParameterizedTest(name = "test{index}, {1}")
-    fun getKotlinFile(expected: File, input: Config) {
-        assertEquals(expected.readText().replace("\r\n", "\n"), TestGenerator(input).kotlinFile.toString())
+    fun getKotlinFile(expectedName: String, input: Config) {
+        assertEquals(
+            javaClass.getResource(expectedName).readText().replace("\r\n", "\n"),
+            TestGenerator(input).kotlinFile.toString()
+        )
     }
 }
