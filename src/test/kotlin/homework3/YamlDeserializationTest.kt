@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.io.File
 
 internal class YamlDeserializationTest {
 
@@ -19,7 +18,7 @@ internal class YamlDeserializationTest {
                         FunctionsName("forwardApply"),
                         FunctionsName("backwardApply")
                     )
-                ), YamlDeserializationTest::class.java.getResource("ConfigTest1.yaml").file
+                ), "ConfigTest1.yaml"
             ),
             Arguments.of(
                 Config(
@@ -28,14 +27,14 @@ internal class YamlDeserializationTest {
                     listOf(
                         FunctionsName("forwardApply")
                     )
-                ), YamlDeserializationTest::class.java.getResource("ConfigTest2.yaml").file
+                ), "ConfigTest2.yaml"
             )
         )
     }
 
     @MethodSource("inputData")
     @ParameterizedTest(name = "test{index}, {1}")
-    fun getConfigFromYamlTest(expected: Config, input: File) {
-        assertEquals(expected, Config.getFromYaml(input.readText()))
+    fun getConfigFromYamlTest(expected: Config, inputName: String) {
+        assertEquals(expected, Config.getFromYaml(javaClass.getResource(inputName).readText()))
     }
 }
