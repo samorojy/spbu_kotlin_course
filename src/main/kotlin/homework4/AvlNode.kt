@@ -1,9 +1,17 @@
 package homework4
 
-class AvlNode<K : Comparable<K>, V>(private var key: K, var value: V) {
+class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) : Map.Entry<K, V> {
     private var height: Int = 0
     private var leftNode: AvlNode<K, V>? = null
     private var rightNode: AvlNode<K, V>? = null
+    override val key: K
+        get() {
+            return _key
+        }
+    override val value: V
+        get() {
+            return _value
+        }
 
     fun balance(): AvlNode<K, V> {
         return when (this.getBalanceFactor()) {
@@ -71,7 +79,7 @@ class AvlNode<K : Comparable<K>, V>(private var key: K, var value: V) {
 
     fun add(key: K, newValue: V): Boolean {
         if (key == this.key) {
-            value = newValue
+            _value = newValue
             return false
         }
         if (key < this.key) {
@@ -110,8 +118,8 @@ class AvlNode<K : Comparable<K>, V>(private var key: K, var value: V) {
             return leftNode
         }
         val minimumNode = rightNode!!.getMinimumNode()
-        this.value = minimumNode.value
-        this.key = minimumNode.key
+        this._value = minimumNode.value
+        this._key = minimumNode.key
         if (rightNode?.key == minimumNode.key) {
             this.rightNode = rightNode?.rightNode
         } else {
@@ -159,5 +167,11 @@ class AvlNode<K : Comparable<K>, V>(private var key: K, var value: V) {
             return this.rightNode?.getValueByKey(key)
         }
         return this.value
+    }
+
+    fun getEntries(entries: MutableSet<AvlNode<K, V>>) {
+        entries.add(this)
+        this.leftNode?.getEntries(entries)
+        this.rightNode?.getEntries(entries)
     }
 }
