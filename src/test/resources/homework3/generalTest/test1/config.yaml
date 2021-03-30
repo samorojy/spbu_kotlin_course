@@ -1,0 +1,5 @@
+package name: test1
+class name: JetBrainsInternship
+functions:
+  - name: "apply"
+  - name: "decline"
