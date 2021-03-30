@@ -1,0 +1,6 @@
+package name: test2
+class name: AvlTree
+functions:
+  - name: "remove"
+  - name: "add"
+  - name: "balance"

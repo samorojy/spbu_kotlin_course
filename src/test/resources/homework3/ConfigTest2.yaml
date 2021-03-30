@@ -1,0 +1,4 @@
+package name: homework3
+class name: CommandStorage
+functions:
+  - name: "forwardApply"
