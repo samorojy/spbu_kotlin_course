@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
  * interface for action classes
  */
 @Serializable
-sealed class Action {
-    abstract fun doAction(storage: CommandStorage)
-    abstract fun undoAction(storage: CommandStorage)
+sealed class Action<K> {
+    abstract fun doAction(numberList: MutableList<K>, storage: CommandStorage<K>)
+    abstract fun undoAction(numberList: MutableList<K>, storage: CommandStorage<K>)
 }
 
 /**
@@ -18,22 +18,24 @@ sealed class Action {
  */
 @Serializable
 @SerialName("Insert at start")
-class InsertAtStart(private val number: Int) : Action() {
+class InsertAtStart<K>(private val number: K) : Action<K>() {
     /**
      * Adds the value to the beginning of the list
+     * @property numberList The list of numbers with whom we work
      * @property storage CommandStorage with whom we work
      */
-    override fun doAction(storage: CommandStorage) {
-        storage.numberList.add(0, number)
+    override fun doAction(numberList: MutableList<K>, storage: CommandStorage<K>) {
+        numberList.add(0, number)
         storage.doAction(this)
     }
 
     /**
      * Removes the value at the beginning of the list
+     * @property numberList The list of numbers with whom we work
      * @property storage CommandStorage with whom we work
      */
-    override fun undoAction(storage: CommandStorage) {
-        storage.numberList.removeFirst()
+    override fun undoAction(numberList: MutableList<K>, storage: CommandStorage<K>) {
+        numberList.removeFirst()
     }
 }
 
@@ -43,22 +45,24 @@ class InsertAtStart(private val number: Int) : Action() {
  */
 @Serializable
 @SerialName("Insert at end")
-class InsertAtEnd(private val number: Int) : Action() {
+class InsertAtEnd<K>(private val number: K) : Action<K>() {
     /**
      * Adds the value to the end of the list
+     * @property numberList The list of numbers with whom we work
      * @property storage CommandStorage with whom we work
      */
-    override fun doAction(storage: CommandStorage) {
-        storage.numberList.add(number)
+    override fun doAction(numberList: MutableList<K>, storage: CommandStorage<K>) {
+        numberList.add(number)
         storage.doAction(this)
     }
 
     /**
      * Removes the value at the end of the list
+     * @property numberList The list of numbers with whom we work
      * @property storage CommandStorage with whom we work
      */
-    override fun undoAction(storage: CommandStorage) {
-        storage.numberList.removeLast()
+    override fun undoAction(numberList: MutableList<K>, storage: CommandStorage<K>) {
+        numberList.removeLast()
     }
 }
 
@@ -66,12 +70,12 @@ class InsertAtEnd(private val number: Int) : Action() {
  * Rearranges a list item from one place to another
  * @param startIndex The index from which to move the element
  * @param endIndex The index where to arrange the element
- * @property storage CommandStorage with whom we work
+ * @property numberList The list of numbers with whom we work
  */
-private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage) {
-    val value: Int = storage.numberList[startIndex]
-    storage.numberList.removeAt(startIndex)
-    storage.numberList.add(endIndex, value)
+private fun <K> moveElement(startIndex: Int, endIndex: Int, numberList: MutableList<K>) {
+    val value: K = numberList[startIndex]
+    numberList.removeAt(startIndex)
+    numberList.add(endIndex, value)
 }
 
 /**
@@ -81,25 +85,27 @@ private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage)
  */
 @Serializable
 @SerialName("Move")
-class Move(private val startIndex: Int, private val endIndex: Int) : Action() {
+class Move<K>(private val startIndex: Int, private val endIndex: Int) : Action<K>() {
 
     /**
      * Rearranges element from StartIndex to EndIndex
+     * @property numberList The list of numbers with whom we work
      * @property storage CommandStorage with whom we work
      */
-    override fun doAction(storage: CommandStorage) {
-        if ((startIndex !in storage.numberList.indices) || (endIndex !in storage.numberList.indices)) {
+    override fun doAction(numberList: MutableList<K>, storage: CommandStorage<K>) {
+        if ((startIndex !in numberList.indices) || (endIndex !in numberList.indices)) {
             error("ERROR! Out of List bounds")
         }
-        moveElement(startIndex, endIndex, storage)
+        moveElement(startIndex, endIndex, numberList)
         storage.doAction(this)
     }
 
     /**
      * Rearranges element from EndIndex to StartIndex
+     * @property numberList The list of numbers with whom we work
      * @property storage CommandStorage with whom we work
      */
-    override fun undoAction(storage: CommandStorage) {
-        moveElement(endIndex, startIndex, storage)
+    override fun undoAction(numberList: MutableList<K>, storage: CommandStorage<K>) {
+        moveElement(endIndex, startIndex, numberList)
     }
 }

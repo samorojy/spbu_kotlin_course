@@ -7,30 +7,29 @@ import java.io.File
 
 /**
  * Stores a list of numbers and a list of actions on them
- * @property numberList stores numbers
  * @property actionList stores actions on numbers
  */
-class CommandStorage {
-    var numberList = mutableListOf<Int>()
-    private var actionList = mutableListOf<Action>()
+class CommandStorage<K>() {
+    private var actionList = mutableListOf<Action<K>>()
 
     /**
      * add action to actionList
      */
-    fun doAction(action: Action) {
+    fun doAction(action: Action<K>) {
         actionList.add(action)
     }
 
     /**
      * undo the last action on numberList
      * remove last action from actionList
+     * @param numberList The list of numbers with whom we work
      */
-    fun undoLastAction() {
+    fun undoLastAction(numberList: MutableList<K>) {
         if (actionList.isEmpty()) {
             println("ERROR! Action list is empty. Nothing to undo")
             return
         }
-        actionList.last().undoAction(this)
+        actionList.last().undoAction(numberList, this)
         actionList.removeLast()
     }
 
@@ -39,18 +38,19 @@ class CommandStorage {
      * @param name path to put file with serialization of actionList
      */
     fun serializeToFile(name: String) {
-        File(name).writeText(Json.encodeToString(actionList))
+        File(name).writeText(Json.encodeToString<MutableList<Action<K>>>(actionList))
     }
 
     /**
      * Deserialize Json and performs actionList's actions from file
      * @param name path to get the file for deserialization
+     * @param numberList The list of numbers with whom we work
      */
-    fun deserializeFromFile(name: String) {
+    fun deserializeFromFile(numberList: MutableList<K>, name: String) {
         val inputString = File(name).readText()
-        val actionListFromFile: MutableList<Action> = Json.decodeFromString(inputString)
+        val actionListFromFile: MutableList<Action<K>> = Json.decodeFromString<MutableList<Action<K>>>(inputString)
         for (action in actionListFromFile) {
-            action.doAction(this)
+            action.doAction(numberList, this)
         }
     }
 }
