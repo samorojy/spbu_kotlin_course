@@ -33,6 +33,20 @@ class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) 
         }
     }
 
+    private fun getBalanceFactor(): Int {
+        return (leftNode?.height ?: 0) - (rightNode?.height ?: 0)
+    }
+
+    fun updateHeight() {
+        if (this.leftNode != null) {
+            this.leftNode!!.updateHeight()
+        }
+        if (this.rightNode != null) {
+            this.rightNode!!.updateHeight()
+        }
+        height = maxOf(leftNode?.height ?: 0, rightNode?.height ?: 0) + 1
+    }
+
     private fun leftRotate(): AvlNode<K, V> {
         val pivot = this.rightNode!!
         this.rightNode = pivot.leftNode
@@ -61,20 +75,6 @@ class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) 
         val rightChild = this.rightNode ?: return this
         this.rightNode = rightChild.rightRotate()
         return this.leftRotate()
-    }
-
-    fun updateHeight() {
-        if (this.leftNode != null) {
-            this.leftNode!!.updateHeight()
-        }
-        if (this.rightNode != null) {
-            this.rightNode!!.updateHeight()
-        }
-        height = maxOf(leftNode?.height ?: 0, rightNode?.height ?: 0) + 1
-    }
-
-    private fun getBalanceFactor(): Int {
-        return (leftNode?.height ?: 0) - (rightNode?.height ?: 0)
     }
 
     fun add(key: K, newValue: V): Boolean {
