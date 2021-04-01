@@ -9,7 +9,7 @@ import java.io.File
  * Stores a list of numbers and a list of actions on them
  * @property actionList stores actions on numbers
  */
-class CommandStorage<K>() {
+class CommandStorage<K> {
     private var actionList = mutableListOf<Action<K>>()
 
     /**
@@ -38,7 +38,7 @@ class CommandStorage<K>() {
      * @param name path to put file with serialization of actionList
      */
     fun serializeToFile(name: String) {
-        File(name).writeText(Json.encodeToString<MutableList<Action<K>>>(actionList))
+        File(name).writeText(Json.encodeToString(actionList))
     }
 
     /**
@@ -48,7 +48,7 @@ class CommandStorage<K>() {
      */
     fun deserializeFromFile(numberList: MutableList<K>, name: String) {
         val inputString = File(name).readText()
-        val actionListFromFile: MutableList<Action<K>> = Json.decodeFromString<MutableList<Action<K>>>(inputString)
+        val actionListFromFile: MutableList<Action<K>> = Json.decodeFromString(inputString)
         for (action in actionListFromFile) {
             action.doAction(numberList, this)
         }
