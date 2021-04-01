@@ -135,11 +135,11 @@ class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) 
         return this
     }
 
-    private fun removeMinimumNode(minKey: K) {
-        if (leftNode?.key == minKey) {
+    private fun removeMinimumNode(minimumKey: K) {
+        if (leftNode?.key == minimumKey) {
             leftNode = null
         } else {
-            leftNode?.removeMinimumNode(minKey)
+            leftNode?.removeMinimumNode(minimumKey)
         }
     }
 
