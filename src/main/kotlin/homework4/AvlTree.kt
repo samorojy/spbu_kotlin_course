@@ -22,10 +22,15 @@ class AvlTree<K : Comparable<K>, V> : Map<K, V> {
             return entries.map { it.value }.toSet()
         }
 
+    fun clear() {
+        root = null
+        _size = 0
+    }
+
     fun addValue(key: K, value: V) {
         if (this.isEmpty()) {
             root = AvlNode(key, value)
-            this._size++
+            _size++
         } else {
             if (root?.add(key, value) == true) {
                 _size++
