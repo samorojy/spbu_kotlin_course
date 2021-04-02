@@ -42,8 +42,6 @@ class AvlTree<K : Comparable<K>, V> : Map<K, V> {
 
     fun remove(key: K) {
         root = root?.remove(key)
-        root?.updateHeight()
-        root = root?.balance()
     }
 
     override fun containsKey(key: K): Boolean = root?.isContainsKey(key) ?: false
@@ -53,5 +51,4 @@ class AvlTree<K : Comparable<K>, V> : Map<K, V> {
     override fun isEmpty(): Boolean = root == null
 
     override fun get(key: K): V? = root?.getValueByKey(key)
-
 }

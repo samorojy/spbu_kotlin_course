@@ -1,28 +1,28 @@
+@file:Suppress("TooManyFunctions")
+
 package homework4
 
-class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) : Map.Entry<K, V> {
+import kotlin.math.max
+
+class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) : Map.Entry<K, V> {
     private var height: Int = 0
     private var leftNode: AvlNode<K, V>? = null
     private var rightNode: AvlNode<K, V>? = null
-    override val key: K
-        get() {
-            return _key
-        }
-    override val value: V
-        get() {
-            return _value
-        }
+
+    companion object {
+        private const val balanceFactorValue = 2
+    }
 
     fun balance(): AvlNode<K, V> {
         return when (this.getBalanceFactor()) {
-            2 -> {
+            balanceFactorValue -> {
                 if (this.leftNode?.getBalanceFactor() == -1) {
                     this.leftRightRotate()
                 } else {
                     this.rightRotate()
                 }
             }
-            -2 -> {
+            -balanceFactorValue -> {
                 if (this.rightNode?.getBalanceFactor() == 1) {
                     this.rightLeftRotate()
                 } else {
@@ -39,20 +39,20 @@ class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) 
 
     fun updateHeight() {
         if (this.leftNode != null) {
-            this.leftNode!!.updateHeight()
+            this.leftNode?.updateHeight()
         }
         if (this.rightNode != null) {
-            this.rightNode!!.updateHeight()
+            this.rightNode?.updateHeight()
         }
-        height = maxOf(leftNode?.height ?: 0, rightNode?.height ?: 0) + 1
+        height = max(leftNode?.height ?: 0, rightNode?.height ?: 0) + 1
     }
 
     private fun leftRotate(): AvlNode<K, V> {
         val pivot = this.rightNode!!
         this.rightNode = pivot.leftNode
         pivot.leftNode = this
-        this.height = maxOf(this.leftNode?.height ?: 0, this.rightNode?.height ?: 0) + 1
-        pivot.height = maxOf(pivot.leftNode?.height ?: 0, pivot.rightNode?.height ?: 0) + 1
+        this.height = max(this.leftNode?.height ?: 0, this.rightNode?.height ?: 0) + 1
+        pivot.height = max(pivot.leftNode?.height ?: 0, pivot.rightNode?.height ?: 0) + 1
         return pivot
     }
 
@@ -66,8 +66,8 @@ class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) 
         val pivot = this.leftNode!!
         this.leftNode = pivot.rightNode
         pivot.rightNode = this
-        this.height = maxOf(this.leftNode?.height ?: 0, this.rightNode?.height ?: 0) + 1
-        pivot.height = maxOf(pivot.leftNode?.height ?: 0, pivot.rightNode?.height ?: 0) + 1
+        this.height = max(this.leftNode?.height ?: 0, this.rightNode?.height ?: 0) + 1
+        pivot.height = max(pivot.leftNode?.height ?: 0, pivot.rightNode?.height ?: 0) + 1
         return pivot
     }
 
@@ -78,79 +78,86 @@ class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) 
     }
 
     fun add(key: K, newValue: V): Boolean {
-        if (key == this.key) {
-            _value = newValue
-            return false
-        }
-        if (key < this.key) {
-            if (leftNode == null) {
-                leftNode = AvlNode(key, newValue)
-                return true
-            } else {
-                leftNode?.add(key, newValue)
+        return when {
+            key == this.key -> {
+                value = newValue
+                false
             }
-        }
+            key < this.key -> {
+                if (leftNode == null) {
+                    leftNode = AvlNode(key, newValue)
+                    true
+                } else {
+                    leftNode?.add(key, newValue) ?: false
+                }
+            }
 
-        if (key > this.key) {
-            if (rightNode == null) {
-                rightNode = AvlNode(key, newValue)
-                return true
-            } else {
-                rightNode?.add(key, newValue)
+            key > this.key -> {
+                if (rightNode == null) {
+                    rightNode = AvlNode(key, newValue)
+                    true
+                } else {
+                    rightNode?.add(key, newValue) ?: false
+                }
             }
+            else -> false
         }
-        return false
     }
 
     fun remove(key: K): AvlNode<K, V>? {
-        if (key < this.key) {
-            leftNode = leftNode?.remove(key)
-            return this
+        return when {
+            key < this.key -> {
+                leftNode = leftNode?.remove(key)
+                this
+            }
+            key > this.key -> {
+                rightNode = rightNode?.remove(key)
+                this
+            }
+            else -> {
+                when {
+                    leftNode == null -> {
+                        rightNode
+                    }
+                    rightNode == null -> {
+                        leftNode
+                    }
+                    else -> {
+                        val minimumNode = rightNode?.getMinimumNode() ?: this
+                        minimumNode.leftNode = this.leftNode
+                        if (minimumNode.key != rightNode?.key) {
+                            rightNode?.removeMinimumNode(minimumNode.key, minimumNode.rightNode)
+                            minimumNode.rightNode = this.rightNode
+                        }
+                        minimumNode.balance()
+                    }
+                }
+            }
         }
-        if (key > this.key) {
-            rightNode = rightNode?.remove(key)
-            return this
-        }
-        if (leftNode == null) {
-            return rightNode
-        }
-        if (rightNode == null) {
-            return leftNode
-        }
-        val minimumNode = rightNode!!.getMinimumNode()
-        this._value = minimumNode.value
-        this._key = minimumNode.key
-        if (rightNode?.key == minimumNode.key) {
-            this.rightNode = rightNode?.rightNode
-        } else {
-            rightNode?.removeMinimumNode(this.key)
-        }
-        return this
     }
 
-    private fun getMinimumNode(): AvlNode<K, V> {
-        while (this.leftNode != null) {
-            this.leftNode!!.getMinimumNode()
-        }
-        return this
-    }
+    private fun getMinimumNode(): AvlNode<K, V> = leftNode?.getMinimumNode() ?: this
 
-    private fun removeMinimumNode(minimumKey: K) {
+    private fun removeMinimumNode(minimumKey: K, renewedNode: AvlNode<K, V>?) {
         if (leftNode?.key == minimumKey) {
-            leftNode = null
+            leftNode = renewedNode
         } else {
-            leftNode?.removeMinimumNode(minimumKey)
+            leftNode?.removeMinimumNode(minimumKey, renewedNode)
         }
     }
 
     fun isContainsKey(key: K): Boolean {
-        if (key < this.key) {
-            return this.leftNode?.isContainsKey(key) ?: false
+        return when {
+            key < this.key -> {
+                this.leftNode?.isContainsKey(key) ?: false
+            }
+
+            key > this.key -> {
+                this.rightNode?.isContainsKey(key) ?: false
+            }
+
+            else -> true
         }
-        if (key > this.key) {
-            return this.rightNode?.isContainsKey(key) ?: false
-        }
-        return true
     }
 
     fun isContainsValue(value: V): Boolean {
@@ -160,13 +167,15 @@ class AvlNode<K : Comparable<K>, V>(private var _key: K, private var _value: V) 
     }
 
     fun getValueByKey(key: K): V? {
-        if (key < this.key) {
-            return this.leftNode?.getValueByKey(key)
+        return when {
+            key < this.key -> {
+                this.leftNode?.getValueByKey(key)
+            }
+            key > this.key -> {
+                this.rightNode?.getValueByKey(key)
+            }
+            else -> this.value
         }
-        if (key > this.key) {
-            return this.rightNode?.getValueByKey(key)
-        }
-        return this.value
     }
 
     fun getEntries(entries: MutableSet<AvlNode<K, V>>) {

@@ -17,8 +17,9 @@ internal class AvlTreeTest {
     fun remove() {
         tree.addValue(1, "Kotlin")
         tree.addValue(2, "C#")
+        tree.addValue(0, "F#")
         tree.remove(1)
-        assertEquals(setOf(Pair(2, "C#")), tree.entries.map { Pair(it.key, it.value) }.toSet())
+        assertEquals(setOf(Pair(2, "C#"), Pair(0, "F#")), tree.entries.map { Pair(it.key, it.value) }.toSet())
     }
 
     @Test
