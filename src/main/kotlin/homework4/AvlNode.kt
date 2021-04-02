@@ -104,45 +104,51 @@ class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) 
         }
     }
 
-    fun remove(key: K): AvlNode<K, V>? {
+    fun remove(key: K, parentNode: AvlNode<K, V>?): AvlNode<K, V>? {
         return when {
             key < this.key -> {
-                leftNode = leftNode?.remove(key)
+                this.leftNode = this.leftNode?.remove(key, this)
                 this
             }
             key > this.key -> {
-                rightNode = rightNode?.remove(key)
+                this.rightNode = this.rightNode?.remove(key, this)
                 this
             }
+            else -> removeByKey(key, parentNode)
+        }
+    }
+
+    private fun removeByKey(key: K, previousNode: AvlNode<K, V>?): AvlNode<K, V>? {
+        return when {
+            leftNode == null -> this.rightNode
+            rightNode == null -> this.leftNode
             else -> {
-                when {
-                    leftNode == null -> {
-                        rightNode
-                    }
-                    rightNode == null -> {
-                        leftNode
-                    }
-                    else -> {
-                        val minimumNode = rightNode?.getMinimumNode() ?: this
-                        minimumNode.leftNode = this.leftNode
-                        if (minimumNode.key != rightNode?.key) {
-                            rightNode?.removeMinimumNode(minimumNode.key, minimumNode.rightNode)
-                            minimumNode.rightNode = this.rightNode
-                        }
-                        minimumNode.balance()
-                    }
+                val minimumNode = this.rightNode?.getMinimumNode() ?: this
+
+                if (previousNode?.leftNode == this) {
+                    previousNode.leftNode = minimumNode
+                } else {
+                    previousNode?.rightNode = minimumNode
                 }
+                minimumNode.leftNode = this.leftNode
+                if (this.rightNode?.key != minimumNode.key) {
+                    this.rightNode?.removeMinimumNode(key)
+                    minimumNode.rightNode = this.rightNode
+                } else {
+                    minimumNode.rightNode = minimumNode.rightNode?.rightNode
+                }
+                minimumNode.balance()
             }
         }
     }
 
     private fun getMinimumNode(): AvlNode<K, V> = leftNode?.getMinimumNode() ?: this
 
-    private fun removeMinimumNode(minimumKey: K, renewedNode: AvlNode<K, V>?) {
+    private fun removeMinimumNode(minimumKey: K) {
         if (leftNode?.key == minimumKey) {
-            leftNode = renewedNode
+            leftNode = null
         } else {
-            leftNode?.removeMinimumNode(minimumKey, renewedNode)
+            leftNode?.removeMinimumNode(minimumKey)
         }
     }
 

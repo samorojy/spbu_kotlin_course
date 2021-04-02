@@ -41,7 +41,7 @@ class AvlTree<K : Comparable<K>, V> : Map<K, V> {
     }
 
     fun remove(key: K) {
-        root = root?.remove(key)
+        root = root?.remove(key, null)
     }
 
     override fun containsKey(key: K): Boolean = root?.isContainsKey(key) ?: false

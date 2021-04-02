@@ -53,4 +53,12 @@ internal class AvlTreeTest {
         tree.addValue(4, "Second")
         assertEquals(2, tree.size)
     }
+
+    @Test
+    fun clear() {
+        tree.addValue(1, "First")
+        tree.addValue(4, "Second")
+        tree.clear()
+        assertEquals(setOf(0, true), setOf(tree.size, tree.isEmpty()))
+    }
 }
