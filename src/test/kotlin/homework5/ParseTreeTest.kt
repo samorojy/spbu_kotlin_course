@@ -28,7 +28,7 @@ internal class ParseTreeTest {
     @Test
     fun getString() {
         val tree = ParseTree(javaClass.getResource("expected1.txt").path.toString())
-        val expected = javaClass.getResource("correct.txt").readText().replace("\r\n", "\n")
+        val expected = javaClass.getResource("getString.txt").readText().replace("\r\n", "\n")
         assertEquals(expected, tree.getString())
     }
 
