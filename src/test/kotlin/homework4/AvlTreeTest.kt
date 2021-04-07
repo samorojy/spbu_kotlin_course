@@ -2,6 +2,9 @@ package homework4
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import kotlin.concurrent.fixedRateTimer
+import kotlin.math.abs
 
 internal class AvlTreeTest {
     private val tree = AvlTree<Int, String>()
@@ -60,5 +63,17 @@ internal class AvlTreeTest {
         tree.addValue(4, "Second")
         tree.clear()
         assertEquals(setOf(0, true), setOf(tree.size, tree.isEmpty()))
+    }
+
+    @Test
+    fun failTest() {
+        for (i in 1..6) {
+            tree.addValue(i, "")
+        }
+        val balanceFactor = (tree.entries.find { it.key == 4 }!! as AvlNode<Int, String>).getBalanceFactor()
+        assertEquals(1, abs(balanceFactor))
+
+        // balanceFactor не может быть равен двум после добавления, посмотри какое у тебя дерево получается и построй
+        // его где-нибдь ещё и пойми что у тебя не так
     }
 }
