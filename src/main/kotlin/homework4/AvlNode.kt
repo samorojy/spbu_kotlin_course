@@ -4,8 +4,12 @@ package homework4
 
 import kotlin.math.max
 
-class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) : Map.Entry<K, V> {
+class AvlNode<K : Comparable<K>, V>(override val key: K, private var privateValue: V) : Map.Entry<K, V> {
     private var height: Int = 0
+    override val value: V
+        get() {
+            return privateValue
+        }
     private var leftNode: AvlNode<K, V>? = null
     private var rightNode: AvlNode<K, V>? = null
 
@@ -17,14 +21,14 @@ class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) 
         return when (this.getBalanceFactor()) {
             balanceFactorValue -> {
                 if (this.leftNode?.getBalanceFactor() == -1) {
-                    this.leftRightRotate()
+                    this.bigLeftRotate()
                 } else {
                     this.rightRotate()
                 }
             }
             -balanceFactorValue -> {
                 if (this.rightNode?.getBalanceFactor() == 1) {
-                    this.rightLeftRotate()
+                    this.bigRightRotate()
                 } else {
                     this.leftRotate()
                 }
@@ -33,7 +37,7 @@ class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) 
         }
     }
 
-     fun getBalanceFactor(): Int {
+    fun getBalanceFactor(): Int {
         return (leftNode?.height ?: 0) - (rightNode?.height ?: 0)
     }
 
@@ -56,9 +60,9 @@ class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) 
         return pivot
     }
 
-    private fun leftRightRotate(): AvlNode<K, V> {
+    private fun bigLeftRotate(): AvlNode<K, V> {
         val leftChild = this.leftNode ?: return this
-        this.leftNode = leftChild.rightRotate()
+        this.leftNode = leftChild.leftRotate()
         return this.rightRotate()
     }
 
@@ -71,7 +75,7 @@ class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) 
         return pivot
     }
 
-    private fun rightLeftRotate(): AvlNode<K, V> {
+    private fun bigRightRotate(): AvlNode<K, V> {
         val rightChild = this.rightNode ?: return this
         this.rightNode = rightChild.rightRotate()
         return this.leftRotate()
@@ -80,7 +84,7 @@ class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) 
     fun add(key: K, newValue: V): Boolean {
         return when {
             key == this.key -> {
-                value = newValue
+                privateValue = newValue
                 false
             }
             key < this.key -> {
@@ -166,11 +170,9 @@ class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) 
         }
     }
 
-    fun isContainsValue(value: V): Boolean {
-        return this.value == value ||
-                rightNode?.isContainsValue(value) ?: false ||
-                leftNode?.isContainsValue(value) ?: false
-    }
+    fun isContainsValue(value: V): Boolean = this.privateValue == value ||
+            rightNode?.isContainsValue(value) ?: false ||
+            leftNode?.isContainsValue(value) ?: false
 
     fun getValueByKey(key: K): V? {
         return when {
@@ -180,7 +182,7 @@ class AvlNode<K : Comparable<K>, V>(override var key: K, override var value: V) 
             key > this.key -> {
                 this.rightNode?.getValueByKey(key)
             }
-            else -> this.value
+            else -> this.privateValue
         }
     }
 

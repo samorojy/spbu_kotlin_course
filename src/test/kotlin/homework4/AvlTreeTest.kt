@@ -72,8 +72,5 @@ internal class AvlTreeTest {
         }
         val balanceFactor = (tree.entries.find { it.key == 4 }!! as AvlNode<Int, String>).getBalanceFactor()
         assertEquals(1, abs(balanceFactor))
-
-        // balanceFactor не может быть равен двум после добавления, посмотри какое у тебя дерево получается и построй
-        // его где-нибдь ещё и пойми что у тебя не так
     }
 }
