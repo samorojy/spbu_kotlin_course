@@ -40,6 +40,7 @@ class AvlNode<K : Comparable<K>, V>(override val key: K, private var privateValu
     }
 
     private fun getBalanceFactor(): Int {
+        updateHeight()
         return (leftNode?.height ?: 0) - (rightNode?.height ?: 0)
     }
 
