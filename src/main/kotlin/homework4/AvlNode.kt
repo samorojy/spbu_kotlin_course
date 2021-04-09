@@ -39,7 +39,7 @@ class AvlNode<K : Comparable<K>, V>(override val key: K, private var privateValu
         }
     }
 
-    fun getBalanceFactor(): Int {
+    private fun getBalanceFactor(): Int {
         return (leftNode?.height ?: 0) - (rightNode?.height ?: 0)
     }
 
@@ -85,10 +85,6 @@ class AvlNode<K : Comparable<K>, V>(override val key: K, private var privateValu
 
     fun add(key: K, newValue: V): Boolean {
         return when {
-            key == this.key -> {
-                privateValue = newValue
-                false
-            }
             key < this.key -> {
                 if (leftNode == null) {
                     leftNode = AvlNode(key, newValue)
@@ -106,7 +102,10 @@ class AvlNode<K : Comparable<K>, V>(override val key: K, private var privateValu
                     rightNode?.add(key, newValue) ?: false
                 }
             }
-            else -> false
+            else -> {
+                privateValue = newValue
+                false
+            }
         }
     }
 
