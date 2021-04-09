@@ -1,8 +1,12 @@
 package action
 
-import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import java.io.File
 
 /**
@@ -10,14 +14,14 @@ import java.io.File
  * @property numberList stores numbers
  * @property actionList stores actions on numbers
  */
-class CommandStorage {
-    var numberList = mutableListOf<Int>()
-    private var actionList = mutableListOf<Action>()
+class CommandStorage<T> {
+    var numberList = mutableListOf<T>()
+    private var actionList = mutableListOf<Action<T>>()
 
     /**
      * add action to actionList
      */
-    fun doAction(action: Action) {
+    fun doAction(action: Action<T>) {
         actionList.add(action)
     }
 
@@ -34,23 +38,39 @@ class CommandStorage {
         actionList.removeLast()
     }
 
-    /**
-     * Serialize actionList and put it to file
-     * @param name path to put file with serialization of actionList
-     */
-    fun serializeToFile(name: String) {
-        File(name).writeText(Json.encodeToString(actionList))
-    }
+    companion object IntJson {
+        private val json = Json {
+            useArrayPolymorphism = true
+            serializersModule = SerializersModule {
+                polymorphic(Any::class) {
+                    subclass(IntAsObjectSerializer)
+                }
+                polymorphic(Action::class) {
+                    subclass(InsertAtStart.serializer(PolymorphicSerializer(Any::class)))
+                    subclass(InsertAtEnd.serializer(PolymorphicSerializer(Any::class)))
+                    subclass(Move.serializer(PolymorphicSerializer(Any::class)))
+                }
+            }
+        }
 
-    /**
-     * Deserialize Json and performs actionList's actions from file
-     * @param name path to get the file for deserialization
-     */
-    fun deserializeFromFile(name: String) {
-        val inputString = File(name).readText()
-        val actionListFromFile: MutableList<Action> = Json.decodeFromString(inputString)
-        for (action in actionListFromFile) {
-            action.doAction(this)
+        /**
+         * Serialize actionList and put it to file
+         * @param name path to put file with serialization of actionList
+         */
+        fun CommandStorage<Int>.serializeToFile(name: String) {
+            File(name).writeText(json.encodeToString(actionList))
+        }
+
+        /**
+         * Deserialize Json and performs actionList's actions from file
+         * @param name path to get the file for deserialization
+         */
+        fun CommandStorage<Int>.deserializeFromFile(name: String) {
+            val inputString = File(name).readText()
+            val actionListFromFile: MutableList<Action<Int>> = json.decodeFromString(inputString)
+            for (action in actionListFromFile) {
+                action.doAction(this)
+            }
         }
     }
 }

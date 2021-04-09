@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
  * interface for action classes
  */
 @Serializable
-sealed class Action {
-    abstract fun doAction(storage: CommandStorage)
-    abstract fun undoAction(storage: CommandStorage)
+sealed class Action<T> {
+    abstract fun doAction(storage: CommandStorage<T>)
+    abstract fun undoAction(storage: CommandStorage<T>)
 }
 
 /**
@@ -18,12 +18,12 @@ sealed class Action {
  */
 @Serializable
 @SerialName("Insert at start")
-class InsertAtStart(private val number: Int) : Action() {
+class InsertAtStart<T>(private val number: T) : Action<T>() {
     /**
      * Adds the value to the beginning of the list
      * @property storage CommandStorage with whom we work
      */
-    override fun doAction(storage: CommandStorage) {
+    override fun doAction(storage: CommandStorage<T>) {
         storage.numberList.add(0, number)
         storage.doAction(this)
     }
@@ -32,7 +32,7 @@ class InsertAtStart(private val number: Int) : Action() {
      * Removes the value at the beginning of the list
      * @property storage CommandStorage with whom we work
      */
-    override fun undoAction(storage: CommandStorage) {
+    override fun undoAction(storage: CommandStorage<T>) {
         storage.numberList.removeFirst()
     }
 }
@@ -43,12 +43,12 @@ class InsertAtStart(private val number: Int) : Action() {
  */
 @Serializable
 @SerialName("Insert at end")
-class InsertAtEnd(private val number: Int) : Action() {
+class InsertAtEnd<T>(private val number: T) : Action<T>() {
     /**
      * Adds the value to the end of the list
      * @property storage CommandStorage with whom we work
      */
-    override fun doAction(storage: CommandStorage) {
+    override fun doAction(storage: CommandStorage<T>) {
         storage.numberList.add(number)
         storage.doAction(this)
     }
@@ -57,7 +57,7 @@ class InsertAtEnd(private val number: Int) : Action() {
      * Removes the value at the end of the list
      * @property storage CommandStorage with whom we work
      */
-    override fun undoAction(storage: CommandStorage) {
+    override fun undoAction(storage: CommandStorage<T>) {
         storage.numberList.removeLast()
     }
 }
@@ -68,8 +68,8 @@ class InsertAtEnd(private val number: Int) : Action() {
  * @param endIndex The index where to arrange the element
  * @property storage CommandStorage with whom we work
  */
-private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage) {
-    val value: Int = storage.numberList[startIndex]
+private fun <T> moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage<T>) {
+    val value: T = storage.numberList[startIndex]
     storage.numberList.removeAt(startIndex)
     storage.numberList.add(endIndex, value)
 }
@@ -81,13 +81,13 @@ private fun moveElement(startIndex: Int, endIndex: Int, storage: CommandStorage)
  */
 @Serializable
 @SerialName("Move")
-class Move(private val startIndex: Int, private val endIndex: Int) : Action() {
+class Move<T>(private val startIndex: Int, private val endIndex: Int) : Action<T>() {
 
     /**
      * Rearranges element from StartIndex to EndIndex
      * @property storage CommandStorage with whom we work
      */
-    override fun doAction(storage: CommandStorage) {
+    override fun doAction(storage: CommandStorage<T>) {
         if ((startIndex !in storage.numberList.indices) || (endIndex !in storage.numberList.indices)) {
             error("ERROR! Out of List bounds")
         }
@@ -99,7 +99,7 @@ class Move(private val startIndex: Int, private val endIndex: Int) : Action() {
      * Rearranges element from EndIndex to StartIndex
      * @property storage CommandStorage with whom we work
      */
-    override fun undoAction(storage: CommandStorage) {
+    override fun undoAction(storage: CommandStorage<T>) {
         moveElement(endIndex, startIndex, storage)
     }
 }

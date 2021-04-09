@@ -1,5 +1,7 @@
 package action
 
+import action.CommandStorage.IntJson.deserializeFromFile
+import action.CommandStorage.IntJson.serializeToFile
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.io.TempDir
@@ -10,10 +12,10 @@ internal class CommandStorageTest {
 
     @Test
     fun doUndoAction() {
-        val testStorage = CommandStorage()
+        val testStorage = CommandStorage<Int>()
         InsertAtStart(1).doAction(testStorage)
         InsertAtEnd(2).doAction(testStorage)
-        Move(0, 1).doAction(testStorage)
+        Move<Int>(0, 1).doAction(testStorage)
         InsertAtStart(5).doAction(testStorage)
         testStorage.undoLastAction()
         assertEquals(listOf(2, 1), testStorage.numberList)
@@ -21,7 +23,7 @@ internal class CommandStorageTest {
 
     @Test
     fun serializeToFile(@TempDir directory: Path) {
-        val testStorage = CommandStorage()
+        val testStorage = CommandStorage<Int>()
         val file = directory.resolve("testFile.json")
         InsertAtStart(1).doAction(testStorage)
         InsertAtStart(2).doAction(testStorage)
@@ -33,7 +35,7 @@ internal class CommandStorageTest {
 
     @Test
     fun deserializeFromFile() {
-        val testStorage = CommandStorage()
+        val testStorage = CommandStorage<Int>()
         testStorage.deserializeFromFile(javaClass.getResource("ActionList.json").path)
         assertEquals(listOf(3, 2, 1, 5), testStorage.numberList)
     }
