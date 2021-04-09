@@ -18,6 +18,8 @@ class AvlNode<K : Comparable<K>, V>(override val key: K, private var privateValu
     }
 
     fun balance(): AvlNode<K, V> {
+        leftNode = leftNode?.balance()
+        rightNode = rightNode?.balance()
         return when (this.getBalanceFactor()) {
             balanceFactorValue -> {
                 if (this.leftNode?.getBalanceFactor() == -1) {
