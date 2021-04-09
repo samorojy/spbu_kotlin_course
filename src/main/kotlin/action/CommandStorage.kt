@@ -1,6 +1,5 @@
 package action
 
-import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -15,7 +14,7 @@ import java.io.File
  * @property actionList stores actions on numbers
  */
 class CommandStorage<T> {
-    var numberList = mutableListOf<T>()
+    val numberList = mutableListOf<T>()
     private var actionList = mutableListOf<Action<T>>()
 
     /**
@@ -44,11 +43,6 @@ class CommandStorage<T> {
             serializersModule = SerializersModule {
                 polymorphic(Any::class) {
                     subclass(IntAsObjectSerializer)
-                }
-                polymorphic(Action::class) {
-                    subclass(InsertAtStart.serializer(PolymorphicSerializer(Any::class)))
-                    subclass(InsertAtEnd.serializer(PolymorphicSerializer(Any::class)))
-                    subclass(Move.serializer(PolymorphicSerializer(Any::class)))
                 }
             }
         }
