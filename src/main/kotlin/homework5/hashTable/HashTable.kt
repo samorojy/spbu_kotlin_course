@@ -87,6 +87,7 @@ class HashTable<K, V>(private var hashFunction: HashFunction<K>) {
             "Element count" to this.elementCount,
             "Bucket count" to this.bucketCount,
             "Load factor" to this.loadFactor,
+            "Current Hash function" to this.hashFunction.name,
             "Conflicts number" to numberOfConflicts,
             "Maximum bucket length" to maximumBucketLength
         )
