@@ -18,7 +18,8 @@ internal class HashTableTest {
         val dataList = listOf(Pair("first", "1"), Pair("second", "2"), Pair("third", "3"))
         dataList.forEach { table.add(it.first, it.second) }
         assertEquals("2", table["second"])
-        table.remove("second")
+        assertEquals(true, table.remove("second"))
+        assertEquals(false, table.remove("six"))
         assertEquals(null, table["second"])
     }
 
