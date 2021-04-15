@@ -8,14 +8,15 @@ class HashTable<K, V>(private var hashFunction: HashFunction<K>) {
     data class HashElement<K, V>(val key: K, var value: V)
 
     private var elementCount = 0
+    private var bucketCount = 1
     private val loadFactor: Double
         get() {
-            return elementCount / buckets.size.toDouble()
+            return elementCount / bucketCount.toDouble()
         }
-    private var buckets = Array(1) { mutableListOf<HashElement<K, V>>() }
+    private var buckets = Array(bucketCount) { mutableListOf<HashElement<K, V>>() }
 
     fun add(key: K, value: V) {
-        val hash = hashFunction.getHash(key) % buckets.size
+        val hash = hashFunction.getHash(key) % bucketCount
         val element = buckets[hash].find { key == it.key }
         if (element != null) {
             if (value != element.value) {
@@ -31,10 +32,11 @@ class HashTable<K, V>(private var hashFunction: HashFunction<K>) {
     }
 
     private fun expand() {
-        updateTable(buckets.size * 2)
+        bucketCount *= 2
+        rewriteHashTable(bucketCount)
     }
 
-    private fun updateTable(newSize: Int = buckets.size) {
+    private fun rewriteHashTable(newSize: Int = bucketCount) {
         val newBuckets = Array(newSize) { mutableListOf<HashElement<K, V>>() }
         buckets.forEach { list ->
             list.forEach { hashElement ->
@@ -45,8 +47,13 @@ class HashTable<K, V>(private var hashFunction: HashFunction<K>) {
         buckets = newBuckets
     }
 
+    operator fun get(key: K): V? {
+        val hash = hashFunction.getHash(key) % bucketCount
+        return buckets[hash].find { key == it.key }?.value
+    }
+
     fun remove(key: K): Boolean {
-        val hash = hashFunction.getHash(key) % (buckets.size)
+        val hash = hashFunction.getHash(key) % (bucketCount)
         val element = buckets[hash].find { key == it.key }
         if (element != null) {
             buckets[hash].remove(element)
@@ -55,8 +62,33 @@ class HashTable<K, V>(private var hashFunction: HashFunction<K>) {
         return element != null
     }
 
-    fun contains(key: K): V? {
-        val hash = hashFunction.getHash(key) % (buckets.size)
-        return buckets[hash].find { key == it.key }?.value
+    fun contains(key: K): Boolean {
+        val hash = hashFunction.getHash(key) % bucketCount
+        return buckets[hash].find { key == it.key } != null
+    }
+
+    fun changeHashFunction(newHashFunction: HashFunction<K>) {
+        hashFunction = newHashFunction
+        rewriteHashTable()
+    }
+
+    fun getStatistic(): Map<String, Any> {
+        var numberOfConflicts = 0
+        var maximumBucketLength = 0
+        buckets.forEach {
+            if (it.size > 1) {
+                ++numberOfConflicts
+            }
+            if (it.size > maximumBucketLength) {
+                maximumBucketLength = it.size
+            }
+        }
+        return mapOf(
+            "Element count" to this.elementCount,
+            "Bucket count" to this.bucketCount,
+            "Load factor" to this.loadFactor,
+            "Conflicts number" to numberOfConflicts,
+            "Maximum bucket length" to maximumBucketLength
+        )
     }
 }
