@@ -60,7 +60,7 @@ class ChangHashFunction : Action {
     override fun doAction(hashTable: HashTable<String, String>) {
         val scan = java.util.Scanner(System.`in`)
         val availableHashFunctions = listOf("DefaultHash", "OwnHash")
-        println("Hash functions: "+availableHashFunctions.joinToString())
+        println("Hash functions: " + availableHashFunctions.joinToString())
         when (scan.next()) {
             "DefaultHash" -> hashTable.changeHashFunction(DefaultHashFunction)
             "OwnHash" -> hashTable.changeHashFunction(OwnHashFunction)
