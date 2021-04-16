@@ -1,4 +1,4 @@
-package homework5
+package homework5.parseTree
 
 import java.io.File
 import java.lang.IllegalArgumentException

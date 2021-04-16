@@ -1,4 +1,4 @@
-package homework5
+package homework5.parseTree
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
