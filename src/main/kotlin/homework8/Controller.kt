@@ -10,7 +10,7 @@ import tornadofx.style
 import tornadofx.label
 
 object Controller : Controller() {
-    const val GAME_FIELD_SIZE = 5
+    const val GAME_FIELD_SIZE = 3
     private val fields = Array(GAME_FIELD_SIZE) { CharArray(GAME_FIELD_SIZE) { ' ' } }
     private var gameMode = GameMode.PlayerVsPlayer
     private var turnNumber = 0
