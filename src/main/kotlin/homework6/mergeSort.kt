@@ -60,9 +60,3 @@ fun IntArray.mergeSortingMultiThread(left: Int, right: Int, numberOfThreads: Int
         this.mergeSortingSingleThread(left, right)
     }
 }
-
-fun main() {
-    val array = intArrayOf(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-    array.mergeSortingMainMultiThread(4)
-    array.forEach { print(it) }
-}
