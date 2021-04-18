@@ -46,11 +46,11 @@ fun IntArray.mergeSortingMultiThread(left: Int, right: Int, numberOfThreads: Int
     val middle = (left + right) / 2
 
     if (numberOfThreads > 1 && right - left >= 1) {
-        val leftAvailableThreads = numberOfThreads / 2
-        val rightAvailableThreads = numberOfThreads - leftAvailableThreads
+        val numberOfLeftThreads = numberOfThreads / 2
+        val numberOfRightThreads = numberOfThreads - numberOfLeftThreads
 
-        val leftThread = Thread { this.mergeSortingMultiThread(left, middle, leftAvailableThreads) }
-        val rightThread = Thread { this.mergeSortingMultiThread(middle, right, rightAvailableThreads) }
+        val leftThread = Thread { this.mergeSortingMultiThread(left, middle, numberOfLeftThreads) }
+        val rightThread = Thread { this.mergeSortingMultiThread(middle, right, numberOfRightThreads) }
         leftThread.run()
         rightThread.run()
         leftThread.join()
