@@ -41,7 +41,7 @@ class DrawThreadsDependenceGraph : JFrame() {
         chartPanel.background = Color.white
         add(chartPanel)
         pack()
-        title = "Line chart"
+        title = "Dependence of the running time on the number of threads"
         setLocationRelativeTo(null)
         defaultCloseOperation = EXIT_ON_CLOSE
     }

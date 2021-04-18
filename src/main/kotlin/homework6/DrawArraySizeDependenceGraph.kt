@@ -27,7 +27,7 @@ class DrawArraySizeDependenceGraph : JFrame() {
         chartPanel.background = Color.white
         add(chartPanel)
         pack()
-        title = "Line chart"
+        title = "Dependence of the running time on the size of the array"
         setLocationRelativeTo(null)
         defaultCloseOperation = EXIT_ON_CLOSE
     }
