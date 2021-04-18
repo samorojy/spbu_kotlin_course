@@ -1,4 +1,5 @@
 @file:Suppress("MagicNumber")
+
 package homework6
 
 import java.awt.Font
