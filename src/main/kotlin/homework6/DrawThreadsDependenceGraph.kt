@@ -1,3 +1,4 @@
+@file:Suppress("MagicNumber")
 package homework6
 
 import java.awt.Font
@@ -29,7 +30,6 @@ import javax.swing.JFrame
 import javax.swing.BorderFactory
 
 import org.jfree.chart.ChartPanel
-
 
 class DrawThreadsDependenceGraph : JFrame() {
 

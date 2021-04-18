@@ -1,3 +1,4 @@
+@file:Suppress("MagicNumber")
 package homework6
 
 import org.jfree.chart.ChartFactory
