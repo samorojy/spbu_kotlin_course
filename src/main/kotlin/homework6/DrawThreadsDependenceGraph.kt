@@ -50,7 +50,7 @@ class DrawThreadsDependenceGraph : JFrame() {
         val series = XYSeries("array of 1000 numbers")
         for (threads in 1..100) {
             val arrayToSort = IntArray(1000)
-            for (i in 1..999) {
+            for (i in 0 until 1000) {
                 arrayToSort[i] = 1000 - i
             }
             val startTime = System.nanoTime()

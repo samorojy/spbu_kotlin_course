@@ -33,9 +33,9 @@ class DrawArraySizeDependenceGraph : JFrame() {
 
     private fun createDataset(): XYDataset {
         val series = XYSeries("10 threads")
-        for (arraySize in 2..10000) {
+        for (arraySize in 2..25000) {
             val arrayToSort = IntArray(arraySize)
-            for (i in 1 until arraySize) {
+            for (i in 0 until arraySize) {
                 arrayToSort[i] = arraySize - i
             }
             val startTime = System.nanoTime()
