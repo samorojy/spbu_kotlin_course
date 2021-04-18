@@ -4,11 +4,9 @@ import java.awt.EventQueue
 
 fun main() {
     EventQueue.invokeLater {
-        val ex = DrawThreadsDependenceGraph()
-        ex.isVisible = true
-    }
-    EventQueue.invokeLater {
-        val ex = DrawArraySizeDependenceGraph()
-        ex.isVisible = true
+        val threadsDependenceGraph = DrawThreadsDependenceGraph()
+        threadsDependenceGraph.isVisible = true
+        val arraySizeDependenceGraph = DrawArraySizeDependenceGraph()
+        arraySizeDependenceGraph.isVisible = true
     }
 }
