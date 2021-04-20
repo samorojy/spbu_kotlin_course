@@ -1,9 +1,11 @@
+@file:Suppress("MagicNumber", "VariableNaming")
+
 package homework6
 
 fun main() {
-    val ArraySizeDependenceGraphDrawer = ArraySizeDependenceGraphDrawer(
+    val ChartDrawer = ArraySizeDependenceGraphDrawer(
         15000, 5,
         15, 5
     )
-    ArraySizeDependenceGraphDrawer.isVisible = true
+    ChartDrawer.isVisible = true
 }
