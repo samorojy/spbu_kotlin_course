@@ -7,9 +7,7 @@ import kotlin.math.max
 class AvlNode<K : Comparable<K>, V>(override val key: K, private var privateValue: V) : Map.Entry<K, V> {
     private var height: Int = 0
     override val value: V
-        get() {
-            return privateValue
-        }
+        get() = privateValue
     private var leftNode: AvlNode<K, V>? = null
     private var rightNode: AvlNode<K, V>? = null
 
@@ -45,12 +43,8 @@ class AvlNode<K : Comparable<K>, V>(override val key: K, private var privateValu
     }
 
     fun updateHeight() {
-        if (this.leftNode != null) {
-            this.leftNode?.updateHeight()
-        }
-        if (this.rightNode != null) {
-            this.rightNode?.updateHeight()
-        }
+        this.leftNode?.updateHeight()
+        this.rightNode?.updateHeight()
         height = max(leftNode?.height ?: 0, rightNode?.height ?: 0) + 1
     }
 

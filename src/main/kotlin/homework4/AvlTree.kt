@@ -4,9 +4,7 @@ class AvlTree<K : Comparable<K>, V> : Map<K, V> {
     private var root: AvlNode<K, V>? = null
     private var _size: Int = 0
     override val size: Int
-        get() {
-            return _size
-        }
+        get() = _size
     override val entries: Set<Map.Entry<K, V>>
         get() {
             val entries = mutableSetOf<AvlNode<K, V>>()
@@ -14,13 +12,9 @@ class AvlTree<K : Comparable<K>, V> : Map<K, V> {
             return entries
         }
     override val keys: Set<K>
-        get() {
-            return entries.map { it.key }.toSet()
-        }
+        get() = entries.map { it.key }.toSet()
     override val values: Collection<V>
-        get() {
-            return entries.map { it.value }
-        }
+        get() = entries.map { it.value }
 
     fun clear() {
         root = null
@@ -32,7 +26,7 @@ class AvlTree<K : Comparable<K>, V> : Map<K, V> {
             root = AvlNode(key, value)
             _size++
         } else {
-            if (root?.add(key, value) == true) {
+            if (root?.add(key, value)!!) {
                 _size++
             }
             root?.updateHeight()

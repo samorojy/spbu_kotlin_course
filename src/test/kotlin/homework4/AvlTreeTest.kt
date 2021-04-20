@@ -2,8 +2,6 @@ package homework4
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import kotlin.concurrent.fixedRateTimer
-import kotlin.math.abs
 
 internal class AvlTreeTest {
     private val tree = AvlTree<Int, String>()
@@ -35,7 +33,8 @@ internal class AvlTreeTest {
     fun containsValue() {
         tree.addValue(1, "First")
         tree.addValue(2, "Second")
-        assertEquals(setOf(true, false), setOf(tree.containsValue("First"), tree.containsValue("Third")))
+        assertEquals(true, tree.containsValue("First"))
+        assertEquals(false, tree.containsValue("Third"))
     }
 
     @Test
@@ -61,6 +60,6 @@ internal class AvlTreeTest {
         tree.addValue(1, "First")
         tree.addValue(4, "Second")
         tree.clear()
-        assertEquals(setOf(0, true), setOf(tree.size, tree.isEmpty()))
+        assertEquals(true, tree.isEmpty())
     }
 }
