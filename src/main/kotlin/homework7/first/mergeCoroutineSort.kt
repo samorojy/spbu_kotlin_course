@@ -40,7 +40,7 @@ fun IntArray.mergeSortingSingleThread(left: Int = 0, right: Int = this.lastIndex
     this.merge(left, middle, right)
 }
 
-fun IntArray.mergeSortingMainMultiCoroutines(numberOfThreads: Int) {
+fun IntArray.mergeSortingStartCoroutines(numberOfThreads: Int) {
     val arrayToSort = this
     runBlocking {
         launch {

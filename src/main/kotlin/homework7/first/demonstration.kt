@@ -1,12 +1,11 @@
+@file:Suppress("MagicNumber", "VariableNaming")
+
 package homework7.first
 
-import java.awt.EventQueue
-
 fun main() {
-    EventQueue.invokeLater {
-        val coroutinesDependenceChart = DrawCoroutinesDependenceChart()
-        coroutinesDependenceChart.isVisible = true
-        val arraySizeDependenceChart = DrawArraySizeDependenceChart()
-        arraySizeDependenceChart.isVisible = true
-    }
+    val ChartDrawer = ArraySizeDependenceGraphDrawer(
+        5000, 5,
+        15, 5
+    )
+    ChartDrawer.isVisible = true
 }

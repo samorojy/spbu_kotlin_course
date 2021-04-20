@@ -17,8 +17,18 @@ import java.awt.Color
 import java.awt.Font
 import javax.swing.BorderFactory
 import javax.swing.JFrame
+import kotlin.random.Random
 
-class DrawArraySizeDependenceChart : JFrame() {
+class ArraySizeDependenceGraphDrawer(
+    private val arraySize: Int,
+    private val minThreadsNumber: Int,
+    private val maxThreadsNumber: Int,
+    private val stepThread: Int
+) : JFrame() {
+
+    init {
+        initUI()
+    }
 
     private fun initUI() {
         val dataset = createDataset()
@@ -34,19 +44,18 @@ class DrawArraySizeDependenceChart : JFrame() {
     }
 
     private fun createDataset(): XYDataset {
-        val series = XYSeries("10 coroutines")
-        for (arraySize in 2..25000) {
-            val arrayToSort = IntArray(arraySize)
-            for (i in 0 until arraySize) {
-                arrayToSort[i] = arraySize - i
-            }
-            val startTime = System.nanoTime()
-            arrayToSort.mergeSortingMainMultiCoroutines(10)
-            val endTime = System.nanoTime()
-            series.add(arraySize, endTime - startTime)
-        }
         val dataset = XYSeriesCollection()
-        dataset.addSeries(series)
+        for (threadsNumber in minThreadsNumber until maxThreadsNumber step stepThread) {
+            val series = XYSeries("$threadsNumber threads")
+            for (tempArraySize in 2..arraySize) {
+                val arrayToSort = getNewArrayAndFill(tempArraySize)
+                val startTime = System.nanoTime()
+                arrayToSort.mergeSortingStartCoroutines(threadsNumber)
+                val endTime = System.nanoTime()
+                series.add(tempArraySize, endTime - startTime)
+            }
+            dataset.addSeries(series)
+        }
         return dataset
     }
 
@@ -63,8 +72,12 @@ class DrawArraySizeDependenceChart : JFrame() {
         )
         val plot = chart.xyPlot
         val renderer = XYLineAndShapeRenderer()
-        renderer.setSeriesPaint(0, Color.RED)
-        renderer.setSeriesStroke(0, BasicStroke(2.0f))
+        for (series in 0 until (maxThreadsNumber - minThreadsNumber) / stepThread) {
+            renderer.setSeriesPaint(series, colorArray[series])
+            renderer.setSeriesStroke(series, BasicStroke(1.0f))
+        }
+        renderer.setSeriesPaint(0, colorArray[0])
+        renderer.setSeriesStroke(0, BasicStroke(1.0f))
         plot.renderer = renderer
         plot.backgroundPaint = Color.white
         plot.isRangeGridlinesVisible = true
@@ -74,12 +87,25 @@ class DrawArraySizeDependenceChart : JFrame() {
         chart.legend.frame = BlockBorder.NONE
         chart.title = TextTitle(
             "Dependence of execution time on the array size",
-            Font("Serif", Font.BOLD, 18)
+            Font("Serif", Font.BOLD, 22)
         )
         return chart
     }
 
-    init {
-        initUI()
+    private fun getNewArrayAndFill(tempArraySize: Int): IntArray {
+        val arrayToSort = IntArray(tempArraySize)
+        for (i in 0 until tempArraySize) {
+            arrayToSort[i] = Random.nextInt(Int.MAX_VALUE)
+        }
+        return arrayToSort
+    }
+
+    companion object {
+        val colorArray = arrayOf(
+            Color.RED, Color.CYAN, Color.ORANGE,
+            Color.PINK, Color.LIGHT_GRAY, Color.MAGENTA,
+            Color.GREEN, Color.BLACK, Color.BLUE,
+            Color.YELLOW
+        )
     }
 }
