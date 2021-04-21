@@ -1,5 +1,20 @@
 package homework6
 
+fun IntArray.binarySearch(value: Int, left: Int, right: Int): Int {
+    var leftBound = left
+    var rightBound = kotlin.math.max(left, right + 1)
+    var middle: Int
+    while (leftBound < rightBound) {
+        middle = (leftBound + rightBound) / 2
+        if (value <= this[middle]) {
+            rightBound = middle
+        } else {
+            leftBound = middle + 1
+        }
+    }
+    return rightBound
+}
+
 fun IntArray.merge(left: Int, middle: Int, right: Int) {
     var leftCounter = 0
     var rightCounter = 0
