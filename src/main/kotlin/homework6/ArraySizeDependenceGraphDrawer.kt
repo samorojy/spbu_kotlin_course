@@ -73,7 +73,7 @@ class ArraySizeDependenceGraphDrawer(
         val plot = chart.xyPlot
         val renderer = XYLineAndShapeRenderer()
         for (series in 0 until (maxThreadsNumber - minThreadsNumber) / stepThread) {
-            renderer.setSeriesPaint(series, colorArray[series])
+            renderer.setSeriesPaint(series, colorArray[series % colorArray.size])
             renderer.setSeriesStroke(series, BasicStroke(1.0f))
         }
         renderer.setSeriesPaint(0, colorArray[0])
