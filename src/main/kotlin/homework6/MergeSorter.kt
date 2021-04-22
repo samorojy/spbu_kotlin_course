@@ -54,8 +54,9 @@ class MergeSorter {
             (leftBoundFirstMergingPart + rightBoundFirstMergingPart) / 2
         val middleOfSecondPart =
             this.binarySearch(this[middleOfFirstPart], leftBoundSecondMergingPart, rightBoundSecondMergingPart)
-        val middleOfArrayToPaste =
-            leftBoundOfArrayToPaste + (middleOfFirstPart - leftBoundFirstMergingPart) + (middleOfSecondPart - leftBoundSecondMergingPart)
+        val sizeHalfPartFirst = middleOfFirstPart - leftBoundFirstMergingPart
+        val sizeHalfPartSecond = middleOfSecondPart - leftBoundSecondMergingPart
+        val middleOfArrayToPaste = leftBoundOfArrayToPaste + sizeHalfPartFirst + sizeHalfPartSecond
 
         arrayMergeTo[middleOfArrayToPaste] = this[middleOfFirstPart]
         val numberOfLeftThreads = numberOfThreads / 2
