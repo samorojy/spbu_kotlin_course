@@ -50,7 +50,7 @@ class ArraySizeDependenceGraphDrawer(
             for (tempArraySize in 2..arraySize) {
                 val arrayToSort = getNewArrayAndFill(tempArraySize)
                 val startTime = System.nanoTime()
-                arrayToSort.mergeSortingMainMultiThread(threadsNumber)
+                MergeSorter().sort(arrayToSort, threadsNumber)
                 val endTime = System.nanoTime()
                 series.add(tempArraySize, endTime - startTime)
             }
@@ -103,7 +103,7 @@ class ArraySizeDependenceGraphDrawer(
     companion object {
         val colorArray = arrayOf(
             Color.RED, Color.CYAN, Color.ORANGE,
-            Color.PINK, Color.LIGHT_GRAY, Color.MAGENTA,
+            Color.MAGENTA, Color.LIGHT_GRAY, Color.PINK,
             Color.GREEN, Color.BLACK, Color.BLUE,
             Color.YELLOW
         )
