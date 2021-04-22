@@ -104,7 +104,7 @@ class ArraySizeDependenceGraphDrawer(
         val colorArray = arrayOf(
             Color.RED, Color.CYAN, Color.ORANGE,
             Color.MAGENTA, Color.LIGHT_GRAY, Color.PINK,
-            Color.GREEN, Color.BLACK, Color.BLUE,
+            Color.GREEN, Color.BLUE, Color.BLACK,
             Color.YELLOW
         )
     }
