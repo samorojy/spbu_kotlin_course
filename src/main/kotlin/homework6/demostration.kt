@@ -4,8 +4,8 @@ package homework6
 
 fun main() {
     val ChartDrawer = ArraySizeDependenceGraphDrawer(
-        15000, 5,
-        15, 5
+        100, 1,
+        100, 20
     )
     ChartDrawer.isVisible = true
 }
