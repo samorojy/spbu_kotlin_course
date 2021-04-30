@@ -3,9 +3,9 @@
 package homework7.first
 
 fun main() {
-    val ChartDrawer = ArraySizeDependenceGraphDrawer(
-        5000, 5,
-        15, 5
+    val ChartDrawer = ArraySizeDependenceCoroutineGraphDrawer(
+        1000, 1,
+        30, 5
     )
     ChartDrawer.isVisible = true
 }

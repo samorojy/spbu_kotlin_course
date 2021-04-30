@@ -19,7 +19,7 @@ import javax.swing.BorderFactory
 import javax.swing.JFrame
 import kotlin.random.Random
 
-class ArraySizeDependenceGraphDrawer(
+class ArraySizeDependenceCoroutineGraphDrawer(
     private val arraySize: Int,
     private val minThreadsNumber: Int,
     private val maxThreadsNumber: Int,
@@ -46,11 +46,11 @@ class ArraySizeDependenceGraphDrawer(
     private fun createDataset(): XYDataset {
         val dataset = XYSeriesCollection()
         for (threadsNumber in minThreadsNumber until maxThreadsNumber step stepThread) {
-            val series = XYSeries("$threadsNumber threads")
+            val series = XYSeries("$threadsNumber coroutines")
             for (tempArraySize in 2..arraySize) {
                 val arrayToSort = getNewArrayAndFill(tempArraySize)
                 val startTime = System.nanoTime()
-                arrayToSort.mergeSortingStartCoroutines(threadsNumber)
+                MergeSorterCoroutine().sort(arrayToSort, threadsNumber)
                 val endTime = System.nanoTime()
                 series.add(tempArraySize, endTime - startTime)
             }
@@ -73,7 +73,7 @@ class ArraySizeDependenceGraphDrawer(
         val plot = chart.xyPlot
         val renderer = XYLineAndShapeRenderer()
         for (series in 0 until (maxThreadsNumber - minThreadsNumber) / stepThread) {
-            renderer.setSeriesPaint(series, colorArray[series])
+            renderer.setSeriesPaint(series, colorArray[series % colorArray.size])
             renderer.setSeriesStroke(series, BasicStroke(1.0f))
         }
         renderer.setSeriesPaint(0, colorArray[0])
@@ -103,8 +103,8 @@ class ArraySizeDependenceGraphDrawer(
     companion object {
         val colorArray = arrayOf(
             Color.RED, Color.CYAN, Color.ORANGE,
-            Color.PINK, Color.LIGHT_GRAY, Color.MAGENTA,
-            Color.GREEN, Color.BLACK, Color.BLUE,
+            Color.MAGENTA, Color.LIGHT_GRAY, Color.PINK,
+            Color.GREEN, Color.BLUE, Color.BLACK,
             Color.YELLOW
         )
     }
