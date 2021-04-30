@@ -28,7 +28,7 @@ internal class MergeCoroutineSortTest {
     @MethodSource("inputData")
     @ParameterizedTest(name = "test{index}, {1}")
     fun getKotlinFile(expectedArray: IntArray, arrayToSort: IntArray, threadsNumber: Int) {
-        arrayToSort.mergeSortingStartCoroutines(threadsNumber)
+        MergeSorterCoroutine().sort(arrayToSort, threadsNumber)
         assertEquals(expectedArray.toList(), arrayToSort.toList())
     }
 }
