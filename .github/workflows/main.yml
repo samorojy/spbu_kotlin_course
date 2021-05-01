@@ -17,7 +17,7 @@ jobs:
 
       - name: Run tests
         env:
-          openWeatherApi: ${{ secrets.OPENWEATHER_API }}
+          OPENWEATHER_API: ${{ secrets.OPENWEATHER_API }}
         run: ./gradlew test
 
       - name: Run detekt

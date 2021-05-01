@@ -7,7 +7,7 @@ internal class RequestCreatorTest {
 
     @Test
     fun createRequest() {
-        val apiKey = System.getenv("openWeatherApi")
+        val apiKey = System.getenv("OPENWEATHER_API")
         val weatherData = RequestCreator()
             .getApi()
             .getWeatherData("metric", "Moscow", apiKey)
