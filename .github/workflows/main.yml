@@ -13,6 +13,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run build
+        env:
+          OPENWEATHER_API: ${{ secrets.OPENWEATHER_API }}
         run: ./gradlew build
 
       - name: Run tests
@@ -21,6 +23,8 @@ jobs:
         run: ./gradlew test
 
       - name: Run detekt
+        env:
+          OPENWEATHER_API: ${{ secrets.OPENWEATHER_API }}
         run: ./gradlew detekt
   build-on-windows:
     runs-on: windows-latest
