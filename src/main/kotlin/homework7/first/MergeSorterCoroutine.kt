@@ -11,7 +11,7 @@ class MergeSorterCoroutine {
         if (arrayToSort.isEmpty()) return
         val temporaryArray = IntArray(arrayToSort.size) { 0 }
         runBlocking {
-            arrayToSort.mergeSortingMultiCoroutine(sortedArray = temporaryArray, numberOfThreads = numberOfThreads)
+            arrayToSort.mergeSortingMultiThread(sortedArray = temporaryArray, numberOfThreads = numberOfThreads)
         }
         for (i in arrayToSort.indices) arrayToSort[i] = temporaryArray[i]
     }
@@ -31,23 +31,21 @@ class MergeSorterCoroutine {
         return rightBound
     }
 
-    private suspend fun IntArray.mergeMultiCoroutine(
-        leftBoundFirstMergingPart: Int,
-        rightBoundFirstMergingPart: Int,
-        leftBoundSecondMergingPart: Int,
-        rightBoundSecondMergingPart: Int,
+    data class MergingPart(val leftBound: Int, val rightBound: Int)
+
+    private suspend fun IntArray.mergeMultiThread(
+        firstPart: MergingPart,
+        secondPart: MergingPart,
         arrayMergeTo: IntArray,
         leftBoundOfArrayToPaste: Int,
         numberOfThreads: Int = 1
     ) {
-        val firstMergingPartSize = rightBoundFirstMergingPart - leftBoundFirstMergingPart + 1
-        val secondMergingPartSize = rightBoundSecondMergingPart - leftBoundSecondMergingPart + 1
+        val firstMergingPartSize = firstPart.rightBound - firstPart.leftBound + 1
+        val secondMergingPartSize = secondPart.rightBound - secondPart.leftBound + 1
         if (firstMergingPartSize < secondMergingPartSize) {
-            this.mergeMultiCoroutine(
-                leftBoundSecondMergingPart,
-                rightBoundSecondMergingPart,
-                leftBoundFirstMergingPart,
-                rightBoundFirstMergingPart,
+            this.mergeMultiThread(
+                secondPart,
+                firstPart,
                 arrayMergeTo,
                 leftBoundOfArrayToPaste
             )
@@ -57,11 +55,11 @@ class MergeSorterCoroutine {
             return
         }
         val middleOfFirstPart =
-            (leftBoundFirstMergingPart + rightBoundFirstMergingPart) / 2
+            (firstPart.leftBound + firstPart.rightBound) / 2
         val middleOfSecondPart =
-            this.binarySearch(this[middleOfFirstPart], leftBoundSecondMergingPart, rightBoundSecondMergingPart)
-        val sizeHalfPartFirst = middleOfFirstPart - leftBoundFirstMergingPart
-        val sizeHalfPartSecond = middleOfSecondPart - leftBoundSecondMergingPart
+            this.binarySearch(this[middleOfFirstPart], secondPart.leftBound, secondPart.rightBound)
+        val sizeHalfPartFirst = middleOfFirstPart - firstPart.leftBound
+        val sizeHalfPartSecond = middleOfSecondPart - secondPart.leftBound
         val middleOfArrayToPaste = leftBoundOfArrayToPaste + sizeHalfPartFirst + sizeHalfPartSecond
 
         arrayMergeTo[middleOfArrayToPaste] = this[middleOfFirstPart]
@@ -71,11 +69,9 @@ class MergeSorterCoroutine {
         coroutineScope {
             val leftCoroutine =
                 launch {
-                    currentArray.mergeMultiCoroutine(
-                        leftBoundFirstMergingPart,
-                        middleOfFirstPart - 1,
-                        leftBoundSecondMergingPart,
-                        middleOfSecondPart - 1,
+                    currentArray.mergeMultiThread(
+                        MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
+                        MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
                         arrayMergeTo,
                         leftBoundOfArrayToPaste,
                         numberOfLeftThreads
@@ -83,11 +79,9 @@ class MergeSorterCoroutine {
                 }
             val rightCoroutine =
                 launch {
-                    currentArray.mergeMultiCoroutine(
-                        middleOfFirstPart + 1,
-                        rightBoundFirstMergingPart,
-                        middleOfSecondPart,
-                        rightBoundSecondMergingPart,
+                    currentArray.mergeMultiThread(
+                        MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
+                        MergingPart(middleOfSecondPart, secondPart.rightBound),
                         arrayMergeTo,
                         middleOfArrayToPaste + 1,
                         numberOfRightThreads
@@ -98,7 +92,7 @@ class MergeSorterCoroutine {
         }
     }
 
-    private suspend fun IntArray.mergeSortingMultiCoroutine(
+    private suspend fun IntArray.mergeSortingMultiThread(
         leftBoundFirstSortingPart: Int = 0,
         rightBoundSecondSortingPart: Int = this.lastIndex,
         sortedArray: IntArray,
@@ -113,40 +107,36 @@ class MergeSorterCoroutine {
             val middle = (leftBoundFirstSortingPart + rightBoundSecondSortingPart) / 2
             val newMiddle = middle - leftBoundFirstSortingPart
             if (numberOfThreads == 1) {
-                this.mergeSortingMultiCoroutine(leftBoundFirstSortingPart, middle, temporaryArray, 0)
-                this.mergeSortingMultiCoroutine(middle + 1, rightBoundSecondSortingPart, temporaryArray, newMiddle + 1)
+                this.mergeSortingMultiThread(leftBoundFirstSortingPart, middle, temporaryArray, 0)
+                this.mergeSortingMultiThread(middle + 1, rightBoundSecondSortingPart, temporaryArray, newMiddle + 1)
             } else {
                 val numberOfLeftThreads = numberOfThreads / 2
                 val numberOfRightThreads = numberOfThreads - numberOfLeftThreads
                 val currentArray = this
                 coroutineScope {
-                    val leftCoroutine =
-                        launch {
-                            currentArray.mergeSortingMultiCoroutine(
-                                leftBoundFirstSortingPart, middle,
-                                temporaryArray, 0,
-                                numberOfLeftThreads
-                            )
-                        }
-                    val rightCoroutine =
-                        launch {
-                            currentArray.mergeSortingMultiCoroutine(
-                                middle + 1, rightBoundSecondSortingPart,
-                                temporaryArray, newMiddle + 1,
-                                numberOfRightThreads
-                            )
-                        }
-                    leftCoroutine.start()
-                    rightCoroutine.start()
-                    leftCoroutine.join()
-                    rightCoroutine.join()
-                }
+                val leftCoroutine =
+                    launch {
+                        currentArray.mergeSortingMultiThread(
+                            leftBoundFirstSortingPart, middle,
+                            temporaryArray, 0,
+                            numberOfLeftThreads
+                        )
+                    }
+                val rightCoroutine =
+                    launch {
+                        currentArray.mergeSortingMultiThread(
+                            middle + 1, rightBoundSecondSortingPart,
+                            temporaryArray, newMiddle + 1,
+                            numberOfRightThreads
+                        )
+                    }
+                leftCoroutine.join()
+                rightCoroutine.join()
             }
-            temporaryArray.mergeMultiCoroutine(
-                0,
-                newMiddle,
-                newMiddle + 1,
-                sortingPartSize - 1,
+        }
+            temporaryArray.mergeMultiThread(
+                MergingPart(0, newMiddle),
+                MergingPart(newMiddle + 1, sortingPartSize - 1),
                 sortedArray,
                 leftBoundOfArrayToPaste,
                 numberOfThreads

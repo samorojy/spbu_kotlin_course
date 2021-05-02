@@ -17,17 +17,19 @@ import java.awt.Color
 import java.awt.Font
 import javax.swing.BorderFactory
 import javax.swing.JFrame
+import kotlin.math.pow
 import kotlin.random.Random
 
 class ArraySizeDependenceCoroutineGraphDrawer(
     private val arraySize: Int,
-    private val minThreadsNumber: Int,
-    private val maxThreadsNumber: Int,
-    private val stepThread: Int
+    private val arraySizeStep: Int,
+    private val minPowerOfTwoOfThreadsNumber: Int,
+    private val maxPowerOfTwoOfThreadsNumber: Int
 ) : JFrame() {
 
     init {
         initUI()
+        this.isVisible = true
     }
 
     private fun initUI() {
@@ -45,16 +47,19 @@ class ArraySizeDependenceCoroutineGraphDrawer(
 
     private fun createDataset(): XYDataset {
         val dataset = XYSeriesCollection()
-        for (threadsNumber in minThreadsNumber until maxThreadsNumber step stepThread) {
+        val maxNumberOfThreads = 2.0.pow(maxPowerOfTwoOfThreadsNumber).toInt()
+        var threadsNumber = 2.0.pow(minPowerOfTwoOfThreadsNumber).toInt()
+        while (threadsNumber <= maxNumberOfThreads) {
             val series = XYSeries("$threadsNumber coroutines")
-            for (tempArraySize in 2..arraySize) {
-                val arrayToSort = getNewArrayAndFill(tempArraySize)
-                val startTime = System.nanoTime()
+            for (tempArraySize in 2..(arraySize + 2) step arraySizeStep) {
+                val arrayToSort = getRandomArray(tempArraySize)
+                val startTime = System.currentTimeMillis()
                 MergeSorterCoroutine().sort(arrayToSort, threadsNumber)
-                val endTime = System.nanoTime()
+                val endTime = System.currentTimeMillis()
                 series.add(tempArraySize, endTime - startTime)
             }
             dataset.addSeries(series)
+            threadsNumber *= 2
         }
         return dataset
     }
@@ -63,7 +68,7 @@ class ArraySizeDependenceCoroutineGraphDrawer(
         val chart = ChartFactory.createXYLineChart(
             "Dependence of execution time on the array size",
             "Array size",
-            "Time (nanoseconds)",
+            "Time (milliseconds)",
             dataset,
             PlotOrientation.VERTICAL,
             true,
@@ -72,7 +77,7 @@ class ArraySizeDependenceCoroutineGraphDrawer(
         )
         val plot = chart.xyPlot
         val renderer = XYLineAndShapeRenderer()
-        for (series in 0 until (maxThreadsNumber - minThreadsNumber) / stepThread) {
+        for (series in 0 until (maxPowerOfTwoOfThreadsNumber - minPowerOfTwoOfThreadsNumber)) {
             renderer.setSeriesPaint(series, colorArray[series % colorArray.size])
             renderer.setSeriesStroke(series, BasicStroke(1.0f))
         }
@@ -92,13 +97,8 @@ class ArraySizeDependenceCoroutineGraphDrawer(
         return chart
     }
 
-    private fun getNewArrayAndFill(tempArraySize: Int): IntArray {
-        val arrayToSort = IntArray(tempArraySize)
-        for (i in 0 until tempArraySize) {
-            arrayToSort[i] = Random.nextInt(Int.MAX_VALUE)
-        }
-        return arrayToSort
-    }
+    private fun getRandomArray(tempArraySize: Int): IntArray =
+        IntArray(tempArraySize) { Random.nextInt(Int.MAX_VALUE) }
 
     companion object {
         val colorArray = arrayOf(
