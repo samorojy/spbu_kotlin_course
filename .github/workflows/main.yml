@@ -32,10 +32,16 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run build
+        env:
+          OPENWEATHER_API: ${{ secrets.OPENWEATHER_API }}
         run: .\gradlew.bat build
 
       - name: Run tests
+        env:
+          OPENWEATHER_API: ${{ secrets.OPENWEATHER_API }}
         run: .\gradlew.bat test
 
       - name: Run detekt
+        env:
+          OPENWEATHER_API: ${{ secrets.OPENWEATHER_API }}
         run: .\gradlew.bat detekt
