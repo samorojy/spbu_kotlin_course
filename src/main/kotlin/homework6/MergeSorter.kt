@@ -25,23 +25,21 @@ class MergeSorter {
         return rightBound
     }
 
+    data class MergingPart(val leftBound: Int, val rightBound: Int)
+
     private fun IntArray.mergeMultiThread(
-        leftBoundFirstMergingPart: Int,
-        rightBoundFirstMergingPart: Int,
-        leftBoundSecondMergingPart: Int,
-        rightBoundSecondMergingPart: Int,
+        firstPart: MergingPart,
+        secondPart: MergingPart,
         arrayMergeTo: IntArray,
         leftBoundOfArrayToPaste: Int,
         numberOfThreads: Int = 1
     ) {
-        val firstMergingPartSize = rightBoundFirstMergingPart - leftBoundFirstMergingPart + 1
-        val secondMergingPartSize = rightBoundSecondMergingPart - leftBoundSecondMergingPart + 1
+        val firstMergingPartSize = firstPart.rightBound - firstPart.leftBound + 1
+        val secondMergingPartSize = secondPart.rightBound - secondPart.leftBound + 1
         if (firstMergingPartSize < secondMergingPartSize) {
             this.mergeMultiThread(
-                leftBoundSecondMergingPart,
-                rightBoundSecondMergingPart,
-                leftBoundFirstMergingPart,
-                rightBoundFirstMergingPart,
+                secondPart,
+                firstPart,
                 arrayMergeTo,
                 leftBoundOfArrayToPaste
             )
@@ -51,11 +49,11 @@ class MergeSorter {
             return
         }
         val middleOfFirstPart =
-            (leftBoundFirstMergingPart + rightBoundFirstMergingPart) / 2
+            (firstPart.leftBound + firstPart.rightBound) / 2
         val middleOfSecondPart =
-            this.binarySearch(this[middleOfFirstPart], leftBoundSecondMergingPart, rightBoundSecondMergingPart)
-        val sizeHalfPartFirst = middleOfFirstPart - leftBoundFirstMergingPart
-        val sizeHalfPartSecond = middleOfSecondPart - leftBoundSecondMergingPart
+            this.binarySearch(this[middleOfFirstPart], secondPart.leftBound, secondPart.rightBound)
+        val sizeHalfPartFirst = middleOfFirstPart - firstPart.leftBound
+        val sizeHalfPartSecond = middleOfSecondPart - secondPart.leftBound
         val middleOfArrayToPaste = leftBoundOfArrayToPaste + sizeHalfPartFirst + sizeHalfPartSecond
 
         arrayMergeTo[middleOfArrayToPaste] = this[middleOfFirstPart]
@@ -64,10 +62,8 @@ class MergeSorter {
         val leftThread =
             Thread {
                 this.mergeMultiThread(
-                    leftBoundFirstMergingPart,
-                    middleOfFirstPart - 1,
-                    leftBoundSecondMergingPart,
-                    middleOfSecondPart - 1,
+                    MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
+                    MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
                     arrayMergeTo,
                     leftBoundOfArrayToPaste,
                     numberOfLeftThreads
@@ -76,10 +72,8 @@ class MergeSorter {
         val rightThread =
             Thread {
                 this.mergeMultiThread(
-                    middleOfFirstPart + 1,
-                    rightBoundFirstMergingPart,
-                    middleOfSecondPart,
-                    rightBoundSecondMergingPart,
+                    MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
+                    MergingPart(middleOfSecondPart, secondPart.rightBound),
                     arrayMergeTo,
                     middleOfArrayToPaste + 1,
                     numberOfRightThreads
@@ -133,10 +127,8 @@ class MergeSorter {
                 rightThread.join()
             }
             temporaryArray.mergeMultiThread(
-                0,
-                newMiddle,
-                newMiddle + 1,
-                sortingPartSize - 1,
+                MergingPart(0, newMiddle),
+                MergingPart(newMiddle + 1, sortingPartSize - 1),
                 sortedArray,
                 leftBoundOfArrayToPaste,
                 numberOfThreads
