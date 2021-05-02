@@ -6,7 +6,7 @@ import java.io.File
 
 fun main() {
 
-    val apiKey = System.getenv("openWeatherApi")
+    val apiKey = System.getenv("OPENWEATHER_API")
 
     val cities = Json.decodeFromString<List<String>>(
         File(

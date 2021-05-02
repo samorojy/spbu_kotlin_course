@@ -13,7 +13,6 @@ internal class RequestCreatorTest {
             .getWeatherData("metric", "Moscow", apiKey)
             .execute()
             .body()
-        println(apiKey)
-        assertEquals("Moscow", "Moscow")
+        assertEquals("Moscow", weatherData?.name)
     }
 }
