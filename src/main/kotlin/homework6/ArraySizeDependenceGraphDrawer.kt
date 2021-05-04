@@ -51,7 +51,7 @@ class ArraySizeDependenceGraphDrawer(
         var threadsNumber = 2.0.pow(minPowerOfTwoOfThreadsNumber).toInt()
         while (threadsNumber <= maxNumberOfThreads) {
             val series = XYSeries("$threadsNumber threads")
-            for (tempArraySize in 2..(arraySize + 2) step arraySizeStep) {
+            for (tempArraySize in 2..arraySize step arraySizeStep) {
                 val arrayToSort = getRandomArray(tempArraySize)
                 val startTime = System.currentTimeMillis()
                 MergeSorter().sort(arrayToSort, threadsNumber)
