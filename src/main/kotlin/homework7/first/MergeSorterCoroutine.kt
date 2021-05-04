@@ -110,7 +110,10 @@ class MergeSorterCoroutine {
             val middle = (sortingPart.leftBound + sortingPart.rightBound) / 2
             val newMiddle = middle - sortingPart.leftBound
             if (numberOfThreads == 1) {
-                this.mergeSortingMultiCoroutine(MergingPart(sortingPart.leftBound, middle), temporaryArray, 0)
+                this.mergeSortingMultiCoroutine(
+                    MergingPart(sortingPart.leftBound, middle),
+                    temporaryArray, 0
+                )
                 this.mergeSortingMultiCoroutine(
                     MergingPart(middle + 1, sortingPart.rightBound),
                     temporaryArray,
