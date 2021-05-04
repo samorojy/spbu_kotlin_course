@@ -90,22 +90,22 @@ class MergeSorter {
     }
 
     private fun IntArray.mergeSortingMultiThread(
-        mergingPart: MergingPart,
+        sortingPart: MergingPart,
         sortedArray: IntArray,
         leftBoundOfArrayToPaste: Int = 0,
         numberOfThreads: Int = 1
     ) {
-        val sortingPartSize = mergingPart.rightBound - mergingPart.leftBound + 1
+        val sortingPartSize = sortingPart.rightBound - sortingPart.leftBound + 1
         if (sortingPartSize == 1) {
-            sortedArray[leftBoundOfArrayToPaste] = this[mergingPart.leftBound]
+            sortedArray[leftBoundOfArrayToPaste] = this[sortingPart.leftBound]
         } else {
             val temporaryArray = IntArray(sortingPartSize) { 0 }
-            val middle = (mergingPart.leftBound + mergingPart.rightBound) / 2
-            val newMiddle = middle - mergingPart.leftBound
+            val middle = (sortingPart.leftBound + sortingPart.rightBound) / 2
+            val newMiddle = middle - sortingPart.leftBound
             if (numberOfThreads == 1) {
-                this.mergeSortingMultiThread(MergingPart(mergingPart.leftBound, middle), temporaryArray, 0)
+                this.mergeSortingMultiThread(MergingPart(sortingPart.leftBound, middle), temporaryArray, 0)
                 this.mergeSortingMultiThread(
-                    MergingPart(middle + 1, mergingPart.rightBound),
+                    MergingPart(middle + 1, sortingPart.rightBound),
                     temporaryArray,
                     newMiddle + 1
                 )
@@ -115,7 +115,7 @@ class MergeSorter {
                 val leftThread =
                     Thread {
                         this.mergeSortingMultiThread(
-                            MergingPart(mergingPart.leftBound, middle),
+                            MergingPart(sortingPart.leftBound, middle),
                             temporaryArray, 0,
                             numberOfLeftThreads
                         )
@@ -123,7 +123,7 @@ class MergeSorter {
                 val rightThread =
                     Thread {
                         this.mergeSortingMultiThread(
-                            MergingPart(middle + 1, mergingPart.rightBound),
+                            MergingPart(middle + 1, sortingPart.rightBound),
                             temporaryArray, newMiddle + 1,
                             numberOfRightThreads
                         )
