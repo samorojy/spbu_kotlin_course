@@ -6,16 +6,16 @@ import kotlinx.coroutines.runBlocking
 
 data class Matrix(private val matrix: Array<IntArray>) {
 
+    @Suppress("ComplexCondition")
     private fun isCorrectMatrices(other: Matrix) {
-        if (matrix[0].isEmpty() || other.matrix[0].isEmpty())
-            throw IllegalArgumentException("The matrix has to be not empty")
 
         if (matrix.size != matrix[0].size &&
-            other.matrix.size != other.matrix[0].size
-        ) throw IllegalArgumentException("The matrix has to be square")
+            other.matrix.size != other.matrix[0].size &&
+            matrix[0].isEmpty() || other.matrix[0].isEmpty()
+        ) throw IllegalArgumentException("The matrices has to be square and not empty")
 
-        if (matrix[0].size != other.matrix[0].size)
-            throw IllegalArgumentException("TMatrices must be the same size")
+        if (matrix[0].size != other.matrix[0].size
+        ) throw IllegalArgumentException("The matrices must be the same size")
     }
 
     operator fun times(other: Matrix): Matrix {
