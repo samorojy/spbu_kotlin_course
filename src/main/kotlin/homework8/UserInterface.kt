@@ -87,7 +87,7 @@ class GameView : View("Tic-Tac-Toe: Game") {
         init {
             button {
                 fontSize = 30.px
-                fontFamily = "Montserrat"
+                fontFamily = "Helvetica"
                 fontWeight = FontWeight.EXTRA_BOLD
                 borderColor += box(
                     top = Color.RED,
