@@ -11,17 +11,24 @@ import tornadofx.label
 
 class Controller() : Controller() {
     private var model = Model()
+    private var gameMode = GameMode.PlayerVsPlayer
 
     fun changeGameSize(newSize: Int) {
         model = Model(newSize)
     }
 
+    fun changeGameMode(newGameMode: GameMode) {
+        gameMode = newGameMode
+    }
+
+    fun getGameSize() = model.gameFieldSize
+
     fun startGame() {
         find<StartView>().replaceWith<GameView>()
     }
 
-    fun makeTurn(row: Int, column: Int) {
-        model.makeTurn(row,column)
+    fun makeTurn(row: Int, column: Int):String {
+        return model.makeTurn(row, column).sign
     }
 
     private fun finishGame(winningStage: TurnStage) {
@@ -32,6 +39,7 @@ class Controller() : Controller() {
                     TurnStage.Draw -> "Draw"
                     TurnStage.WinX -> "Cross player won"
                     TurnStage.Win0 -> "Nought player won"
+                    else -> "Something else"
                 }
             ) {
                 style() {
@@ -47,11 +55,5 @@ class Controller() : Controller() {
                 }
             }
         }
-    }
-
-    fun changeGameMode(newGameMode: GameMode) {
-/*
-        model.changeGameMode(newGameMode)
-*/
     }
 }
