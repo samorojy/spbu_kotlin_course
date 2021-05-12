@@ -2,6 +2,7 @@
 
 package homework8
 
+import javafx.scene.control.Button
 import tornadofx.App
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
@@ -11,10 +12,7 @@ import tornadofx.View
 class TicTacToe : App(StartView::class, GameView.GameStyle::class)
 
 class StartView : View("Tic-Tac-Toe: Menu") {
-    companion object {
-        const val CELL_SIZE = 100.0
-    }
-
+    private val controller = Controller()
     override val root = vbox {
         setPrefSize(Controller.GAME_FIELD_SIZE * CELL_SIZE, Controller.GAME_FIELD_SIZE * CELL_SIZE)
 
@@ -36,6 +34,10 @@ class StartView : View("Tic-Tac-Toe: Menu") {
             useMaxWidth = true
             setOnAction { Controller.startGame() }
         }
+    }
+
+    companion object {
+        const val CELL_SIZE = 100.0
     }
 }
 
@@ -61,17 +63,15 @@ class FinishView : View("Tic-Tac-Toe: Game Over") {
 }
 
 class GameView : View("Tic-Tac-Toe: Game") {
-    companion object {
-        const val CELL_SIZE = 100.0
-    }
 
+    private val buttons = Array(Controller.GAME_FIELD_SIZE) { Array<Button?>(Controller.GAME_FIELD_SIZE) { null } }
     override val root = vbox {
         setPrefSize(Controller.GAME_FIELD_SIZE * CELL_SIZE, Controller.GAME_FIELD_SIZE * CELL_SIZE)
         gridpane {
             for (y in 0 until Controller.GAME_FIELD_SIZE)
                 row {
                     for (x in 0 until Controller.GAME_FIELD_SIZE)
-                        button(" ") {
+                        buttons[y][x] = button(" ") {
                             setPrefSize(CELL_SIZE, CELL_SIZE)
                             setOnAction {
                                 if (text == " ") {
@@ -97,5 +97,9 @@ class GameView : View("Tic-Tac-Toe: Game") {
                 )
             }
         }
+    }
+
+    companion object {
+        const val CELL_SIZE = 100.0
     }
 }
