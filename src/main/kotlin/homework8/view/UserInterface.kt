@@ -1,16 +1,32 @@
-@file:Suppress("NoWildcardImports", "WildcardImport")
-
 package homework8.view
 
 import homework8.controller.Controller
 import homework8.controller.GameMode
 import homework8.controller.TurnPlace
 import javafx.scene.control.Button
+import javafx.scene.control.ToggleGroup
 import tornadofx.App
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
-import tornadofx.*
+import tornadofx.Stylesheet
+import tornadofx.separator
+import tornadofx.togglebutton
 import tornadofx.View
+import tornadofx.action
+import tornadofx.borderpane
+import tornadofx.box
+import tornadofx.button
+import tornadofx.gridpane
+import tornadofx.hbox
+import tornadofx.item
+import tornadofx.label
+import tornadofx.menu
+import tornadofx.menubar
+import tornadofx.px
+import tornadofx.row
+import tornadofx.style
+import tornadofx.useMaxWidth
+import tornadofx.vbox
 
 class TicTacToe : App(StartView::class, GameView.GameStyle::class)
 
@@ -33,6 +49,17 @@ class StartView : View("Tic-Tac-Toe: Menu") {
                         item("Easy Mode").action { controller.changeGameMode(GameMode.PlayerVsComputerEasy) }
                         separator()
                         item("Hard Mode").action { controller.changeGameMode(GameMode.PlayerVsComputerHard) }
+                    }
+                }
+                item("[NON-STABLE] Game size \n Working only at first start") {
+                    hbox {
+                        val toggleGroup = ToggleGroup()
+                        @Suppress("MagicNumber")
+                        togglebutton("3", toggleGroup).action { controller.changeGameSize(3) }
+                        @Suppress("MagicNumber")
+                        togglebutton("5", toggleGroup).action { controller.changeGameSize(5) }
+                        @Suppress("MagicNumber")
+                        togglebutton("7", toggleGroup).action { controller.changeGameSize(7) }
                     }
                 }
             }
