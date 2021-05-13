@@ -1,6 +1,6 @@
 @file:Suppress("NoWildcardImports", "WildcardImport")
 
-package homework8
+package homework8.view
 
 import homework8.controller.Controller
 import homework8.controller.GameMode
@@ -50,13 +50,14 @@ class StartView : View("Tic-Tac-Toe: Menu") {
 }
 
 class FinishView : View("Tic-Tac-Toe: Game Over") {
+    private val controller: Controller by inject()
     override val root = vbox {
         borderpane {
             useMaxWidth = true
             center = label("Game Over!") {
                 style() {
                     fontSize = 30.px
-                    fontFamily = "Montserrat"
+                    fontFamily = "Helvetica"
                     fontWeight = FontWeight.EXTRA_BOLD
                     borderColor += box(
                         top = Color.RED,
@@ -66,6 +67,10 @@ class FinishView : View("Tic-Tac-Toe: Game Over") {
                     )
                 }
             }
+        }
+        button("Back to menu") {
+            useMaxWidth = true
+            setOnAction { controller.restartGame() }
         }
     }
 }

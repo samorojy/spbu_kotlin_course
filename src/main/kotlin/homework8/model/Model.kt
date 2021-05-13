@@ -3,21 +3,19 @@ package homework8.model
 import homework8.controller.TurnPlace
 import homework8.controller.TurnStage
 
-class Model(private val gameFieldSize: Int = 3) {
+class Model(val gameFieldSize: Int = 3) {
     private val fields: List<MutableList<Char>> = List(gameFieldSize) { MutableList(gameFieldSize) { ' ' } }
     private var turnNumber = 0
     private val winningXExpression: String
     private val winning0Expression: String
 
     init {
-        var tempXExpression = ""
-        var temp0Expression = ""
-        repeat(gameFieldSize) {
-            tempXExpression += TurnStage.NO_WINNER_YET_X.sign
-            temp0Expression += TurnStage.NO_WINNER_YET_0.sign
-        }
-        this.winningXExpression = tempXExpression
-        this.winning0Expression = temp0Expression
+        val winningXExpressionBuilder = StringBuilder()
+        repeat(gameFieldSize) { winningXExpressionBuilder.append('X') }
+        val winning0ExpressionBuilder = StringBuilder()
+        repeat(gameFieldSize) { winning0ExpressionBuilder.append('0') }
+        this.winningXExpression = winningXExpressionBuilder.toString()
+        this.winning0Expression = winning0ExpressionBuilder.toString()
     }
 
     fun makeTurn(turnPlace: TurnPlace): TurnStage {
@@ -32,7 +30,7 @@ class Model(private val gameFieldSize: Int = 3) {
 
     private fun getRow(row: Int): String {
         var rowResult = ""
-        for (x in 0 until gameFieldSize) {
+        for (x in fields.indices) {
             rowResult += fields[row][x].toString()
         }
         return rowResult
@@ -40,7 +38,7 @@ class Model(private val gameFieldSize: Int = 3) {
 
     private fun getColumn(column: Int): String {
         var columnResult = ""
-        for (x in 0 until gameFieldSize) {
+        for (x in fields.indices) {
             columnResult += fields[x][column].toString()
         }
         return columnResult
@@ -48,7 +46,7 @@ class Model(private val gameFieldSize: Int = 3) {
 
     private fun getLeftDiagonal(): String {
         var diagonalResult = ""
-        for (i in 0 until gameFieldSize) {
+        for (i in fields.indices) {
             diagonalResult += fields[i][i].toString()
         }
         return diagonalResult
@@ -56,7 +54,7 @@ class Model(private val gameFieldSize: Int = 3) {
 
     private fun getRightDiagonal(): String {
         var diagonalResult = ""
-        for (i in 0 until gameFieldSize) {
+        for (i in fields.indices) {
             diagonalResult += fields[i][gameFieldSize - i - 1].toString()
         }
         return diagonalResult
@@ -65,7 +63,7 @@ class Model(private val gameFieldSize: Int = 3) {
     @Suppress("ReturnCount")
     private fun checkWin(isLastTurn: Boolean): TurnStage {
 
-        for (i in 0 until gameFieldSize) {
+        for (i in fields.indices) {
             if (getRow(i) == winningXExpression || getColumn(i) == winningXExpression) {
                 return TurnStage.WIN_X
             }
