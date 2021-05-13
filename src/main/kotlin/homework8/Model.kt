@@ -1,7 +1,7 @@
 package homework8
 
 class Model(val gameFieldSize: Int = 3) {
-    private var fields = Array(gameFieldSize) { CharArray(gameFieldSize) { ' ' } }
+    private val fields: List<MutableList<Char>> = List(gameFieldSize) { MutableList(gameFieldSize) { ' ' } }
     private var turnNumber = 0
     private val winningXExpression: String
     private val winning0Expression: String
@@ -17,13 +17,15 @@ class Model(val gameFieldSize: Int = 3) {
         this.winning0Expression = temp0Expression
     }
 
-    fun makeTurn(row: Int, column: Int): TurnStage {
-        fields[row][column] = if (turnNumber % 2 == 0) {
+    fun makeTurn(turnPlace: TurnPlace): TurnStage {
+        fields[turnPlace.row][turnPlace.column] = if (turnNumber % 2 == 0) {
             'X'
         } else '0'
         ++turnNumber
         return checkWin(turnNumber == gameFieldSize * gameFieldSize)
     }
+
+    fun getCurrentState(): List<List<Char>> = fields
 
     private fun getRow(row: Int): String {
         var rowResult = ""
