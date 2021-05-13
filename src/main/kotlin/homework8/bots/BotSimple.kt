@@ -1,18 +1,19 @@
 package homework8.bots
 
-import homework8.TurnPlace
+import homework8.controller.TurnPlace
 import kotlin.random.Random
 
 class BotSimple : BotInterface {
-    override fun makeTurn(gameSize: Int, currentGameState: List<List<Char>>): TurnPlace {
-        var botTurn = getBotTurn(gameSize)
-        while (!isBotTurnCorrect(botTurn, currentGameState)) botTurn = getBotTurn(gameSize)
+    override val botName = "Simple Bot: Alex"
+    override fun makeTurn(currentGameState: List<List<Char>>): TurnPlace {
+        var botTurn = getBotTurn(currentGameState)
+        while (!isBotTurnCorrect(botTurn, currentGameState)) botTurn = getBotTurn(currentGameState)
         return botTurn
     }
 
-    private fun getBotTurn(gameSize: Int) = TurnPlace(
-        Random.nextInt(0, gameSize),
-        Random.nextInt(0, gameSize)
+    private fun getBotTurn(currentGameState: List<List<Char>>) = TurnPlace(
+        Random.nextInt(0, currentGameState.size),
+        Random.nextInt(0, currentGameState.size)
     )
 
     private fun isBotTurnCorrect(botTurn: TurnPlace, currentGameState: List<List<Char>>): Boolean =

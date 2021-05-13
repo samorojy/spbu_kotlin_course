@@ -2,6 +2,9 @@
 
 package homework8
 
+import homework8.controller.Controller
+import homework8.controller.GameMode
+import homework8.controller.TurnPlace
 import javafx.scene.control.Button
 import tornadofx.App
 import javafx.scene.paint.Color
@@ -20,7 +23,11 @@ class StartView : View("Tic-Tac-Toe: Menu") {
         menubar {
             menu("Settings") {
                 menu("Game mode") {
-                    item("Player vs Players").action { controller.changeGameMode(GameMode.PlayerVsPlayer) }
+                    menu("Player vs Player") {
+                        item("Local").action { controller.changeGameMode(GameMode.PlayerVsPlayerLocal) }
+                        separator()
+                        item("Online").action { controller.changeGameMode(GameMode.PlayerVsPlayerOnline) }
+                    }
                     separator()
                     menu("Player vs Computer") {
                         item("Easy Mode").action { controller.changeGameMode(GameMode.PlayerVsComputerEasy) }

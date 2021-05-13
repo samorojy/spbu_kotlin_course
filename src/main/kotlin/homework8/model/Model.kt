@@ -1,6 +1,9 @@
-package homework8
+package homework8.model
 
-class Model(val gameFieldSize: Int = 3) {
+import homework8.controller.TurnPlace
+import homework8.controller.TurnStage
+
+class Model(private val gameFieldSize: Int = 3) {
     private val fields: List<MutableList<Char>> = List(gameFieldSize) { MutableList(gameFieldSize) { ' ' } }
     private var turnNumber = 0
     private val winningXExpression: String
@@ -10,8 +13,8 @@ class Model(val gameFieldSize: Int = 3) {
         var tempXExpression = ""
         var temp0Expression = ""
         repeat(gameFieldSize) {
-            tempXExpression += TurnStage.NoWinnerYetX.sign
-            temp0Expression += TurnStage.NoWinnerYet0.sign
+            tempXExpression += TurnStage.NO_WINNER_YET_X.sign
+            temp0Expression += TurnStage.NO_WINNER_YET_0.sign
         }
         this.winningXExpression = tempXExpression
         this.winning0Expression = temp0Expression
@@ -64,21 +67,21 @@ class Model(val gameFieldSize: Int = 3) {
 
         for (i in 0 until gameFieldSize) {
             if (getRow(i) == winningXExpression || getColumn(i) == winningXExpression) {
-                return TurnStage.WinX
+                return TurnStage.WIN_X
             }
             if (getRow(i) == winning0Expression || getColumn(i) == winning0Expression) {
-                return TurnStage.Win0
+                return TurnStage.WIN_0
             }
         }
         if (getLeftDiagonal() == winningXExpression || getRightDiagonal() == winningXExpression) {
-            return TurnStage.WinX
+            return TurnStage.WIN_X
         }
         if (getLeftDiagonal() == winning0Expression || getRightDiagonal() == winning0Expression) {
-            return TurnStage.Win0
+            return TurnStage.WIN_0
         }
         if (isLastTurn) {
-            return TurnStage.Draw
+            return TurnStage.DRAW
         }
-        return if ((turnNumber - 1) % 2 == 0) TurnStage.NoWinnerYetX else TurnStage.NoWinnerYet0
+        return if ((turnNumber - 1) % 2 == 0) TurnStage.NO_WINNER_YET_X else TurnStage.NO_WINNER_YET_0
     }
 }

@@ -1,6 +1,10 @@
-package homework8
+package homework8.controller
 
-import homework8.bots.BotSimple
+import homework8.FinishView
+import homework8.GameView
+import homework8.StartView
+import homework8.bots.BotHard
+import homework8.model.Model
 import javafx.scene.control.Button
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
@@ -10,10 +14,11 @@ import tornadofx.box
 import tornadofx.px
 import tornadofx.style
 import tornadofx.label
+import java.lang.IllegalArgumentException
 
 class Controller : Controller() {
     private var model = Model()
-    private var gameMode = GameMode.PlayerVsPlayer
+    private var gameMode = GameMode.PlayerVsComputerHard
 
     fun changeGameSize(newSize: Int) {
         model = Model(newSize)
@@ -23,24 +28,28 @@ class Controller : Controller() {
         gameMode = newGameMode
     }
 
-    fun getGameSize() = model.gameFieldSize
-
     fun startGame() {
         find<StartView>().replaceWith<GameView>()
     }
 
-    fun makeTurn(turnPlace: TurnPlace, buttons: List<MutableList<Button>>) {
+    fun makeTurn(turnPlace: TurnPlace, buttons: List<List<Button>>) {
         val turnResult = model.makeTurn(turnPlace)
         buttons[turnPlace.row][turnPlace.column].text = turnResult.sign
-        if (turnResult == TurnStage.Draw || turnResult == TurnStage.Win0 || turnResult == TurnStage.WinX
-        ) {
-            finishGame(turnResult)
-        }
-        if (gameMode == GameMode.PlayerVsComputerEasy) {
-            val botTurnPlace = BotSimple().makeTurn(model.gameFieldSize, model.getCurrentState())
+        if (isGameFinished(turnResult)) return
+        if (gameMode == GameMode.PlayerVsComputerHard) {
+            val botTurnPlace = BotHard().makeTurn(model.getCurrentState())
             val botTurn = model.makeTurn(botTurnPlace)
             buttons[botTurnPlace.row][botTurnPlace.column].text = botTurn.sign
+            if (isGameFinished(botTurn)) return
         }
+    }
+
+    private fun isGameFinished(turnResult: TurnStage): Boolean {
+        if (turnResult == TurnStage.DRAW || turnResult == TurnStage.WIN_0 || turnResult == TurnStage.WIN_X) {
+            finishGame(turnResult)
+            return true
+        }
+        return false
     }
 
     private fun finishGame(winningStage: TurnStage) {
@@ -48,15 +57,15 @@ class Controller : Controller() {
         find<FinishView>().root.borderpane {
             center = label(
                 when (winningStage) {
-                    TurnStage.Draw -> "Draw"
-                    TurnStage.WinX -> "Cross player won"
-                    TurnStage.Win0 -> "Nought player won"
-                    else -> "Something else"
+                    TurnStage.DRAW -> "Draw"
+                    TurnStage.WIN_X -> "Cross player won"
+                    TurnStage.WIN_0 -> "Nought player won"
+                    else -> throw IllegalArgumentException("The game can only be completed at the winner stage")
                 }
             ) {
                 style() {
                     fontSize = 25.px
-                    fontFamily = "Montserrat"
+                    fontFamily = "Helvetica"
                     fontWeight = FontWeight.EXTRA_BOLD
                     borderColor += box(
                         top = Color.RED,

@@ -1,7 +1,8 @@
 package homework8.bots
 
-import homework8.TurnPlace
+import homework8.controller.TurnPlace
 
 interface BotInterface {
-    fun makeTurn(gameSize: Int, currentGameState: List<List<Char>>): TurnPlace
+    val botName: String
+    fun makeTurn(currentGameState: List<List<Char>>): TurnPlace
 }
