@@ -57,7 +57,7 @@ data class Matrix(private val matrix: Array<IntArray>) {
     }
 
     override fun toString(): String =
-        matrix.joinToString(transform = { elements -> elements.joinToString { "$it" } }, separator = "\n")
+        matrix.joinToString("\n") { it.joinToString(separator = ", ") }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
