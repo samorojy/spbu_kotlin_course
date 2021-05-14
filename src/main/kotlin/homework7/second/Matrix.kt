@@ -6,16 +6,36 @@ import kotlinx.coroutines.runBlocking
 
 data class Matrix(private val matrix: Array<IntArray>) {
 
-    @Suppress("ComplexCondition")
+    init {
+        val matrixWidth = matrix[0].size
+        matrix.forEach { require(it.size == matrixWidth) { IllegalArgumentException("Incorrect matrix") } }
+    }
+
+    private fun isMatrixSquare(matrixToCheck: Matrix) {
+        require(matrixToCheck.matrix.size == matrixToCheck.matrix[0].size) {
+            IllegalArgumentException("The matrix has to be square")
+        }
+    }
+
     private fun isCorrectMatrices(other: Matrix) {
 
-        if (matrix.size != matrix[0].size &&
-            other.matrix.size != other.matrix[0].size &&
-            matrix[0].isEmpty() || other.matrix[0].isEmpty()
-        ) throw IllegalArgumentException("The matrices has to be square and not empty")
+        require(
+            matrix.isNotEmpty() ||
+                    matrix[0].isNotEmpty() ||
+                    other.matrix.isNotEmpty() ||
+                    other.matrix[0].isNotEmpty()
+        ) {
+            IllegalArgumentException("The matrices has to be not empty")
+        }
 
-        if (matrix[0].size != other.matrix[0].size
-        ) throw IllegalArgumentException("The matrices must be the same size")
+        require(
+            matrix[0].size == other.matrix[0].size
+        ) {
+            IllegalArgumentException("The matrices must be the same size")
+        }
+
+        isMatrixSquare(this)
+        isMatrixSquare(other)
     }
 
     operator fun times(other: Matrix): Matrix {
@@ -36,11 +56,8 @@ data class Matrix(private val matrix: Array<IntArray>) {
         return Matrix(resultArray)
     }
 
-    override fun toString(): String {
-        var string = ""
-        matrix.forEach { string += it.joinToString(postfix = "\n") }
-        return string
-    }
+    override fun toString(): String =
+        matrix.joinToString(transform = { elements -> elements.joinToString { "$it" } }, separator = "\n")
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -48,9 +65,7 @@ data class Matrix(private val matrix: Array<IntArray>) {
 
         other as Matrix
 
-        if (!matrix.contentDeepEquals(other.matrix)) return false
-
-        return true
+        return matrix.contentDeepEquals(other.matrix)
     }
 
     override fun hashCode(): Int {
