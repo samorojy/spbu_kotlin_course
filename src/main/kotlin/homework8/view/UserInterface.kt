@@ -2,6 +2,7 @@ package homework8.view
 
 import homework8.controller.Controller
 import homework8.controller.GameMode
+import homework8.controller.TurnAuthor
 import homework8.controller.TurnPlace
 import javafx.scene.control.Button
 import javafx.scene.control.ToggleGroup
@@ -40,15 +41,15 @@ class StartView : View("Tic-Tac-Toe: Menu") {
             menu("Settings") {
                 menu("Game mode") {
                     menu("Player vs Player") {
-                        item("Local").action { controller.changeGameMode(GameMode.PlayerVsPlayerLocal) }
+                        item("Local").action { controller.changeGameMode(GameMode.PLAYER_VS_PLAYER_LOCAL) }
                         separator()
-                        item("Online").action { controller.changeGameMode(GameMode.PlayerVsPlayerOnline) }
+                        item("Online").action { controller.changeGameMode(GameMode.PLAYER_VS_PLAYER_ONLINE) }
                     }
                     separator()
                     menu("Player vs Computer") {
-                        item("Easy Mode").action { controller.changeGameMode(GameMode.PlayerVsComputerEasy) }
+                        item("Easy Mode").action { controller.changeGameMode(GameMode.PLAYER_VS_COMPUTER_EASY) }
                         separator()
-                        item("Hard Mode").action { controller.changeGameMode(GameMode.PlayerVsComputerHard) }
+                        item("Hard Mode").action { controller.changeGameMode(GameMode.PLAYER_VS_COMPUTER_HARD) }
                     }
                 }
                 item("[NON-STABLE] Game size \n Working only at first start") {
@@ -115,12 +116,13 @@ class GameView : View("Tic-Tac-Toe: Game") {
                         buttons[y].add(button(" ") {
                             setPrefSize(CELL_SIZE, CELL_SIZE)
                             setOnAction {
-                                if (text == " ") {
-                                    controller.makeTurn(TurnPlace(y, x), buttons)
-                                }
+                                controller.makeTurn(TurnPlace(y, x), buttons, TurnAuthor.CLIENT)
                             }
                         })
                 }
+        }
+        button("UPDATE FIELDS").action {
+            controller.updateFields(buttons)
         }
     }
 

@@ -1,5 +1,8 @@
 package homework8.controller
 
 enum class GameMode {
-    PlayerVsPlayerLocal, PlayerVsPlayerOnline, PlayerVsComputerEasy, PlayerVsComputerHard
+    PLAYER_VS_PLAYER_LOCAL,
+    PLAYER_VS_PLAYER_ONLINE,
+    PLAYER_VS_COMPUTER_EASY,
+    PLAYER_VS_COMPUTER_HARD
 }
