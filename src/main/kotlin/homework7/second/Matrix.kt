@@ -19,18 +19,11 @@ data class Matrix(private val matrix: Array<IntArray>) {
 
     private fun isCorrectMatrices(other: Matrix) {
 
-        require(
-            matrix.isNotEmpty() ||
-                    matrix[0].isNotEmpty() ||
-                    other.matrix.isNotEmpty() ||
-                    other.matrix[0].isNotEmpty()
-        ) {
+        require(matrix[0].isNotEmpty() || other.matrix[0].isNotEmpty()) {
             IllegalArgumentException("The matrices has to be not empty")
         }
 
-        require(
-            matrix[0].size == other.matrix[0].size
-        ) {
+        require(matrix[0].size == other.matrix[0].size) {
             IllegalArgumentException("The matrices must be the same size")
         }
 
