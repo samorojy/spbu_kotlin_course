@@ -24,7 +24,6 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
-    testImplementation("io.ktor:ktor-server-tests:1.5.4")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.32")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
@@ -38,11 +37,10 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32")
     implementation("io.ktor:ktor-server-netty:1.5.4")
+    implementation("io.ktor:ktor-websockets:1.5.4")
+    implementation("io.ktor:ktor-client-websockets:1.5.4")
+    implementation("io.ktor:ktor-client-cio:1.5.4")
     implementation("ch.qos.logback:logback-classic:1.2.3")
-    implementation("io.ktor:ktor-server-core:1.5.4")
-    implementation("io.ktor:ktor-client-core:1.5.3")
-    implementation("io.ktor:ktor-client-cio:1.5.3")
-    implementation("io.ktor:ktor-client-serialization:1.5.3")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
