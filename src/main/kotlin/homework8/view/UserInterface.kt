@@ -4,7 +4,6 @@ import homework8.controller.Controller
 import homework8.controller.GameMode
 import homework8.controller.TurnAuthor
 import homework8.controller.TurnPlace
-import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.ToggleGroup
 import tornadofx.App
