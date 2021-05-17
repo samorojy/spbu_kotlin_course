@@ -4,6 +4,7 @@ import homework8.controller.Controller
 import homework8.controller.GameMode
 import homework8.controller.TurnAuthor
 import homework8.controller.TurnPlace
+import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.control.ToggleGroup
 import tornadofx.App
@@ -121,9 +122,7 @@ class GameView : View("Tic-Tac-Toe: Game") {
                         })
                 }
         }
-        button("UPDATE FIELDS").action {
-            controller.updateFields(buttons)
-        }
+        runAsync { controller.getCurrentState(buttons) }
     }
 
     class GameStyle : Stylesheet() {
