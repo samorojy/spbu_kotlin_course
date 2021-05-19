@@ -35,11 +35,8 @@ import java.lang.IllegalArgumentException
 @Suppress("TooManyFunctions")
 class Controller : Controller() {
     private var model = Model()
-    private var gameMode = GameMode.PLAYER_VS_PLAYER_ONLINE
+    private var gameMode = GameMode.PLAYER_VS_PLAYER_LOCAL
     private var currentBot: BotInterface? = null
-    private val client = HttpClient {
-        install(WebSockets)
-    }
 
     fun getGameSize(): Int = model.gameFieldSize
 
@@ -84,6 +81,9 @@ class Controller : Controller() {
     fun getCurrentState(buttons: List<List<Button>>) {
         if (gameMode == GameMode.PLAYER_VS_PLAYER_ONLINE) {
             runBlocking {
+                val client = HttpClient {
+                    install(WebSockets)
+                }
                 client.webSocket(method = HttpMethod.Get, host = "127.0.0.1", port = 8080, path = "/play") {
                     val gettingTurn = launch { getTurn(buttons) }
                     gettingTurn.join()
@@ -104,6 +104,9 @@ class Controller : Controller() {
             buttons[turnPlace.row][turnPlace.column].text = turnResult.sign
             if (gameMode == GameMode.PLAYER_VS_PLAYER_ONLINE) {
                 runBlocking {
+                    val client = HttpClient {
+                        install(WebSockets)
+                    }
                     client.webSocket(method = HttpMethod.Get, host = "127.0.0.1", port = 8080, path = "/play") {
                         val sendingTurn = launch { sendTurn(turnPlace) }
                         sendingTurn.join()
