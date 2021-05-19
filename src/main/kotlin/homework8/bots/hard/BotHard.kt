@@ -1,5 +1,6 @@
-package homework8.bots
+package homework8.bots.hard
 
+import homework8.bots.BotInterface
 import homework8.controller.TurnPlace
 import kotlin.random.Random
 

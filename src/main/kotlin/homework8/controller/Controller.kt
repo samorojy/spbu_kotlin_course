@@ -3,9 +3,9 @@ package homework8.controller
 import homework8.view.FinishView
 import homework8.view.GameView
 import homework8.view.StartView
-import homework8.bots.BotHard
+import homework8.bots.hard.BotHard
 import homework8.bots.BotInterface
-import homework8.bots.BotSimple
+import homework8.bots.simple.BotSimple
 import homework8.model.Model
 import io.ktor.client.HttpClient
 import io.ktor.client.features.websocket.DefaultClientWebSocketSession
@@ -14,7 +14,6 @@ import io.ktor.client.features.websocket.webSocket
 import io.ktor.http.HttpMethod
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.send
-import io.ktor.http.cio.websocket.readText
 import javafx.application.Platform
 import javafx.scene.control.Button
 import javafx.scene.paint.Color
