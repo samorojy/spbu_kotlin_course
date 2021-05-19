@@ -13,6 +13,7 @@ import io.ktor.client.features.websocket.WebSockets
 import io.ktor.client.features.websocket.webSocket
 import io.ktor.http.HttpMethod
 import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.readText
 import io.ktor.http.cio.websocket.send
 import javafx.application.Platform
 import javafx.scene.control.Button
