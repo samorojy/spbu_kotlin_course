@@ -37,10 +37,13 @@ class BotHard : BotInterface {
                     }
                 }
             }
+            LineType.RANDOM -> {
+                var botTurn = getBotRandomTurn(currentGameState)
+                while (!isBotRandomTurnCorrect(botTurn, currentGameState)) botTurn = getBotRandomTurn(currentGameState)
+                return botTurn
+            }
         }
-        var botTurn = getBotRandomTurn(currentGameState)
-        while (!isBotRandomTurnCorrect(botTurn, currentGameState)) botTurn = getBotRandomTurn(currentGameState)
-        return botTurn
+        return TurnPlace(0, 0)
     }
 
     @Suppress("ReturnCount")
