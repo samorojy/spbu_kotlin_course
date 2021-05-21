@@ -17,43 +17,30 @@ class BotHard : BotInterface {
                 return TurnPlace(decision.lineNumber, placeInLine)
             }
             LineType.COLUMN -> {
-                var placeInLine = 0
                 for (i in currentGameState.indices) {
                     if (currentGameState[i][decision.lineNumber] == ' ') {
-                        placeInLine = i
-                        break
+                        return TurnPlace(i, decision.lineNumber)
                     }
                 }
-                return TurnPlace(placeInLine, decision.lineNumber)
             }
             LineType.LEFT_DIAGONAL -> {
-                var placeInLine = 0
                 for (i in currentGameState.indices) {
                     if (currentGameState[i][i] == ' ') {
-                        placeInLine = i
-                        break
+                        return TurnPlace(i, i)
                     }
                 }
-                return TurnPlace(placeInLine, placeInLine)
             }
             LineType.RIGHT_DIAGONAL -> {
-                var placeInRow = 0
-                var placeInColumn = 0
                 for (i in currentGameState.indices) {
                     if (currentGameState[i][currentGameState.size - i - 1] == ' ') {
-                        placeInRow = i
-                        placeInColumn = currentGameState.size - i - 1
-                        break
+                        return TurnPlace(i, currentGameState.size - i - 1)
                     }
                 }
-                return TurnPlace(placeInRow, placeInColumn)
-            }
-            LineType.RANDOM -> {
-                var botTurn = getBotRandomTurn(currentGameState)
-                while (!isBotRandomTurnCorrect(botTurn, currentGameState)) botTurn = getBotRandomTurn(currentGameState)
-                return botTurn
             }
         }
+        var botTurn = getBotRandomTurn(currentGameState)
+        while (!isBotRandomTurnCorrect(botTurn, currentGameState)) botTurn = getBotRandomTurn(currentGameState)
+        return botTurn
     }
 
     @Suppress("ReturnCount")
