@@ -45,17 +45,19 @@ class BotHard : BotInterface {
 
     @Suppress("ReturnCount")
     private fun getDecision(gameFieldStatistic: List<LineState>): LineState {
-        val defenseList =
-            gameFieldStatistic.filter { it.numberOfX > 0 && it.numberOf0 == 0 }.sortedByDescending { it.numberOfX }
-        val attackList =
-            gameFieldStatistic.filter { it.numberOfX == 0 }.sortedByDescending { it.numberOf0 }
+        val defenseList = gameFieldStatistic.filter {
+            it.numberOfX > 0 && it.numberOf0 == 0
+        }.sortedByDescending { it.numberOfX }
+        val attackList = gameFieldStatistic.filter {
+            it.numberOfX == 0
+        }.sortedByDescending { it.numberOf0 }
         if (defenseList.isEmpty() && attackList.isEmpty()) return LineState(LineType.RANDOM, 0, 0, 0)
         if (attackList.isNotEmpty() && attackList[0].numberOf0 == gameFieldStatistic.size - 1) return attackList[0]
         if (defenseList.isEmpty()) return attackList[0]
         return defenseList[0]
     }
 
-    data class LineState(val stringType: LineType, val lineNumber: Int, val numberOfX: Int, val numberOf0: Int)
+    private data class LineState(val stringType: LineType, val lineNumber: Int, val numberOfX: Int, val numberOf0: Int)
 
     private fun getGameFieldStatistic(fields: List<List<Char>>): List<LineState> {
         val gameStatistic: MutableList<LineState> = mutableListOf()
