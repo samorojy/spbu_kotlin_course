@@ -53,9 +53,11 @@ class BotHard : BotInterface {
         val defenseList = gameFieldStatistic.filter {
             it.numberOfX > 0 && it.numberOf0 == 0
         }.sortedByDescending { it.numberOfX }
+
         val attackList = gameFieldStatistic.filter {
             it.numberOfX == 0
         }.sortedByDescending { it.numberOf0 }
+
         if (defenseList.isEmpty() && attackList.isEmpty()) return LineState(LineType.RANDOM, 0, 0, 0)
         if (attackList.isNotEmpty() && attackList[0].numberOf0 == gameFieldStatistic.size - 1) return attackList[0]
         if (defenseList.isEmpty()) return attackList[0]
