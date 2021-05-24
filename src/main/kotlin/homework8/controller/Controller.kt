@@ -7,6 +7,7 @@ import homework8.bots.hard.BotHard
 import homework8.bots.BotInterface
 import homework8.bots.simple.BotSimple
 import homework8.model.Model
+import homework8.style.GameStyle
 import io.ktor.client.HttpClient
 import io.ktor.client.features.websocket.DefaultClientWebSocketSession
 import io.ktor.client.features.websocket.WebSockets
@@ -17,19 +18,15 @@ import io.ktor.http.cio.websocket.readText
 import io.ktor.http.cio.websocket.send
 import javafx.application.Platform
 import javafx.scene.control.Button
-import javafx.scene.paint.Color
-import javafx.scene.text.FontWeight
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tornadofx.Controller
-import tornadofx.borderpane
-import tornadofx.box
-import tornadofx.px
-import tornadofx.style
+import tornadofx.addClass
 import tornadofx.label
+import tornadofx.borderpane
 import java.lang.IllegalArgumentException
 
 @Suppress("TooManyFunctions")
@@ -177,17 +174,7 @@ class Controller : Controller() {
                     else -> throw IllegalArgumentException("The game can only be completed at the winner stage")
                 }
             ) {
-                style() {
-                    fontSize = 25.px
-                    fontFamily = "Helvetica"
-                    fontWeight = FontWeight.EXTRA_BOLD
-                    borderColor += box(
-                        top = Color.RED,
-                        right = Color.DARKGREEN,
-                        left = Color.ORANGE,
-                        bottom = Color.PURPLE
-                    )
-                }
+                addClass(GameStyle.gameViewStyle)
             }
         }
     }

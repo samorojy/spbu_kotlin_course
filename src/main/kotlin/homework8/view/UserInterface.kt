@@ -6,18 +6,16 @@ import homework8.controller.Controller
 import homework8.controller.GameMode
 import homework8.controller.TurnAuthor
 import homework8.controller.TurnPlace
+import homework8.style.GameStyle
 import javafx.scene.control.Button
 import javafx.scene.control.ToggleGroup
 import tornadofx.App
-import javafx.scene.paint.Color
-import javafx.scene.text.FontWeight
-import tornadofx.Stylesheet
+import tornadofx.addClass
 import tornadofx.separator
 import tornadofx.togglebutton
 import tornadofx.View
 import tornadofx.action
 import tornadofx.borderpane
-import tornadofx.box
 import tornadofx.button
 import tornadofx.gridpane
 import tornadofx.hbox
@@ -25,13 +23,11 @@ import tornadofx.item
 import tornadofx.label
 import tornadofx.menu
 import tornadofx.menubar
-import tornadofx.px
 import tornadofx.row
-import tornadofx.style
 import tornadofx.useMaxWidth
 import tornadofx.vbox
 
-class TicTacToe : App(StartView::class, GameView.GameStyle::class)
+class TicTacToe : App(StartView::class, GameStyle::class)
 
 class StartView : View("Tic-Tac-Toe: Menu") {
     private val controller: Controller by inject()
@@ -69,6 +65,7 @@ class StartView : View("Tic-Tac-Toe: Menu") {
             useMaxWidth = true
             setOnAction { controller.startGame() }
         }
+        addClass(GameStyle.menuStyle)
     }
 
     companion object {
@@ -81,24 +78,13 @@ class FinishView : View("Tic-Tac-Toe: Game Over") {
     override val root = vbox {
         borderpane {
             useMaxWidth = true
-            center = label("Game Over!") {
-                style() {
-                    fontSize = 30.px
-                    fontFamily = "Helvetica"
-                    fontWeight = FontWeight.EXTRA_BOLD
-                    borderColor += box(
-                        top = Color.RED,
-                        right = Color.DARKGREEN,
-                        left = Color.ORANGE,
-                        bottom = Color.PURPLE
-                    )
-                }
-            }
+            center = label("Game Over!")
         }
         button("Back to menu") {
             useMaxWidth = true
             setOnAction { controller.restartGame() }
         }
+        addClass(GameStyle.gameViewStyle)
     }
 }
 
@@ -120,23 +106,8 @@ class GameView : View("Tic-Tac-Toe: Game") {
                         })
                 }
         }
+        addClass(GameStyle.gameViewStyle)
         runAsync { controller.getCurrentState(buttons) }
-    }
-
-    class GameStyle : Stylesheet() {
-        init {
-            button {
-                fontSize = 30.px
-                fontFamily = "Helvetica"
-                fontWeight = FontWeight.EXTRA_BOLD
-                borderColor += box(
-                    top = Color.RED,
-                    right = Color.DARKGREEN,
-                    left = Color.ORANGE,
-                    bottom = Color.PURPLE
-                )
-            }
-        }
     }
 
     companion object {
