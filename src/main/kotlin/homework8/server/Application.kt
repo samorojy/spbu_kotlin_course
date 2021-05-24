@@ -10,7 +10,6 @@ import io.ktor.routing.routing
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
 
-@Suppress("unused")
 fun Application.module() {
     install(WebSockets)
     routing {
