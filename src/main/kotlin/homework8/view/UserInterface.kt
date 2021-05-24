@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package homework8.view
 
 import homework8.controller.Controller
@@ -55,11 +57,8 @@ class StartView : View("Tic-Tac-Toe: Menu") {
                 item("[NON-STABLE] Game size \n Working only at first start") {
                     hbox {
                         val toggleGroup = ToggleGroup()
-                        @Suppress("MagicNumber")
                         togglebutton("3", toggleGroup).action { controller.changeGameSize(3) }
-                        @Suppress("MagicNumber")
                         togglebutton("5", toggleGroup).action { controller.changeGameSize(5) }
-                        @Suppress("MagicNumber")
                         togglebutton("7", toggleGroup).action { controller.changeGameSize(7) }
                     }
                 }
