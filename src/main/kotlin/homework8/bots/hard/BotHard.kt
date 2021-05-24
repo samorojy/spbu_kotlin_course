@@ -7,48 +7,49 @@ import kotlin.random.Random
 class BotHard : BotInterface {
     override val botName = "Hard Bot: Egor"
 
-    @Suppress("ReturnCount", "ComplexMethod")
     override fun makeTurn(currentGameState: List<List<Char>>): TurnPlace {
         val gameStatistic = getGameFieldStatistic(currentGameState)
         val decision = getDecision(gameStatistic)
-        when (decision.stringType) {
+        return when (decision.stringType) {
             LineType.ROW -> {
                 val placeInLine = currentGameState[decision.lineNumber].indexOf(' ')
-                return TurnPlace(decision.lineNumber, placeInLine)
+                TurnPlace(decision.lineNumber, placeInLine)
             }
             LineType.COLUMN -> {
+                var placeInLine = 0
                 for (i in currentGameState.indices) {
                     if (currentGameState[i][decision.lineNumber] == ' ') {
-                        return TurnPlace(i, decision.lineNumber)
+                        placeInLine = i
                     }
                 }
+                TurnPlace(placeInLine, decision.lineNumber)
             }
             LineType.LEFT_DIAGONAL -> {
+                var placeInLine = 0
                 for (i in currentGameState.indices) {
                     if (currentGameState[i][i] == ' ') {
-                        return TurnPlace(i, i)
+                        placeInLine = i
                     }
                 }
+                TurnPlace(placeInLine, placeInLine)
             }
             LineType.RIGHT_DIAGONAL -> {
+                var placeInLine = 0
                 for (i in currentGameState.indices) {
                     if (currentGameState[i][currentGameState.size - i - 1] == ' ') {
-                        return TurnPlace(i, currentGameState.size - i - 1)
+                        placeInLine = i
                     }
                 }
+                TurnPlace(placeInLine, currentGameState.size - placeInLine - 1)
             }
             LineType.RANDOM -> {
                 var botTurn = getBotRandomTurn(currentGameState)
                 while (!isBotRandomTurnCorrect(botTurn, currentGameState)) botTurn = getBotRandomTurn(currentGameState)
-                return botTurn
+                botTurn
             }
         }
-        var botTurn = getBotRandomTurn(currentGameState)
-        while (!isBotRandomTurnCorrect(botTurn, currentGameState)) botTurn = getBotRandomTurn(currentGameState)
-        return botTurn
     }
 
-    @Suppress("ReturnCount")
     private fun getDecision(gameFieldStatistic: List<LineState>): LineState {
         val defenseList = gameFieldStatistic.filter {
             it.numberOfX > 0 && it.numberOf0 == 0
@@ -58,10 +59,12 @@ class BotHard : BotInterface {
             it.numberOfX == 0
         }.sortedByDescending { it.numberOf0 }
 
-        if (defenseList.isEmpty() && attackList.isEmpty()) return LineState(LineType.RANDOM, 0, 0, 0)
-        if (attackList.isNotEmpty() && attackList[0].numberOf0 == gameFieldStatistic.size - 1) return attackList[0]
-        if (defenseList.isEmpty()) return attackList[0]
-        return defenseList[0]
+        return when {
+            defenseList.isEmpty() && attackList.isEmpty() -> LineState(LineType.RANDOM, 0, 0, 0)
+            attackList.isNotEmpty() && attackList[0].numberOf0 == gameFieldStatistic.size - 1 -> attackList[0]
+            defenseList.isEmpty() -> attackList[0]
+            else -> defenseList[0]
+        }
     }
 
     private data class LineState(val stringType: LineType, val lineNumber: Int, val numberOfX: Int, val numberOf0: Int)

@@ -4,5 +4,5 @@ import homework8.view.TicTacToe
 import tornadofx.launch
 
 fun main() {
-        launch<TicTacToe>()
+    launch<TicTacToe>()
 }
