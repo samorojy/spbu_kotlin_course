@@ -20,6 +20,7 @@ import javafx.application.Platform
 import javafx.scene.control.Button
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -50,18 +51,16 @@ class Controller : Controller() {
         }
     }
 
-    @Suppress("TooGenericExceptionCaught")
     private suspend fun DefaultClientWebSocketSession.sendTurn(turnPlace: TurnPlace) {
         try {
             send(Json.encodeToString(turnPlace))
             send("exit")
-        } catch (e: Exception) {
+        } catch (e: SerializationException) {
             println("Error while sending: " + e.localizedMessage)
             return
         }
     }
 
-    @Suppress("TooGenericExceptionCaught")
     private suspend fun DefaultClientWebSocketSession.getTurn(buttons: List<List<Button>>) {
         try {
             for (jsonTurnPlace in incoming) {
@@ -70,7 +69,7 @@ class Controller : Controller() {
                 val turnPlace = Json.decodeFromString<TurnPlace>(string)
                 makeTurn(turnPlace, buttons)
             }
-        } catch (e: Exception) {
+        } catch (e: SerializationException) {
             println("Error while receiving: " + e.localizedMessage)
         }
     }
