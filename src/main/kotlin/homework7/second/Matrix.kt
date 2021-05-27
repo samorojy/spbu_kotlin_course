@@ -11,15 +11,15 @@ data class Matrix(private val matrix: Array<IntArray>) {
         matrix.forEach { require(it.size == matrixWidth) { IllegalArgumentException("Incorrect matrix") } }
     }
 
-    private fun isMatrixSquare(matrixToCheck: Matrix) {
-        require(matrixToCheck.matrix.size == matrixToCheck.matrix[0].size) {
+    private fun Matrix.isMatrixSquare() {
+        require(this@Matrix.matrix.size == this@Matrix.matrix[0].size) {
             IllegalArgumentException("The matrix has to be square")
         }
     }
 
     private fun isCorrectMatrices(other: Matrix) {
 
-        require(matrix[0].isNotEmpty() || other.matrix[0].isNotEmpty()) {
+        require(matrix[0].isNotEmpty() && other.matrix[0].isNotEmpty()) {
             IllegalArgumentException("The matrices has to be not empty")
         }
 
@@ -27,8 +27,8 @@ data class Matrix(private val matrix: Array<IntArray>) {
             IllegalArgumentException("The matrices must be the same size")
         }
 
-        isMatrixSquare(this)
-        isMatrixSquare(other)
+        this.isMatrixSquare()
+        other.isMatrixSquare()
     }
 
     operator fun times(other: Matrix): Matrix {
