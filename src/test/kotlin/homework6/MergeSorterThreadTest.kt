@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-internal class MergeSorterTest {
+internal class MergeSorterThreadTest {
 
     companion object {
         @JvmStatic
@@ -37,7 +37,7 @@ internal class MergeSorterTest {
     @MethodSource("inputData")
     @ParameterizedTest(name = "test{index}, {1}")
     fun mergeSortingTest(expectedArray: IntArray, actualArray: IntArray, threadsNumber: Int) {
-        MergeSorter().sort(actualArray, threadsNumber)
+        MergeSorterThread().sort(actualArray, threadsNumber)
         assertEquals(expectedArray.toList(), actualArray.toList())
     }
 }

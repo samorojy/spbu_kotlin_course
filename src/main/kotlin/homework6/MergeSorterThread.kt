@@ -2,8 +2,13 @@
 
 package homework6
 
-class MergeSorter {
-    fun sort(arrayToSort: IntArray, numberOfThreads: Int) {
+import homework7.first.MergeSorter
+import homework7.first.SorterInterface
+
+@Suppress("LongMethod")
+class MergeSorterThread : MergeSorter(), SorterInterface {
+
+    override fun sort(arrayToSort: IntArray, numberOfThreads: Int) {
         if (arrayToSort.isEmpty()) return
         val temporaryArray = IntArray(arrayToSort.size) { 0 }
         arrayToSort.mergeSortingMultiThread(
@@ -13,23 +18,6 @@ class MergeSorter {
         )
         for (i in arrayToSort.indices) arrayToSort[i] = temporaryArray[i]
     }
-
-    private fun IntArray.binarySearch(valueToFind: Int, left: Int, right: Int): Int {
-        var leftBound = left
-        var rightBound = kotlin.math.max(left, right + 1)
-        var middle: Int
-        while (leftBound < rightBound) {
-            middle = (leftBound + rightBound) / 2
-            if (valueToFind <= this[middle]) {
-                rightBound = middle
-            } else {
-                leftBound = middle + 1
-            }
-        }
-        return rightBound
-    }
-
-    data class MergingPart(val leftBound: Int, val rightBound: Int)
 
     private fun IntArray.mergeMultiThread(
         firstPart: MergingPart,
@@ -61,32 +49,48 @@ class MergeSorter {
         val middleOfArrayToPaste = leftBoundOfArrayToPaste + sizeHalfPartFirst + sizeHalfPartSecond
 
         arrayMergeTo[middleOfArrayToPaste] = this[middleOfFirstPart]
-        val numberOfLeftThreads = numberOfThreads / 2
-        val numberOfRightThreads = numberOfThreads - numberOfLeftThreads
-        val leftThread =
-            Thread {
-                this.mergeMultiThread(
-                    MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
-                    MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
-                    arrayMergeTo,
-                    leftBoundOfArrayToPaste,
-                    numberOfLeftThreads
-                )
-            }
-        val rightThread =
-            Thread {
-                this.mergeMultiThread(
-                    MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
-                    MergingPart(middleOfSecondPart, secondPart.rightBound),
-                    arrayMergeTo,
-                    middleOfArrayToPaste + 1,
-                    numberOfRightThreads
-                )
-            }
-        leftThread.start()
-        rightThread.start()
-        leftThread.join()
-        rightThread.join()
+
+        if (numberOfThreads > 1) {
+            val numberOfLeftThreads = numberOfThreads / 2
+            val numberOfRightThreads = numberOfThreads - numberOfLeftThreads
+            val leftThread =
+                Thread {
+                    this.mergeMultiThread(
+                        MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
+                        MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
+                        arrayMergeTo,
+                        leftBoundOfArrayToPaste,
+                        numberOfLeftThreads
+                    )
+                }
+            val rightThread =
+                Thread {
+                    this.mergeMultiThread(
+                        MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
+                        MergingPart(middleOfSecondPart, secondPart.rightBound),
+                        arrayMergeTo,
+                        middleOfArrayToPaste + 1,
+                        numberOfRightThreads
+                    )
+                }
+            leftThread.start()
+            rightThread.start()
+            leftThread.join()
+            rightThread.join()
+        } else {
+            this.mergeMultiThread(
+                MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
+                MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
+                arrayMergeTo,
+                leftBoundOfArrayToPaste,
+            )
+            this.mergeMultiThread(
+                MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
+                MergingPart(middleOfSecondPart, secondPart.rightBound),
+                arrayMergeTo,
+                middleOfArrayToPaste + 1,
+            )
+        }
     }
 
     private fun IntArray.mergeSortingMultiThread(

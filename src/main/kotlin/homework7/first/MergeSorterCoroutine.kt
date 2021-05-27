@@ -6,9 +6,12 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class MergeSorterCoroutine {
-    fun sort(arrayToSort: IntArray, numberOfThreads: Int) {
+@Suppress("LongMethod")
+class MergeSorterCoroutine : MergeSorter(), SorterInterface {
+
+    override fun sort(arrayToSort: IntArray, numberOfThreads: Int) {
         if (arrayToSort.isEmpty()) return
+
         val temporaryArray = IntArray(arrayToSort.size) { 0 }
         runBlocking {
             arrayToSort.mergeSortingMultiCoroutine(
@@ -19,23 +22,6 @@ class MergeSorterCoroutine {
         }
         for (i in arrayToSort.indices) arrayToSort[i] = temporaryArray[i]
     }
-
-    private fun IntArray.binarySearch(valueToFind: Int, left: Int, right: Int): Int {
-        var leftBound = left
-        var rightBound = kotlin.math.max(left, right + 1)
-        var middle: Int
-        while (leftBound < rightBound) {
-            middle = (leftBound + rightBound) / 2
-            if (valueToFind <= this[middle]) {
-                rightBound = middle
-            } else {
-                leftBound = middle + 1
-            }
-        }
-        return rightBound
-    }
-
-    data class MergingPart(val leftBound: Int, val rightBound: Int)
 
     private suspend fun IntArray.mergeMultiCoroutine(
         firstPart: MergingPart,
@@ -67,32 +53,47 @@ class MergeSorterCoroutine {
         val middleOfArrayToPaste = leftBoundOfArrayToPaste + sizeHalfPartFirst + sizeHalfPartSecond
 
         arrayMergeTo[middleOfArrayToPaste] = this[middleOfFirstPart]
-        val numberOfLeftThreads = numberOfThreads / 2
-        val numberOfRightThreads = numberOfThreads - numberOfLeftThreads
-        val currentArray = this
-        coroutineScope {
-            val leftCoroutine =
-                launch {
-                    currentArray.mergeMultiCoroutine(
-                        MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
-                        MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
-                        arrayMergeTo,
-                        leftBoundOfArrayToPaste,
-                        numberOfLeftThreads
-                    )
-                }
-            val rightCoroutine =
-                launch {
-                    currentArray.mergeMultiCoroutine(
-                        MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
-                        MergingPart(middleOfSecondPart, secondPart.rightBound),
-                        arrayMergeTo,
-                        middleOfArrayToPaste + 1,
-                        numberOfRightThreads
-                    )
-                }
-            leftCoroutine.join()
-            rightCoroutine.join()
+        if (numberOfThreads > 1) {
+            val numberOfLeftThreads = numberOfThreads / 2
+            val numberOfRightThreads = numberOfThreads - numberOfLeftThreads
+            val currentArray = this
+            coroutineScope {
+                val leftCoroutine =
+                    launch {
+                        currentArray.mergeMultiCoroutine(
+                            MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
+                            MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
+                            arrayMergeTo,
+                            leftBoundOfArrayToPaste,
+                            numberOfLeftThreads
+                        )
+                    }
+                val rightCoroutine =
+                    launch {
+                        currentArray.mergeMultiCoroutine(
+                            MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
+                            MergingPart(middleOfSecondPart, secondPart.rightBound),
+                            arrayMergeTo,
+                            middleOfArrayToPaste + 1,
+                            numberOfRightThreads
+                        )
+                    }
+                leftCoroutine.join()
+                rightCoroutine.join()
+            }
+        } else {
+            this.mergeMultiCoroutine(
+                MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
+                MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
+                arrayMergeTo,
+                leftBoundOfArrayToPaste,
+            )
+            this.mergeMultiCoroutine(
+                MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
+                MergingPart(middleOfSecondPart, secondPart.rightBound),
+                arrayMergeTo,
+                middleOfArrayToPaste + 1,
+            )
         }
     }
 

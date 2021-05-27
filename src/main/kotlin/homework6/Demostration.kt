@@ -2,9 +2,12 @@
 
 package homework6
 
+import homework7.first.SorterInterface
+
 fun main() {
-    ArraySizeDependenceGraphDrawer(
-        16000, 2000, 0,
+    ArraySizeDependenceGraphDrawer<SorterInterface>(
+        MergeSorterThread(),
+        16000, 200, 0,
         8
     )
 }
