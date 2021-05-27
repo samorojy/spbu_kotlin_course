@@ -8,27 +8,25 @@ data class Matrix(private val matrix: Array<IntArray>) {
 
     init {
         val matrixWidth = matrix[0].size
-        matrix.forEach { require(it.size == matrixWidth) { IllegalArgumentException("Incorrect matrix") } }
+        matrix.forEach { require(it.size == matrixWidth) { "Incorrect matrix" } }
     }
 
-    private fun Matrix.isMatrixSquare() {
-        require(this@Matrix.matrix.size == this@Matrix.matrix[0].size) {
-            IllegalArgumentException("The matrix has to be square")
-        }
+    private fun requireSquare() {
+        require(matrix.size == matrix[0].size) { "The matrix has to be square" }
     }
 
     private fun isCorrectMatrices(other: Matrix) {
 
         require(matrix[0].isNotEmpty() && other.matrix[0].isNotEmpty()) {
-            IllegalArgumentException("The matrices has to be not empty")
+            "The matrices has to be not empty"
         }
 
         require(matrix[0].size == other.matrix[0].size) {
-            IllegalArgumentException("The matrices must be the same size")
+            "The matrices must be the same size"
         }
 
-        this.isMatrixSquare()
-        other.isMatrixSquare()
+        requireSquare()
+        other.requireSquare()
     }
 
     operator fun times(other: Matrix): Matrix {
