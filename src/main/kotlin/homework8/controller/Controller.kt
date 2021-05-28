@@ -130,11 +130,15 @@ class Controller : Controller() {
         buttons: List<List<Button>>,
         turnAuthor: TurnAuthor = TurnAuthor.CLIENT
     ): Boolean {
-        if (turnResult == TurnStage.DRAW || turnResult == TurnStage.WIN_0 || turnResult == TurnStage.WIN_X) {
+        if (turnResult.isGameOver()) {
             finishGame(turnResult, buttons, turnAuthor)
             return true
         }
         return false
+    }
+
+    private fun TurnStage.isGameOver(): Boolean {
+        return this == TurnStage.DRAW || this == TurnStage.WIN_0 || this == TurnStage.WIN_X
     }
 
     fun startGame() {
