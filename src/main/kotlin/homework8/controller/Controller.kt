@@ -155,16 +155,20 @@ class Controller : Controller() {
         buttons: List<List<Button>>,
         turnAuthor: TurnAuthor
     ) {
-
         if (turnAuthor == TurnAuthor.CLIENT) {
-            find<GameView>().replaceWith<FinishView>()
-            buttons.forEach { list -> list.forEach { it.text = " " } }
-            printWinner(winningStage)
+            endingGame(winningStage, buttons)
         } else {
-            Platform.runLater { find<GameView>().replaceWith<FinishView>() }
-            buttons.forEach { list -> list.forEach { Platform.runLater { it.text = " " } } }
-            Platform.runLater { printWinner(winningStage) }
+            Platform.runLater { endingGame(winningStage, buttons) }
         }
+    }
+
+    private fun endingGame(
+        winningStage: TurnStage,
+        buttons: List<List<Button>>,
+    ) {
+        find<GameView>().replaceWith<FinishView>()
+        buttons.forEach { list -> list.forEach { it.text = " " } }
+        printWinner(winningStage)
     }
 
     private fun printWinner(winningStage: TurnStage) {
