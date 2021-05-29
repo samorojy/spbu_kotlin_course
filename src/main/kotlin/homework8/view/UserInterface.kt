@@ -33,6 +33,8 @@ class TicTacToe : App(StartView::class, GameStyle::class)
 class StartView : View("Tic-Tac-Toe: Menu") {
     private val controller: Controller by inject()
     private val gameSize = controller.getGameSize()
+    val currentGameMode = SimpleStringProperty(GameMode.PLAYER_VS_PLAYER_LOCAL.presentableName)
+
     override val root = vbox {
         setPrefSize(gameSize * CELL_SIZE, gameSize * CELL_SIZE)
 
@@ -65,6 +67,10 @@ class StartView : View("Tic-Tac-Toe: Menu") {
         button("Start game") {
             useMaxWidth = true
             setOnAction { controller.startGame() }
+        }
+        borderpane {
+            left = label("Current settings: ")
+            center = label(currentGameMode)
         }
         addClass(GameStyle.menuStyle)
     }

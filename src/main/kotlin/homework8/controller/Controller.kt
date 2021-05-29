@@ -45,6 +45,7 @@ class Controller : Controller() {
             GameMode.PLAYER_VS_COMPUTER_HARD -> BotHard()
             else -> null
         }
+        find<StartView>().currentGameMode.set(gameMode.presentableName)
     }
 
     private suspend fun DefaultClientWebSocketSession.sendTurn(turnPlace: TurnPlace) {
