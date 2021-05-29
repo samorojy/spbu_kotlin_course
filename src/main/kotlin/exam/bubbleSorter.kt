@@ -15,7 +15,7 @@ fun <T> Iterable<T>.bubbleSort(comparator: Comparator<T>): List<T> {
             val compareResult = try {
                 comparator.compare(list[i], list[i + 1])
             } catch (e: ArithmeticException) {
-                println("comparison error")
+                println("comparison error: ${e.message}")
                 return emptyList()
             }
             if (compareResult > 0) {
