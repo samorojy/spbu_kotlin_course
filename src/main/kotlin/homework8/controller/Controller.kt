@@ -7,7 +7,6 @@ import homework8.bots.hard.BotHard
 import homework8.bots.BotInterface
 import homework8.bots.simple.BotSimple
 import homework8.model.Model
-import homework8.style.GameStyle
 import io.ktor.client.HttpClient
 import io.ktor.client.features.websocket.DefaultClientWebSocketSession
 import io.ktor.client.features.websocket.WebSockets
@@ -25,9 +24,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tornadofx.Controller
-import tornadofx.addClass
-import tornadofx.label
-import tornadofx.borderpane
 import java.lang.IllegalArgumentException
 
 @Suppress("TooManyFunctions")
@@ -103,7 +99,7 @@ class Controller : Controller() {
                     val client = HttpClient {
                         install(WebSockets)
                     }
-                    client.webSocket(method = HttpMethod.Get, host = "127.0.0.1", port = 8080, path = "/play") {
+                    client.webSocket(method = HttpMethod.Post, host = "127.0.0.1", port = 8080, path = "/play") {
                         val sendingTurn = launch { sendTurn(turnPlace) }
                         sendingTurn.join()
                     }
@@ -168,21 +164,13 @@ class Controller : Controller() {
     ) {
         find<GameView>().replaceWith<FinishView>()
         buttons.forEach { list -> list.forEach { it.text = " " } }
-        printWinner(winningStage)
-    }
-
-    private fun printWinner(winningStage: TurnStage) {
-        find<FinishView>().root.borderpane {
-            center = label(
-                when (winningStage) {
-                    TurnStage.DRAW -> "Draw"
-                    TurnStage.WIN_X -> "Cross player won"
-                    TurnStage.WIN_0 -> "Nought player won"
-                    else -> throw IllegalArgumentException("The game can only be completed at the winner stage")
-                }
-            ) {
-                addClass(GameStyle.gameViewStyle)
+        find<FinishView>().winnerMessage.set(
+            when (winningStage) {
+                TurnStage.DRAW -> "Draw"
+                TurnStage.WIN_X -> "Cross player won"
+                TurnStage.WIN_0 -> "Nought player won"
+                else -> throw IllegalArgumentException("The game can only be completed at the winner stage")
             }
-        }
+        )
     }
 }

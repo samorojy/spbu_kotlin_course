@@ -7,6 +7,7 @@ import homework8.controller.GameMode
 import homework8.controller.TurnAuthor
 import homework8.controller.TurnPlace
 import homework8.style.GameStyle
+import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Button
 import javafx.scene.control.ToggleGroup
 import tornadofx.App
@@ -75,10 +76,13 @@ class StartView : View("Tic-Tac-Toe: Menu") {
 
 class FinishView : View("Tic-Tac-Toe: Game Over") {
     private val controller: Controller by inject()
+    var winnerMessage = SimpleStringProperty("")
     override val root = vbox {
         borderpane {
-            useMaxWidth = true
             center = label("Game Over!")
+        }
+        borderpane {
+            center = label(winnerMessage)
         }
         button("Back to menu") {
             useMaxWidth = true
