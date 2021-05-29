@@ -44,7 +44,7 @@ class StartView : View("Tic-Tac-Toe: Menu") {
                     menu("Player vs Player") {
                         item("Local").action { controller.changeGameMode(GameMode.PLAYER_VS_PLAYER_LOCAL) }
                         separator()
-                        item("Online").action { controller.changeGameMode(GameMode.PLAYER_VS_PLAYER_ONLINE) }
+                        item("Online ").action { controller.changeGameMode(GameMode.PLAYER_VS_PLAYER_ONLINE) }
                     }
                     separator()
                     menu("Player vs Computer") {
