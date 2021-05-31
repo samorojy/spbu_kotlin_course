@@ -2,8 +2,6 @@
 
 package homework6
 
-import homework7.first.SorterInterface
-
 fun main() {
     ArraySizeDependenceGraphDrawer(
         MergeSorterThread(),
