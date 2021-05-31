@@ -3,20 +3,15 @@
 package homework6
 
 import homework7.first.MergeSorter
-import homework7.first.SorterInterface
 
 @Suppress("LongMethod")
-class MergeSorterThread : MergeSorter(), SorterInterface {
-
-    override fun sort(arrayToSort: IntArray, numberOfThreads: Int) {
-        if (arrayToSort.isEmpty()) return
-        val temporaryArray = IntArray(arrayToSort.size) { 0 }
-        arrayToSort.mergeSortingMultiThread(
-            MergingPart(0, arrayToSort.lastIndex),
+class MergeSorterThread : MergeSorter() {
+    override fun IntArray.mergeSorting(mergingPart: MergingPart, temporaryArray: IntArray, numberOfThreads: Int) {
+        this.mergeSortingMultiThread(
+            MergingPart(0, this.lastIndex),
             sortedArray = temporaryArray,
             numberOfThreads = numberOfThreads
         )
-        temporaryArray.copyInto(arrayToSort)
     }
 
     private fun IntArray.mergeMultiThread(

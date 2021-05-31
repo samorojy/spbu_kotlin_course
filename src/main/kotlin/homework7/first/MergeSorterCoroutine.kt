@@ -7,20 +7,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @Suppress("LongMethod")
-class MergeSorterCoroutine : MergeSorter(), SorterInterface {
-
-    override fun sort(arrayToSort: IntArray, numberOfThreads: Int) {
-        if (arrayToSort.isEmpty()) return
-
-        val temporaryArray = IntArray(arrayToSort.size) { 0 }
+class MergeSorterCoroutine : MergeSorter() {
+    override fun IntArray.mergeSorting(mergingPart: MergingPart, temporaryArray: IntArray, numberOfThreads: Int) {
         runBlocking {
-            arrayToSort.mergeSortingMultiCoroutine(
-                MergingPart(0, arrayToSort.lastIndex),
+            this@mergeSorting.mergeSortingMultiCoroutine(
+                MergingPart(0, this@mergeSorting.lastIndex),
                 sortedArray = temporaryArray,
                 numberOfThreads = numberOfThreads
             )
         }
-        temporaryArray.copyInto(arrayToSort)
     }
 
     private suspend fun IntArray.mergeMultiCoroutine(
