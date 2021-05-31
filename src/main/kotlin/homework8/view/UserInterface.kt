@@ -32,7 +32,7 @@ class TicTacToe : App(StartView::class, GameStyle::class)
 
 class StartView : View("Tic-Tac-Toe: Menu") {
     private val controller: Controller by inject()
-    private val gameSize = controller.getGameSize()
+    private val gameSize = controller.gameSize
     val currentGameMode = SimpleStringProperty(GameMode.PLAYER_VS_PLAYER_LOCAL.presentableName)
 
     override val root = vbox {
@@ -100,8 +100,8 @@ class FinishView : View("Tic-Tac-Toe: Game Over") {
 
 class GameView : View("Tic-Tac-Toe: Game") {
     private val controller: Controller by inject()
-    private val gameSize = controller.getGameSize()
-    private val buttons: List<MutableList<Button>> = List(gameSize) { mutableListOf() }
+    private val gameSize = controller.gameSize
+    val buttons: List<MutableList<Button>> = List(gameSize) { mutableListOf() }
     override val root = vbox {
         setPrefSize(gameSize * CELL_SIZE, gameSize * CELL_SIZE)
         gridpane {
@@ -117,7 +117,6 @@ class GameView : View("Tic-Tac-Toe: Game") {
                 }
         }
         addClass(GameStyle.gameViewStyle)
-        runAsync { controller.getCurrentState(buttons) }
     }
 
     companion object {

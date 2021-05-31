@@ -20,11 +20,15 @@ fun Application.module() {
             for (frame in incoming) {
                 frame as? Frame.Text ?: continue
                 val receivedText = frame.readText()
+                println(receivedText)
+                println("$connections |||")
                 if (receivedText == "exit") {
                     connections.remove(this)
                 } else {
                     connections.forEach {
-                        it.send(receivedText)
+                        if (it != this) {
+                            it.send(receivedText)
+                        }
                     }
                 }
             }

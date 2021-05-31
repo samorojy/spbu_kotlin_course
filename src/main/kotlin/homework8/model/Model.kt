@@ -1,9 +1,12 @@
 package homework8.model
 
+import homework8.controller.TurnAuthor
 import homework8.controller.TurnPlace
 import homework8.controller.TurnStage
+import javafx.application.Platform
+import javafx.scene.control.Button
 
-class Model(val gameFieldSize: Int = 3) {
+open class Model(private val gameFieldSize: Int = 3) : ModelInterface {
     private val fields: List<MutableList<Char>> = List(gameFieldSize) { MutableList(gameFieldSize) { ' ' } }
     private var turnNumber = 0
     private val winningXExpression: String
@@ -18,15 +21,27 @@ class Model(val gameFieldSize: Int = 3) {
         this.winning0Expression = winning0ExpressionBuilder.toString()
     }
 
-    fun makeTurn(turnPlace: TurnPlace): TurnStage {
+    override fun move(
+        turnPlace: TurnPlace,
+        gameField: List<List<Button>>,
+        turnAuthor: TurnAuthor
+    ): MoveResult = makeTurn(turnPlace, gameField)
+
+    fun makeTurn(turnPlace: TurnPlace, gameField: List<List<Button>>): MoveResult {
         fields[turnPlace.row][turnPlace.column] = if (turnNumber % 2 == 0) {
             'X'
         } else '0'
         ++turnNumber
-        return checkWin(turnNumber == gameFieldSize * gameFieldSize)
+        val turnStage = checkWin(turnNumber == gameFieldSize * gameFieldSize)
+        Platform.runLater { gameField[turnPlace.row][turnPlace.column].text = turnStage.sign }
+        return MoveResult(turnStage, turnStage.isGameOver())
     }
 
     fun getCurrentState(): List<List<Char>> = fields
+
+    private fun TurnStage.isGameOver(): Boolean {
+        return this == TurnStage.DRAW || this == TurnStage.WIN_0 || this == TurnStage.WIN_X
+    }
 
     private fun getRow(row: Int): String {
         var rowResult = ""
