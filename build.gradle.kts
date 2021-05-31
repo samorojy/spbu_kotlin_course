@@ -8,7 +8,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
     id("org.jetbrains.dokka") version "1.4.30"
     id("org.openjfx.javafxplugin") version "0.0.8"
-=    application
+    application
 }
 
 group = "me.user"
