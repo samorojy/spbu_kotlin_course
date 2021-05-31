@@ -16,7 +16,7 @@ class MergeSorterThread : MergeSorter(), SorterInterface {
             sortedArray = temporaryArray,
             numberOfThreads = numberOfThreads
         )
-        for (i in arrayToSort.indices) arrayToSort[i] = temporaryArray[i]
+        temporaryArray.copyInto(arrayToSort)
     }
 
     private fun IntArray.mergeMultiThread(

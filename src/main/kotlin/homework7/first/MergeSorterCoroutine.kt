@@ -20,7 +20,7 @@ class MergeSorterCoroutine : MergeSorter(), SorterInterface {
                 numberOfThreads = numberOfThreads
             )
         }
-        for (i in arrayToSort.indices) arrayToSort[i] = temporaryArray[i]
+        temporaryArray.copyInto(arrayToSort)
     }
 
     private suspend fun IntArray.mergeMultiCoroutine(

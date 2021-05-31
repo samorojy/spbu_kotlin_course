@@ -21,8 +21,8 @@ import javax.swing.JFrame
 import kotlin.math.pow
 import kotlin.random.Random
 
-class ArraySizeDependenceGraphDrawer<T : SorterInterface>(
-    private val sorter: T,
+class ArraySizeDependenceGraphDrawer(
+    private val sorter: SorterInterface,
     private val arraySize: Int,
     private val arraySizeStep: Int,
     private val minPowerOfTwoOfThreadsNumber: Int,
