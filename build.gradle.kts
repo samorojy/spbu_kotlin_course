@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.serialization") version "1.4.31"
     id("io.gitlab.arturbosch.detekt") version "1.15.0"
     id("org.jetbrains.dokka") version "1.4.20"
+    id("org.openjfx.javafxplugin") version "0.0.8"
     application
 }
 
@@ -23,6 +24,11 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.32")
+    implementation("no.tornado:tornadofx:1.7.20")
+    implementation("org.openjfx:javafx-base:11.0.2")
+    implementation("org.openjfx:javafx:11.0.2")
+    implementation("org.openjfx:javafx-controls:11.0.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
     implementation("org.jfree:jfreechart:1.5.3")
     implementation("com.charleskorn.kaml:kaml:0.28.3")
@@ -30,6 +36,10 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
+}
+
+javafx {
+    modules("javafx.controls")
 }
 
 detekt {
