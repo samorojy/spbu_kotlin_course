@@ -26,7 +26,14 @@ class Model(gameSize: Int) {
     }
 
     private fun isGameOver(): Boolean {
-        gameField.forEach { mutableList -> mutableList.forEach { if (!it.isPressed) return false } }
+        gameField.forEach { mutableList ->
+            mutableList.forEach {
+                if (!it.isPressed) {
+                    println(it)
+                    return false
+                }
+            }
+        }
         return true
     }
 
@@ -39,7 +46,8 @@ class Model(gameSize: Int) {
             ) {
                 buttons[turnPlace.row][turnPlace.column].text = " "
                 buttons[lastTurnPlace!!.row][lastTurnPlace!!.column].text = " "
-            } else lastTurnPlace = null
+            }
+            lastTurnPlace = null
         } else lastTurnPlace = turnPlace
         return isGameOver()
     }
