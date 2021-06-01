@@ -2,7 +2,6 @@ package homework6
 
 import homework7.first.MergeSorter
 
-@Suppress("LongMethod")
 class MergeSorterThread : MergeSorter() {
     override fun IntArray.mergeSorting(mergingPart: MergingPart, temporaryArray: IntArray, numberOfThreads: Int) {
         this.mergeSortingMultiThread(

@@ -3,7 +3,6 @@ package homework7.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-@Suppress("LongMethod")
 class MergeSorterCoroutine : MergeSorter() {
 
     override fun IntArray.mergeSorting(mergingPart: MergingPart, temporaryArray: IntArray, numberOfThreads: Int) {
