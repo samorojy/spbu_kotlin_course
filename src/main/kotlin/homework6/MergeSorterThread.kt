@@ -12,7 +12,6 @@ class MergeSorterThread : MergeSorter() {
         )
     }
 
-    @Suppress("LongParameterList")
     override fun IntArray.runParallelMerging(
         firstPart: MergingPart,
         middleOfFirstPart: Int,

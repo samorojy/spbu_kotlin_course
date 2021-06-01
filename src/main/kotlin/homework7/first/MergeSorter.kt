@@ -15,6 +15,8 @@ abstract class MergeSorter : SorterInterface {
     }
 
     abstract fun IntArray.mergeSorting(mergingPart: MergingPart, temporaryArray: IntArray, numberOfThreads: Int)
+
+    @Suppress("LongParameterList")
     abstract fun IntArray.runParallelMerging(
         firstPart: MergingPart,
         middleOfFirstPart: Int,

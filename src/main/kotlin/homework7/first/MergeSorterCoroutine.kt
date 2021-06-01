@@ -1,5 +1,3 @@
-@file:Suppress("LongParameterList")
-
 package homework7.first
 
 import kotlinx.coroutines.coroutineScope
