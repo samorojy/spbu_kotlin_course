@@ -16,30 +16,40 @@ abstract class MergeSorter : SorterInterface {
 
     abstract fun IntArray.mergeSorting(mergingPart: MergingPart, temporaryArray: IntArray, numberOfThreads: Int)
 
-    @Suppress("LongParameterList")
-    abstract fun IntArray.runParallelMerging(
-        firstPart: MergingPart,
-        middleOfFirstPart: Int,
-        secondPart: MergingPart,
-        middleOfSecondPart: Int,
-        arrayMergeTo: IntArray,
-        leftBoundOfArrayToPaste: Int,
-        middleOfArrayToPaste: Int,
+    data class SortingPartsProperties(
+        val firstPart: MergingPart,
+        val middleOfFirstPart: Int,
+        val secondPart: MergingPart,
+        val middleOfSecondPart: Int,
+    )
+
+    data class ArrayToPasteProperties(
+        val arrayMergeTo: IntArray,
+        val leftBoundOfArrayToPaste: Int,
+        val middleOfArrayToPaste: Int,
+    )
+
+    protected abstract fun IntArray.runParallelMerging(
+        partProperties: SortingPartsProperties,
+        arrayToPasteProperties: ArrayToPasteProperties,
         numberOfThreads: Int = 1
     )
 
-    @Suppress("LongParameterList")
-    abstract fun IntArray.runParallelMergeSorting(
-        sortingPart: MergingPart,
-        sortedArray: IntArray,
-        leftBoundOfArrayToPaste: Int = 0,
-        middle: Int,
-        newMiddle: Int,
+    data class SortedArrayProperties(
+        val sortingPart: MergingPart,
+        val sortedArray: IntArray,
+        val leftBoundOfArrayToPaste: Int = 0,
+        val middle: Int,
+        val newMiddle: Int
+    )
+
+    protected abstract fun IntArray.runParallelMergeSorting(
+        sortedArrayProperties: SortedArrayProperties,
         temporaryArray: IntArray,
         numberOfThreads: Int = 1
     )
 
-    fun IntArray.mergeSortingMultiThread(
+    protected fun IntArray.mergeSortingMultiThread(
         sortingPart: MergingPart,
         sortedArray: IntArray,
         leftBoundOfArrayToPaste: Int = 0,
@@ -64,11 +74,13 @@ abstract class MergeSorter : SorterInterface {
                 )
             } else {
                 runParallelMergeSorting(
-                    sortingPart,
-                    sortedArray,
-                    leftBoundOfArrayToPaste,
-                    middle,
-                    newMiddle,
+                    SortedArrayProperties(
+                        sortingPart,
+                        sortedArray,
+                        leftBoundOfArrayToPaste,
+                        middle,
+                        newMiddle
+                    ),
                     temporaryArray, numberOfThreads
                 )
             }
@@ -82,7 +94,7 @@ abstract class MergeSorter : SorterInterface {
         }
     }
 
-    fun IntArray.mergeMultiThread(
+    protected fun IntArray.mergeMultiThread(
         firstPart: MergingPart,
         secondPart: MergingPart,
         arrayMergeTo: IntArray,
@@ -114,13 +126,17 @@ abstract class MergeSorter : SorterInterface {
         arrayMergeTo[middleOfArrayToPaste] = this[middleOfFirstPart]
         if (numberOfThreads > 1) {
             runParallelMerging(
-                firstPart,
-                middleOfFirstPart,
-                secondPart,
-                middleOfSecondPart,
-                arrayMergeTo,
-                leftBoundOfArrayToPaste,
-                middleOfArrayToPaste,
+                SortingPartsProperties(
+                    firstPart,
+                    middleOfFirstPart,
+                    secondPart,
+                    middleOfSecondPart
+                ),
+                ArrayToPasteProperties(
+                    arrayMergeTo,
+                    leftBoundOfArrayToPaste,
+                    middleOfArrayToPaste
+                ),
                 numberOfThreads
             )
         } else {

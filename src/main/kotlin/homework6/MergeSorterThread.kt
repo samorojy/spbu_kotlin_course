@@ -12,11 +12,7 @@ class MergeSorterThread : MergeSorter() {
     }
 
     override fun IntArray.runParallelMergeSorting(
-        sortingPart: MergingPart,
-        sortedArray: IntArray,
-        leftBoundOfArrayToPaste: Int,
-        middle: Int,
-        newMiddle: Int,
+        sortedArrayProperties: SortedArrayProperties,
         temporaryArray: IntArray,
         numberOfThreads: Int
     ) {
@@ -25,7 +21,7 @@ class MergeSorterThread : MergeSorter() {
         val leftThread =
             Thread {
                 this.mergeSortingMultiThread(
-                    MergingPart(sortingPart.leftBound, middle),
+                    MergingPart(sortedArrayProperties.sortingPart.leftBound, sortedArrayProperties.middle),
                     temporaryArray, 0,
                     numberOfLeftThreads
                 )
@@ -33,8 +29,8 @@ class MergeSorterThread : MergeSorter() {
         val rightThread =
             Thread {
                 this.mergeSortingMultiThread(
-                    MergingPart(middle + 1, sortingPart.rightBound),
-                    temporaryArray, newMiddle + 1,
+                    MergingPart(sortedArrayProperties.middle + 1, sortedArrayProperties.sortingPart.rightBound),
+                    temporaryArray, sortedArrayProperties.newMiddle + 1,
                     numberOfRightThreads
                 )
             }
@@ -45,13 +41,8 @@ class MergeSorterThread : MergeSorter() {
     }
 
     override fun IntArray.runParallelMerging(
-        firstPart: MergingPart,
-        middleOfFirstPart: Int,
-        secondPart: MergingPart,
-        middleOfSecondPart: Int,
-        arrayMergeTo: IntArray,
-        leftBoundOfArrayToPaste: Int,
-        middleOfArrayToPaste: Int,
+        partProperties: SortingPartsProperties,
+        arrayToPasteProperties: ArrayToPasteProperties,
         numberOfThreads: Int
     ) {
         val numberOfLeftThreads = numberOfThreads / 2
@@ -59,20 +50,20 @@ class MergeSorterThread : MergeSorter() {
         val leftThread =
             Thread {
                 this@runParallelMerging.mergeMultiThread(
-                    MergingPart(firstPart.leftBound, middleOfFirstPart - 1),
-                    MergingPart(secondPart.leftBound, middleOfSecondPart - 1),
-                    arrayMergeTo,
-                    leftBoundOfArrayToPaste,
+                    MergingPart(partProperties.firstPart.leftBound, partProperties.middleOfFirstPart - 1),
+                    MergingPart(partProperties.secondPart.leftBound, partProperties.middleOfSecondPart - 1),
+                    arrayToPasteProperties.arrayMergeTo,
+                    arrayToPasteProperties.leftBoundOfArrayToPaste,
                     numberOfLeftThreads
                 )
             }
         val rightThread =
             Thread {
                 this@runParallelMerging.mergeMultiThread(
-                    MergingPart(middleOfFirstPart + 1, firstPart.rightBound),
-                    MergingPart(middleOfSecondPart, secondPart.rightBound),
-                    arrayMergeTo,
-                    middleOfArrayToPaste + 1,
+                    MergingPart(partProperties.middleOfFirstPart + 1, partProperties.firstPart.rightBound),
+                    MergingPart(partProperties.middleOfSecondPart, partProperties.secondPart.rightBound),
+                    arrayToPasteProperties.arrayMergeTo,
+                    arrayToPasteProperties.middleOfArrayToPaste + 1,
                     numberOfRightThreads
                 )
             }
