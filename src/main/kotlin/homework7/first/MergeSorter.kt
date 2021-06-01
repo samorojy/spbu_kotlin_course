@@ -52,7 +52,7 @@ abstract class MergeSorter : SorterInterface {
             val temporaryArray = IntArray(sortingPartSize) { 0 }
             val middle = (sortingPart.leftBound + sortingPart.rightBound) / 2
             val newMiddle = middle - sortingPart.leftBound
-            if (numberOfThreads == 1) {
+            if (numberOfThreads <= 1) {
                 this.mergeSortingMultiThread(
                     MergingPart(sortingPart.leftBound, middle),
                     temporaryArray, 0
