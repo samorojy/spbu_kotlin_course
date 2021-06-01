@@ -29,7 +29,6 @@ class Model(gameSize: Int) {
         gameField.forEach { mutableList ->
             mutableList.forEach {
                 if (!it.isPressed) {
-                    println(it)
                     return false
                 }
             }
@@ -40,12 +39,15 @@ class Model(gameSize: Int) {
     fun makeTurn(turnPlace: TurnPlace, buttons: List<List<Button>>): Boolean {
         buttons[turnPlace.row][turnPlace.column].text = gameField[turnPlace.row][turnPlace.column].value.toString()
         gameField[turnPlace.row][turnPlace.column].isPressed = true
-        if (lastTurnPlace != null) {
-            if (gameField[lastTurnPlace!!.row][lastTurnPlace!!.column].value
+        val lastTurnPlaceNotNull = lastTurnPlace
+        if (lastTurnPlaceNotNull != null) {
+            if (gameField[lastTurnPlaceNotNull.row][lastTurnPlaceNotNull.column].value
                 != gameField[turnPlace.row][turnPlace.column].value
             ) {
                 buttons[turnPlace.row][turnPlace.column].text = " "
-                buttons[lastTurnPlace!!.row][lastTurnPlace!!.column].text = " "
+                gameField[turnPlace.row][turnPlace.column].isPressed = false
+                buttons[lastTurnPlaceNotNull.row][lastTurnPlaceNotNull.column].text = " "
+                gameField[lastTurnPlaceNotNull.row][lastTurnPlaceNotNull.column].isPressed = false
             }
             lastTurnPlace = null
         } else lastTurnPlace = turnPlace
