@@ -28,6 +28,60 @@ abstract class MergeSorter : SorterInterface {
         numberOfThreads: Int = 1
     )
 
+    @Suppress("LongParameterList")
+    abstract fun IntArray.runParallelMergeSorting(
+        sortingPart: MergingPart,
+        sortedArray: IntArray,
+        leftBoundOfArrayToPaste: Int = 0,
+        middle: Int,
+        newMiddle: Int,
+        temporaryArray: IntArray,
+        numberOfThreads: Int = 1
+    )
+
+    fun IntArray.mergeSortingMultiThread(
+        sortingPart: MergingPart,
+        sortedArray: IntArray,
+        leftBoundOfArrayToPaste: Int = 0,
+        numberOfThreads: Int = 1
+    ) {
+        val sortingPartSize = sortingPart.rightBound - sortingPart.leftBound + 1
+        if (sortingPartSize == 1) {
+            sortedArray[leftBoundOfArrayToPaste] = this[sortingPart.leftBound]
+        } else {
+            val temporaryArray = IntArray(sortingPartSize) { 0 }
+            val middle = (sortingPart.leftBound + sortingPart.rightBound) / 2
+            val newMiddle = middle - sortingPart.leftBound
+            if (numberOfThreads == 1) {
+                this.mergeSortingMultiThread(
+                    MergingPart(sortingPart.leftBound, middle),
+                    temporaryArray, 0
+                )
+                this.mergeSortingMultiThread(
+                    MergingPart(middle + 1, sortingPart.rightBound),
+                    temporaryArray,
+                    newMiddle + 1
+                )
+            } else {
+                runParallelMergeSorting(
+                    sortingPart,
+                    sortedArray,
+                    leftBoundOfArrayToPaste,
+                    middle,
+                    newMiddle,
+                    temporaryArray, numberOfThreads
+                )
+            }
+            temporaryArray.mergeMultiThread(
+                MergingPart(0, newMiddle),
+                MergingPart(newMiddle + 1, sortingPartSize - 1),
+                sortedArray,
+                leftBoundOfArrayToPaste,
+                numberOfThreads
+            )
+        }
+    }
+
     fun IntArray.mergeMultiThread(
         firstPart: MergingPart,
         secondPart: MergingPart,
