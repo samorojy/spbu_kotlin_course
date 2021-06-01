@@ -14,6 +14,7 @@ class Controller : Controller() {
     }
 
     fun makeMove(turnPlace: TurnPlace, buttons: List<List<Button>>) {
+        if (buttons[turnPlace.row][turnPlace.column].text != " ") return
         if (model.makeTurn(turnPlace, buttons)) finishGame()
     }
 
