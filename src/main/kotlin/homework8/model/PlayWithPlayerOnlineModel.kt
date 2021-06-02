@@ -1,8 +1,11 @@
+@file:Suppress("MagicNumber")
+
 package homework8.model
 
 import homework8.controller.Controller
 import homework8.controller.TurnAuthor
 import homework8.controller.TurnPlace
+import homework8.controller.TurnStage
 import io.ktor.client.HttpClient
 import io.ktor.client.features.websocket.DefaultClientWebSocketSession
 import io.ktor.client.features.websocket.WebSockets
@@ -14,20 +17,23 @@ import io.ktor.http.cio.websocket.send
 import javafx.scene.control.Button
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlin.concurrent.thread
+import java.io.Serial
 
 class PlayWithPlayerOnlineModel(val controller: Controller, gameSize: Int, gameField: List<List<Button>>) :
     Model(gameSize) {
-
+    var isMyTurn = true
     private val client = HttpClient { install(WebSockets) }
     private var session: DefaultClientWebSocketSession? = null
 
     init {
-        thread(isDaemon = true) { getCurrentState(gameField) }
+        val updateStateThread = Thread { updateCurrentState(gameField) }
+        updateStateThread.start()
+        Thread.sleep(15)
     }
 
     private suspend fun DefaultClientWebSocketSession.getTurn(buttons: List<List<Button>>) {
@@ -44,9 +50,19 @@ class PlayWithPlayerOnlineModel(val controller: Controller, gameSize: Int, gameF
         }
     }
 
-    private fun getCurrentState(buttons: List<List<Button>>) {
+    @Serializable
+    data class ConnectionInfo(val host: String, val port: Int, val path: String)
+
+    private fun updateCurrentState(buttons: List<List<Button>>) {
+        val connectionInfo =
+            Json.decodeFromString<ConnectionInfo>(javaClass.getResource("ConnectionInfo.json").readText())
         runBlocking {
-            client.webSocket(method = HttpMethod.Get, host = "127.0.0.1", port = 8080, path = "/play") {
+            client.webSocket(
+                method = HttpMethod.Get,
+                host = connectionInfo.host,
+                port = connectionInfo.port,
+                path = connectionInfo.path
+            ) {
                 session = this
                 val gettingTurn = launch { getTurn(buttons) }
                 gettingTurn.join()
@@ -63,14 +79,20 @@ class PlayWithPlayerOnlineModel(val controller: Controller, gameSize: Int, gameF
         }
     }
 
+    @Suppress("ReturnCount")
     override fun move(turnPlace: TurnPlace, gameField: List<List<Button>>, turnAuthor: TurnAuthor): MoveResult {
 
-        if (turnAuthor == TurnAuthor.CLIENT) {
+        if (turnAuthor == TurnAuthor.CLIENT && isMyTurn) {
             runBlocking {
                 val sendingTurn = launch { session?.sendTurn(turnPlace) }
                 sendingTurn.join()
             }
+            isMyTurn = false
+            return makeTurn(turnPlace, gameField, turnAuthor)
+        } else if (turnAuthor == TurnAuthor.SERVER) {
+            isMyTurn = true
+            return makeTurn(turnPlace, gameField, turnAuthor)
         }
-        return makeTurn(turnPlace, gameField)
+        return MoveResult(TurnStage.NO_WINNER_YET_X, false)
     }
 }

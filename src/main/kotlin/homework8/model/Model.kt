@@ -7,7 +7,7 @@ import javafx.application.Platform
 import javafx.scene.control.Button
 
 open class Model(private val gameFieldSize: Int = 3) : ModelInterface {
-    private val fields: List<MutableList<Char>> = List(gameFieldSize) { MutableList(gameFieldSize) { ' ' } }
+    private var fields: List<MutableList<Char>> = List(gameFieldSize) { MutableList(gameFieldSize) { ' ' } }
     private var turnNumber = 0
     private val winningXExpression: String
     private val winning0Expression: String
@@ -27,21 +27,32 @@ open class Model(private val gameFieldSize: Int = 3) : ModelInterface {
         turnAuthor: TurnAuthor
     ): MoveResult = makeTurn(turnPlace, gameField)
 
-    fun makeTurn(turnPlace: TurnPlace, gameField: List<List<Button>>): MoveResult {
+    fun makeTurn(
+        turnPlace: TurnPlace,
+        gameField: List<List<Button>>,
+        turnAuthor: TurnAuthor = TurnAuthor.CLIENT
+    ): MoveResult {
         fields[turnPlace.row][turnPlace.column] = if (turnNumber % 2 == 0) {
             'X'
         } else '0'
         ++turnNumber
         val turnStage = checkWin(turnNumber == gameFieldSize * gameFieldSize)
-        Platform.runLater { gameField[turnPlace.row][turnPlace.column].text = turnStage.sign }
-        return MoveResult(turnStage, turnStage.isGameOver())
+        if (turnAuthor == TurnAuthor.CLIENT) gameField[turnPlace.row][turnPlace.column].text = turnStage.sign
+        else Platform.runLater { gameField[turnPlace.row][turnPlace.column].text = turnStage.sign }
+        val isGameOver = turnStage.isGameOver()
+        if (isGameOver) cleanField()
+        return MoveResult(turnStage, isGameOver)
+    }
+
+    private fun cleanField() {
+        turnNumber = 0
+        fields = List(gameFieldSize) { MutableList(gameFieldSize) { ' ' } }
     }
 
     fun getCurrentState(): List<List<Char>> = fields
 
-    private fun TurnStage.isGameOver(): Boolean {
-        return this == TurnStage.DRAW || this == TurnStage.WIN_0 || this == TurnStage.WIN_X
-    }
+    private fun TurnStage.isGameOver(): Boolean =
+        this == TurnStage.DRAW || this == TurnStage.WIN_0 || this == TurnStage.WIN_X
 
     private fun getRow(row: Int): String {
         var rowResult = ""

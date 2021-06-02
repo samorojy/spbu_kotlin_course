@@ -15,9 +15,7 @@ class PlayWithBotModel(gameSize: Int, gameMode: GameMode) : Model(gameSize) {
         else -> throw IllegalArgumentException("Game mode must be game with bot")
     }
 
-    override fun move(
-        turnPlace: TurnPlace, gameField: List<List<Button>>, turnAuthor: TurnAuthor
-    ): MoveResult {
+    override fun move(turnPlace: TurnPlace, gameField: List<List<Button>>, turnAuthor: TurnAuthor): MoveResult {
         var turnResult = makeTurn(turnPlace, gameField)
         if (turnResult.isGameOver) return turnResult
 

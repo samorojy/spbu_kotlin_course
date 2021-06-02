@@ -6,6 +6,8 @@ import javafx.scene.control.Button
 
 interface ModelInterface {
     fun move(
-        turnPlace: TurnPlace, gameField: List<List<Button>>, turnAuthor: TurnAuthor = TurnAuthor.CLIENT
+        turnPlace: TurnPlace,
+        gameField: List<List<Button>>,
+        turnAuthor: TurnAuthor = TurnAuthor.CLIENT
     ): MoveResult
 }

@@ -13,9 +13,8 @@ import tornadofx.Controller
 class Controller : Controller() {
     private lateinit var model: Model
     private var gameMode = GameMode.PLAYER_VS_PLAYER_ONLINE
-    var gameSize = 3
+    var gameSize = DEFAULT_GAME_SIZE
         private set
-    private var isMyTurn = true
 
     fun changeGameSize(newSize: Int) {
         gameSize = newSize
@@ -27,11 +26,9 @@ class Controller : Controller() {
     }
 
     fun makeTurn(turnPlace: TurnPlace, buttons: List<List<Button>>, turnAuthor: TurnAuthor = TurnAuthor.SERVER) {
+        if (buttons[turnPlace.row][turnPlace.column].text != " ") return
         val turnResult = model.move(turnPlace, buttons)
-        println(model.getCurrentState())
-        if (turnResult.isGameOver) {
-            finishGame(turnResult.turnStage, buttons, turnAuthor)
-        }
+        if (turnResult.isGameOver) finishGame(turnResult.turnStage, buttons, turnAuthor)
     }
 
     fun startGame() {
@@ -41,7 +38,7 @@ class Controller : Controller() {
             GameMode.PLAYER_VS_PLAYER_ONLINE -> PlayWithPlayerOnlineModel(
                 this,
                 gameSize,
-                find<GameView>().buttons
+                find<GameView>().buttons,
             )
             else -> PlayWithBotModel(gameSize, gameMode)
         }
@@ -77,5 +74,9 @@ class Controller : Controller() {
                 else -> throw IllegalArgumentException("The game can only be completed at the winner stage")
             }
         )
+    }
+
+    companion object {
+        const val DEFAULT_GAME_SIZE = 3
     }
 }
