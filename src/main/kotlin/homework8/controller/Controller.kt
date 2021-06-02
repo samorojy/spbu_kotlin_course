@@ -12,7 +12,7 @@ import tornadofx.Controller
 
 class Controller : Controller() {
     private lateinit var model: Model
-    private var gameMode = GameMode.PLAYER_VS_PLAYER_ONLINE
+    private var gameMode = GameMode.PLAYER_VS_PLAYER_LOCAL
     var gameSize = DEFAULT_GAME_SIZE
         private set
 

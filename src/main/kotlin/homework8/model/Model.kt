@@ -27,7 +27,7 @@ open class Model(private val gameFieldSize: Int = 3) : ModelInterface {
         turnAuthor: TurnAuthor
     ): MoveResult = makeTurn(turnPlace, gameField)
 
-    fun makeTurn(
+    protected fun makeTurn(
         turnPlace: TurnPlace,
         gameField: List<List<Button>>,
         turnAuthor: TurnAuthor = TurnAuthor.CLIENT
