@@ -78,20 +78,20 @@ class PlayWithPlayerOnlineModel(val controller: Controller, gameSize: Int, gameF
         }
     }
 
-    @Suppress("ReturnCount")
-    override fun move(turnPlace: TurnPlace, gameField: List<List<Button>>, turnAuthor: TurnAuthor): MoveResult {
-
-        if (turnAuthor == TurnAuthor.CLIENT && isMyTurn) {
-            runBlocking {
-                val sendingTurn = launch { session?.sendTurn(turnPlace) }
-                sendingTurn.join()
+    override fun move(turnPlace: TurnPlace, gameField: List<List<Button>>, turnAuthor: TurnAuthor): MoveResult =
+        when {
+            turnAuthor == TurnAuthor.CLIENT && isMyTurn -> {
+                runBlocking {
+                    val sendingTurn = launch { session?.sendTurn(turnPlace) }
+                    sendingTurn.join()
+                }
+                isMyTurn = false
+                makeTurn(turnPlace, gameField, turnAuthor)
             }
-            isMyTurn = false
-            return makeTurn(turnPlace, gameField, turnAuthor)
-        } else if (turnAuthor == TurnAuthor.SERVER) {
-            isMyTurn = true
-            return makeTurn(turnPlace, gameField, turnAuthor)
+            turnAuthor == TurnAuthor.SERVER -> {
+                isMyTurn = true
+                makeTurn(turnPlace, gameField, turnAuthor)
+            }
+            else -> MoveResult(TurnStage.NO_WINNER_YET_X, false)
         }
-        return MoveResult(TurnStage.NO_WINNER_YET_X, false)
-    }
 }

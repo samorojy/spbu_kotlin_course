@@ -97,15 +97,17 @@ open class Model(private val gameFieldSize: Int = 3) : ModelInterface {
                 return TurnStage.WIN_0
             }
         }
-        if (getLeftDiagonal() == winningXExpression || getRightDiagonal() == winningXExpression) {
-            return TurnStage.WIN_X
+        return when {
+            getLeftDiagonal() == winningXExpression || getRightDiagonal() == winningXExpression -> {
+                TurnStage.WIN_X
+            }
+            getLeftDiagonal() == winning0Expression || getRightDiagonal() == winning0Expression -> {
+                TurnStage.WIN_0
+            }
+            isLastTurn -> {
+                TurnStage.DRAW
+            }
+            else -> if ((turnNumber - 1) % 2 == 0) TurnStage.NO_WINNER_YET_X else TurnStage.NO_WINNER_YET_0
         }
-        if (getLeftDiagonal() == winning0Expression || getRightDiagonal() == winning0Expression) {
-            return TurnStage.WIN_0
-        }
-        if (isLastTurn) {
-            return TurnStage.DRAW
-        }
-        return if ((turnNumber - 1) % 2 == 0) TurnStage.NO_WINNER_YET_X else TurnStage.NO_WINNER_YET_0
     }
 }
