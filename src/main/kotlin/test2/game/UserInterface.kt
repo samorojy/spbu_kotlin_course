@@ -12,7 +12,7 @@ import tornadofx.textfield
 import tornadofx.useMaxWidth
 import tornadofx.vbox
 
-class TicTacToe : App(StartView::class)
+class FindPairGame : App(StartView::class)
 
 class StartView : View("Find Pair: menu") {
     private val controller: Controller by inject()
