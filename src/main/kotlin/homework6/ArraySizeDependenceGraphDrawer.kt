@@ -2,6 +2,7 @@
 
 package homework6
 
+import homework7.first.SorterInterface
 import org.jfree.chart.ChartFactory
 import org.jfree.chart.ChartPanel
 import org.jfree.chart.JFreeChart
@@ -21,6 +22,7 @@ import kotlin.math.pow
 import kotlin.random.Random
 
 class ArraySizeDependenceGraphDrawer(
+    private val sorter: SorterInterface,
     private val arraySize: Int,
     private val arraySizeStep: Int,
     private val minPowerOfTwoOfThreadsNumber: Int,
@@ -54,7 +56,7 @@ class ArraySizeDependenceGraphDrawer(
             for (tempArraySize in 2..arraySize step arraySizeStep) {
                 val arrayToSort = getRandomArray(tempArraySize)
                 val startTime = System.currentTimeMillis()
-                MergeSorter().sort(arrayToSort, threadsNumber)
+                sorter.sort(arrayToSort, threadsNumber)
                 val endTime = System.currentTimeMillis()
                 series.add(tempArraySize, endTime - startTime)
             }
