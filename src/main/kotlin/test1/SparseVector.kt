@@ -49,19 +49,17 @@ data class SparseVector<T : ArithmeticAvailable<T>>(
         return SparseVector(spaceSize, resultedMapOfElements.toSparseVectorElementList())
     }
 
-    @Suppress("NestedBlockDepth")
     operator fun times(other: SparseVector<T>): T? {
         check(other)
         require(list.isNotEmpty()) { "Cannot multiply empty vectors" }
         var scalarTimesResult: T? = null
-        for (i in list.indices) {
-            for (j in other.list.indices) {
-                if (list[i].positionNumber == other.list[j].positionNumber) {
-                    if (scalarTimesResult != null) {
-                        scalarTimesResult += list[i].value * other.list[j].value
-                    } else scalarTimesResult = list[i].value * other.list[j].value
-                }
-            }
+        val positions = list.map { it.positionNumber }.intersect(other.list.map { it.positionNumber })
+        for (i in positions) {
+            val first = list.find { it.positionNumber == i }
+            val second = other.list.find { it.positionNumber == i }
+            if (first == null || second == null) continue
+            scalarTimesResult = scalarTimesResult?.let { it + first.value * second.value }
+                ?: first.value * second.value
         }
         return scalarTimesResult
     }
