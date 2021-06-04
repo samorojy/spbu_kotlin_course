@@ -4,7 +4,8 @@ package homework6
 
 fun main() {
     ArraySizeDependenceGraphDrawer(
-        16000, 2000, 0,
+        MergeSorterThread(),
+        16000, 1000, 0,
         8
     )
 }
