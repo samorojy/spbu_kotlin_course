@@ -3,10 +3,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import java.net.URL
 
 plugins {
-    kotlin("jvm") version "1.4.31"
-    kotlin("plugin.serialization") version "1.4.31"
-    id("io.gitlab.arturbosch.detekt") version "1.15.0"
-    id("org.jetbrains.dokka") version "1.4.20"
     kotlin("jvm") version "1.4.32"
     kotlin("plugin.serialization") version "1.4.32"
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
