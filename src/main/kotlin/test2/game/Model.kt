@@ -17,9 +17,9 @@ class Model(gameSize: Int) {
         numbersList.shuffle()
 
         gameField = List(gameSize) { mutableListOf() }
-        gameField.forEach {
-            for (g in 0 until gameSize) {
-                it.add(FieldState(numbersList.last(), false))
+        gameField.forEach { lineList ->
+            repeat(gameSize) {
+                lineList.add(FieldState(numbersList.last(), false))
                 numbersList.removeLast()
             }
         }
