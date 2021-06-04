@@ -1,10 +1,10 @@
 package test1
 
-data class SparseVectorElementData<T : ArithmeticAvailable<T>>(val positionNumber: Int, val value: T)
+data class SparseVectorElementData<T : ArithmeticAvailable<T>>(val positionNumber: Int, var value: T)
 
 data class SparseVector<T : ArithmeticAvailable<T>>(
     private val spaceSize: Int,
-    private val list: List<SparseVectorElementData<T>>
+    private val list: MutableList<SparseVectorElementData<T>>
 ) {
     private val mapOfSparseVectorElements =
         mutableMapOf<Int, T>().also {
@@ -13,7 +13,7 @@ data class SparseVector<T : ArithmeticAvailable<T>>(
             }
         }
 
-    private fun Map<Int, T>.toSparseVectorElementList(): List<SparseVectorElementData<T>> =
+    private fun Map<Int, T>.toSparseVectorElementList(): MutableList<SparseVectorElementData<T>> =
         mutableListOf<SparseVectorElementData<T>>().also {
             this.toList()
                 .forEach { pairFromMap ->
@@ -62,6 +62,12 @@ data class SparseVector<T : ArithmeticAvailable<T>>(
                 ?: first.value * second.value
         }
         return scalarTimesResult
+    }
+
+    operator fun get(index: Int): T? = list.find { it.positionNumber == index }?.value
+
+    operator fun set(index: Int, data: SparseVectorElementData<T>) {
+        list.find { it.positionNumber == data.positionNumber }?.also { it.value = data.value } ?: list.add(index, data)
     }
 }
 
